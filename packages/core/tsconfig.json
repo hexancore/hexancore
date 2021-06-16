@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "outDir": "./lib",
+    "baseUrl": "./",
+    "plugins": [{ "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false, "debug": false }],
+    "paths": {
+      "@": ["src"],
+      "@/*": ["src/*"],
+    }
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["lib", "node_modules"]
+}

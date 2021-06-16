@@ -1,0 +1,1 @@
+export * from './Command/Mailing/SendTemplatedMail/SendTemplatedEmailCommand';
