@@ -1,6 +1,6 @@
 {
   "name": "@hexcore/core",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Core to build hexagonal architecture designed apps",
   "author": "Mararok",
   "license": "MIT",
@@ -14,7 +14,6 @@
   "publishConfig": {
     "access": "public"
   },
-
   "homepage": "https://github.com/mararok/hexcore.git",
   "scripts": {
     "build": "nest build",
