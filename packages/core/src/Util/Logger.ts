@@ -1,78 +1,51 @@
+import { LoggerService } from '@nestjs/common';
 import { LambdaLog } from 'lambda-log';
 
-export interface Logger {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  error(message: string, meta?: object, tags?: Array<string>): void;
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  warn(message: string, meta?: object, tags?: Array<string>): void;
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  info(message: string, meta?: object, tags?: Array<string>): void;
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  debug(message: string, meta?: object, tags?: Array<string>): void;
+export class NullLogger implements LoggerService {
+  public log(message: any, context?: string) {}
+  public error(message: any, trace?: string, context?: string) {}
+  public warn(message: any, context?: string) {}
+  public debug?(message: any, context?: string) {}
+  public verbose?(message: any, context?: string) {}
 }
 
-export class NullLogger implements Logger {
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  public error(message: string, meta?: object, tags?: string[]): void {}
+export class LambdaLogger implements LoggerService {
+  private readonly native: LambdaLog;
 
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  public warn(message: string, meta?: object, tags?: string[]): void {}
-
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  public info(message: string, meta?: object, tags?: Array<string>): void {}
-
-  // eslint-disable-next-line @typescript-eslint/ban-types, @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-  public debug(message: string, meta?: object, tags?: Array<string>): void {}
-}
-
-export class LambdaLogger implements Logger {
-  private readonly log: LambdaLog;
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public constructor(native: any) {
-    this.log = native;
+    this.native = native;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public static create(name: string, context?: object, tags?: Array<string>): Logger {
-    const log = new LambdaLog({
+  public static create(name: string, tags?: Array<string>): LoggerService {
+    const native = new LambdaLog({
       dev: !process.env.STAGE || process.env.STAGE === 'dev',
       debug: process.env.DEBUG || false,
       silent: process.env.LOGGING_SILENT || false,
-      meta: { loggerName: name, context },
+      meta: { name },
       tags: tags,
     });
 
-    return new LambdaLogger(log);
+    return new LambdaLogger(native);
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public info(message: string, meta?: object, tags?: Array<string>): void {
-    this.log.info(message, meta, tags);
+  public  log(message: any, context?: string) {
+    this.native.info(message, {ctx: context});
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public warn(message: string, meta?: object, tags?: Array<string>): void {
-    this.log.warn(message, meta, tags);
+  public  warn(message: any, context?: string) {
+    this.native.warn(message, {ctx: context});
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public error(message: string, meta?: object, tags?: Array<string>): void {
-    this.log.error(message, meta, tags);
+  public error(message: any, trace?: string, context?: string) {
+    this.native.error(message, {ctx: context});
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public debug(message: string, meta?: object, tags?: Array<string>): void {
-    this.log.debug(message, meta, tags);
+  public debug?(message: any, context?: string) {
+    this.native.debug(message, {ctx: context});
   }
-}
 
-export class LoggerService {
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  public static create(name: string, context?: object, tags?: Array<string>): Logger {
-    return LambdaLogger.create(name, context, tags);
+  public verbose?(message: any, context?: string) {
+    this.native.debug(message, {ctx: context});
   }
+
 }

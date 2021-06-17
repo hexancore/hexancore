@@ -8,12 +8,13 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mararok/hexcore.git",
+    "url": "git+https://github.com/mararok/hexcore.git",
     "directory": "packages/core"
   },
   "publishConfig": {
     "access": "public"
   },
+
   "homepage": "https://github.com/mararok/hexcore.git",
   "scripts": {
     "build": "nest build",
@@ -94,5 +95,12 @@
         "compiler": "ttypescript"
       }
     }
+  },
+  "bugs": {
+    "url": "https://github.com/mararok/hexcore/issues"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
   }
 }
