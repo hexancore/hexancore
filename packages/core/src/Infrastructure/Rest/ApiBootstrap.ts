@@ -14,7 +14,7 @@ export interface ApiBootstrapOptions {
   serverPort: 3000
 }
 
-export async function bootstrap(options: ApiBootstrapOptions) {
+export async function apiBootstrap(options: ApiBootstrapOptions) {
   const apiLogger = LambdaLogger.create("api");
   const allExceptionFilter = new AllExceptionFilter(apiLogger);
   const adapter = await createFastifyAdapter(allExceptionFilter);

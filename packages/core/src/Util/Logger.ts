@@ -22,8 +22,12 @@ export class LambdaLogger implements LoggerService {
       debug: process.env.DEBUG || false,
       silent: process.env.LOGGING_SILENT || false,
       meta: { name },
-      tags: tags,
+      tags: tags ?? [],
+      levelKey: 'level',
+      tagsKey: 'tags'
     });
+
+    console.log(tags);
 
     return new LambdaLogger(native);
   }
