@@ -9,7 +9,7 @@ import { Inject } from '@nestjs/common';
 import { TemplateContentType } from '../../../../Domain/Dto/SendMailTemplateDto';
 import { Email } from '../../../../Domain/ValueObject/Email';
 import { FilePath } from '../../../../Util/FilePath';
-import { ITemplateService, IMailingService } from '../../../../Infrastructure/CorePublicInfrastructureModule';
+import { ITemplateService, IMailingService } from '../../../../Infrastructure/HexcorePublicInfrastructureModule';
 import { ConfigService } from '@nestjs/config';
 
 @CommandHandler(SendTemplatedMailCommand)

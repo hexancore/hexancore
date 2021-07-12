@@ -37,4 +37,4 @@ const GeneralBusProvider = {
   providers: [GeneralBusProvider, AppHomeProvider],
   exports: [GeneralBusProvider, ConfigModuleInstance, AppHomeProvider],
 })
-export class CoreModule {}
+export class HexcoreModule {}
