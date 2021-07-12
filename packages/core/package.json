@@ -1,6 +1,6 @@
 {
   "name": "@hexcore/core",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Core to build hexagonal architecture designed apps",
   "author": "Mararok",
   "license": "MIT",
