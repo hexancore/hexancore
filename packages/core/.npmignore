@@ -3,3 +3,4 @@ tsconfig.build.json
 tsconfig.json
 src
 *.tsbuildinfo
+yarn-error.log
