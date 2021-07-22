@@ -2,7 +2,7 @@
  * @group unit/core
  */
 
-import { Email, AppError } from "src";
+import { Email, AppError } from "@";
 
 describe('Email', () => {
   test('create', () => {
