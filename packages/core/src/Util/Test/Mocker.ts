@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { method, On } from 'ts-auto-mock/extension';
+import { method, On, Provider } from 'ts-auto-mock/extension';
 
 interface MethodCallExpection {
   method: string;
@@ -30,10 +30,14 @@ export class Mocker<T extends object> {
   }
 
   public expect(name: keyof T, ...args: any): MethodMock {
-    const methodMock = On(this.i).get(method(name));
+    let methodMock;
     if (!this.methods.has(<string>name)) {
+      methodMock = On(this.i).get(method(name));
       this.methods.set(<string>name, methodMock);
+    } else {
+      methodMock = this.methods.get(<string>name);
     }
+
     this.methodCallExpections.push({ method: <string>name, args });
     return new MethodMock(methodMock);
   }
