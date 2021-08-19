@@ -1,5 +1,6 @@
+import 'jest-ts-auto-mock';
 /* eslint-disable @typescript-eslint/ban-types */
-import { method, On, Provider } from 'ts-auto-mock/extension';
+import { method, On, ɵMarker } from 'ts-auto-mock/extension';
 
 interface MethodCallExpection {
   method: string;
@@ -24,9 +25,23 @@ export class Mocker<T extends object> {
   private methodCallExpections: MethodCallExpection[];
 
   public constructor(instance: T) {
+    // Hack ts-automock marker when Mocker used in other project tests - instance come here without marker property
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (!instance[ɵMarker.instance.get()]) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      instance[ɵMarker.instance.get()] = true;
+    }
+    // end Hack
+
     this.i = instance;
     this.methods = new Map();
     this.methodCallExpections = [];
+  }
+
+  public static of<T extends object>(instance: T): Mocker<T> {
+    return new Mocker(instance);
   }
 
   public expect(name: keyof T, ...args: any): MethodMock {

@@ -11,14 +11,13 @@ interface TestMock {
 
 
 describe('Mocker', () => {
-  test('handleCommand() when expected is correct', async () => {
+  test('checkExpections()', async () => {
     const mock = new Mocker(createMock<TestMock>());
 
     mock.expect("a").andReturn(true);
-
     mock.i.a();
-
     mock.checkExpections();
+
   });
 
 
