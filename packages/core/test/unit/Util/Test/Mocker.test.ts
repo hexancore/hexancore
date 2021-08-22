@@ -6,19 +6,35 @@ import { createMock } from 'ts-auto-mock';
  */
 
 interface TestMock {
-  a(): boolean;
+  a(param1: string, param2: boolean): boolean;
 }
 
 
 describe('Mocker', () => {
-  test('checkExpections()', async () => {
+  test('checkExpections() when called with expected arguments', async () => {
     const mock = new Mocker(createMock<TestMock>());
 
-    mock.expect("a").andReturn(true);
-    mock.i.a();
+    mock.expect("a", "test", true).andReturn(true);
+    mock.i.a("test", true);
     mock.checkExpections();
 
   });
 
+  test('checkExpections() when called with not expected arguments', async () => {
+    const mock = new Mocker(createMock<TestMock>());
+
+    mock.expect("a", "test", true).andReturn(true);
+    mock.i.a("not test", false);
+
+    expect(() => mock.checkExpections()).toThrow();
+  });
+
+  test('checkExpections() when not called', async () => {
+    const mock = new Mocker(createMock<TestMock>());
+
+    mock.expect("a", "test", true).andReturn(true);
+
+    expect(() => mock.checkExpections()).toThrow();
+  });
 
 });

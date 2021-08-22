@@ -21,10 +21,11 @@ export class MethodMock {
 
 export class Mocker<T extends object> {
   public readonly i: T;
+  public readonly name: string;
   private methods: Map<string, any>;
   private methodCallExpections: MethodCallExpection[];
 
-  public constructor(instance: T) {
+  public constructor(instance: T, name = '') {
     // Hack ts-automock marker when Mocker used in other project tests - instance come here without marker property
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -36,12 +37,13 @@ export class Mocker<T extends object> {
     // end Hack
 
     this.i = instance;
+    this.name = name;
     this.methods = new Map();
     this.methodCallExpections = [];
   }
 
-  public static of<T extends object>(instance: T): Mocker<T> {
-    return new Mocker(instance);
+  public static of<T extends object>(instance: T, name = ''): Mocker<T> {
+    return new Mocker(instance, name);
   }
 
   public expect(name: keyof T, ...args: any): MethodMock {
@@ -59,10 +61,19 @@ export class Mocker<T extends object> {
 
   public checkExpections(): void {
     this.methodCallExpections.forEach((expection) => {
-      if (expection.args.length > 0) {
-        expect(this.methods.get(expection.method)).toBeCalledWith(...expection.args);
-      } else {
-        expect(this.methods.get(expection.method)).toBeCalled();
+      const callMatcher = expect(this.methods.get(expection.method));
+
+      try {
+        if (expection.args.length > 0) {
+          callMatcher.toBeCalledWith(...expection.args);
+        } else {
+          callMatcher.toBeCalled();
+        }
+      } catch (e) {
+        const message: string = e.matcherResult.message;
+        const callName = (this.name !== '' ? this.name : 'Mock') + '.' + expection.method;
+        e.message = message.replace('jest.fn()', callName);
+        throw e;
       }
     });
   }
