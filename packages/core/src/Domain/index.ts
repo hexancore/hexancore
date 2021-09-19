@@ -8,6 +8,7 @@ export * from './ValueObject/ImmutableDate';
 export * from './ValueObject/StringValue';
 export * from './ValueObject/UUID4Value';
 export * from './ValueObject/Id';
+export * from './ValueObject/NumericStringId';
 export * from './ValueObject/PublicIdValue';
 
 export * from './Dto/SendMailDto';

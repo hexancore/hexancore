@@ -1,11 +1,11 @@
 import { Id } from '../ValueObject/Id';
 export abstract class Entity<IdType extends Id> {
-  public readonly id: IdType;
+  public id?: IdType;
 
   public tracking: boolean;
   public readonly modifiedProperties: Set<string>;
 
-  public constructor(id: IdType) {
+  public constructor(id?: IdType) {
     this.id = id;
     this.tracking = false;
     this.modifiedProperties = new Set();

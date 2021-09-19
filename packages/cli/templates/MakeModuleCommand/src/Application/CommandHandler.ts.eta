@@ -1,0 +1,12 @@
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { <%=it.fullname%>Command } from './PostCreateCommand';
+
+@CommandHandler(<%=it.fullname%>Command)
+export class <%=it.fullname%>CommandHandler implements ICommandHandler<<%=it.fullname%>Command> {
+  public constructor() {}
+
+  public execute(command: <%=it.fullname%>Command): Promise<Result<boolean>> {
+    // TODO: need implementation
+  }
+}

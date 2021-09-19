@@ -33,6 +33,14 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
     );
   }
 
+  public mapToTrue(): AsyncResult<boolean> {
+    return new AsyncResult(
+      this.promise.then(() => {
+        return success(true);
+      }),
+    );
+  }
+
   public mapError(f: (e: AppError) => AppError | Promise<AppError>): AsyncResult<T> {
     return new AsyncResult(
       this.promise.then(async (res: Result<T>) => {

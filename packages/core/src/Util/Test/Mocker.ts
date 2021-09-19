@@ -19,6 +19,13 @@ export class MethodMock {
   }
 }
 
+interface DoneCallback {
+  (...args: any[]): any;
+  fail(error?: string | { message: string }): any;
+}
+
+type ProvidesCallback = (cb: DoneCallback) => any;
+
 export class Mocker<T extends object> {
   public readonly i: T;
   public readonly name: string;
@@ -44,6 +51,24 @@ export class Mocker<T extends object> {
 
   public static of<T extends object>(instance: T, name = ''): Mocker<T> {
     return new Mocker(instance, name);
+  }
+
+  /**
+   * Experimental
+   * @param callback
+   * @param mocks
+   * @returns
+   */
+  public static checkMocksAfter(callback: ProvidesCallback, mocks: Mocker<any>[]): any {
+    return (doneCallback: DoneCallback) => {
+      const result = callback.apply(this, doneCallback);
+      if (result instanceof Promise) {
+        result.then(() => {
+          mocks.forEach((mock: Mocker<any>) => mock.checkExpections());
+        });
+      }
+      return result;
+    };
   }
 
   public expect(name: keyof T, ...args: any): MethodMock {

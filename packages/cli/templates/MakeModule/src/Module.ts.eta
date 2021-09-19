@@ -1,0 +1,10 @@
+import { Module } from '@nestjs/common';
+import { <%=it.moduleName%>PrivateApplicationModule } from './Application/<%=it.moduleName%>PrivateApplicationModule';
+import { <%=it.moduleName%>PublicApplicationModule } from './Application/<%=it.moduleName%>PublicApplicationModule';
+
+@Module({
+  imports: [<%=it.moduleName%>PrivateApplicationModule, <%=it.moduleName%>PublicApplicationModule],
+  exports: [<%=it.moduleName%>PublicApplicationModule],
+  controllers: [],
+})
+export class <%=it.moduleName%>Module {}

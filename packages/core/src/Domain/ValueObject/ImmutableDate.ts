@@ -15,7 +15,8 @@ export class ImmutableDate extends ValueObject {
   }
 
   public static now() : ImmutableDate {
-    return new ImmutableDate(new Date());
+    const now = Math.trunc(Date.now()/1000)*1000;
+    return new ImmutableDate(new Date(now));
   }
 
   public static create(value:Date): ImmutableDate {
@@ -34,7 +35,11 @@ export class ImmutableDate extends ValueObject {
   }
 
   public getTimestamp(): number {
-    return Math.floor(this.value.getTime()/1000);
+    return Math.trunc(this.value.getTime()/1000);
+  }
+
+  public get timestamp(): number {
+    return this.getTimestamp();
   }
 
   public toString(): string {
