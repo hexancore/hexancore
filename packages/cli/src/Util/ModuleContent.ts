@@ -33,18 +33,18 @@ export class ModuleContent {
     return new ModuleContent(name, rootDir, templateRootDir);
   }
 
-  public testDir(path: string): this {
-    this.dir(Path.join('test', path));
+  public testDir(path: string, addGitKeep = false): this {
+    this.dir(Path.join('test', path), addGitKeep);
     return this;
   }
 
-  public srcDir(path: string): this {
-    this.dir(Path.join('src', path));
+  public srcDir(path: string, addGitKeep = false): this {
+    this.dir(Path.join('src', path), addGitKeep);
     return this;
   }
 
-  public srcModuleDir(path: string): this {
-    this.dir(Path.join('src', this.moduleName, path));
+  public srcModuleDir(path: string, addGitKeep = false): this {
+    this.dir(Path.join('src', this.moduleName, path), addGitKeep);
     return this;
   }
 
@@ -91,8 +91,8 @@ export class ModuleContent {
   }
 
   public print(): void {
-    console.log(this.dirs);
-    console.log(this.files);
+    console.log("Dirs:", this.dirs);
+    console.log("Files:", this.files);
   }
 
   public save(filesystem: FilesystemHelper): Promise<void> {

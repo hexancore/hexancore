@@ -1,0 +1,12 @@
+import { <%=it.messageType%>Handler, I<%=it.messageType%>Handler } from '@nestjs/cqrs';
+
+import { <%=it.messageClassName%> } from './<%=it.messageClassName%>';
+
+@<%=it.messageType%>Handler(<%=it.messageClassName%>)
+export class <%=it.messageClassName%>Handler implements I<%=it.messageType%>Handler<<%=it.messageClassName%>> {
+  public constructor() {}
+
+  public execute(<%=it.messageType.toLowerCase()%>: <%=it.messageClassName%>): Promise<Result<boolean>> {
+    // TODO: need implementation
+  }
+}

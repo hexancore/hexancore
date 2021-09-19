@@ -1,0 +1,24 @@
+import { Mocker } from '@hexcore/core';
+import { createMock } from 'ts-auto-mock';
+import { <%=it.messageClassName%> } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>';
+import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>Handler';
+
+
+/**
+ * @group unit/<%=it.moduleImportName%>
+ *
+ */
+describe('Command.<%=it.group%>.<%=it.name%>', () => {
+  let handler: <%=it.messageClassName%>Handler;
+
+  beforeEach(() => {
+    handler = new <%=it.messageClassName%>Handler();
+  });
+
+  test('execute()', async () => {
+    const <%=it.messageType.toLowerCase()%> = new <%=it.messageClassName%>();
+
+    await handler.execute(<%=it.messageType.toLowerCase()%>);
+    fail('Need implementation');
+  });
+});

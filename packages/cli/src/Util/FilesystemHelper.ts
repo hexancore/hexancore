@@ -16,7 +16,6 @@ export class FilesystemHelper {
   public async mkdir(dir: string): Promise<void> {
     const mode = 0o2775;
     await fs.ensureDir(dir, mode);
-    fs.outputFile(Path.join(dir, ".gitkeep"), "");
   }
 
   public async outputFiles(files: FileItem[]): Promise<void> {

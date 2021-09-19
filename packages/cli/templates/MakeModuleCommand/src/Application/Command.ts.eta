@@ -1,3 +1,0 @@
-export class <%=it.fullname%>Command {
-  public constructor() {}
-}
