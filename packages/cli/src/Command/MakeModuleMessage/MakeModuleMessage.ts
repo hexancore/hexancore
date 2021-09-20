@@ -59,7 +59,7 @@ export class MakeModuleMessage {
     if (this.isEventMaker()) {
       messagePath = `Domain/Event`+ ((group !== '') ? `/${group}/` : '');
     } else {
-      messagePath = `Application/Event`+ ((group !== '') ? `${group}/` : '')+ `${name}`;
+      messagePath = `Application/${this.messageType}`+ ((group !== '') ? `${group}/` : '')+ `${name}`;
     }
 
     const context = {
