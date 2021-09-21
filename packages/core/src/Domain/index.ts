@@ -15,4 +15,4 @@ export * from './Dto/SendMailDto';
 export * from './Dto/SendMailTemplateDto';
 
 export * from './Service/MailingService';
-export * from './Service/TemplateService';
+export * from './Service/Template/TemplateService';

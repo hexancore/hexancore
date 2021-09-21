@@ -3,11 +3,6 @@ import { EtaTemplateService } from './Template/EtaTemplateService';
 import { MockMailingService } from './Mailing/MockMailingService';
 
 export const ITemplateService = Symbol('TemplateService');
-const DefaultTemplateServiceProvider = {
-  provide: ITemplateService,
-  useClass: EtaTemplateService,
-};
-
 export const IMailingService = Symbol('MailingService');
 const DefaultMailingServiceProvider = {
   provide: IMailingService,
@@ -17,13 +12,20 @@ const DefaultMailingServiceProvider = {
 export interface CorePublicInfrastructureModuleOptions {
   MailingServiceProvider?: Provider;
   TemplateServiceProvider?: Provider;
+  DefaultTemplateServiceProviderOptions?: {
+    templateRootDir: string;
+  };
 }
 
 @Module({})
 export class HexcorePublicInfrastructureModule {
-  static register(options: CorePublicInfrastructureModuleOptions): DynamicModule {
+  public static register(options: CorePublicInfrastructureModuleOptions): DynamicModule {
+
     const providers = [
-      options.TemplateServiceProvider ?? DefaultTemplateServiceProvider,
+      options.TemplateServiceProvider ?? {
+        provide: ITemplateService,
+        useValue: new EtaTemplateService(options.DefaultTemplateServiceProviderOptions.templateRootDir)
+      },
       options.MailingServiceProvider ?? DefaultMailingServiceProvider,
     ];
     return {

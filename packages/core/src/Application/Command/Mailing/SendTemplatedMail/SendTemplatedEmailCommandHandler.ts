@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { SendTemplatedMailCommand } from './SendTemplatedEmailCommand';
 import { MailingService } from '../../../../Domain/Service/MailingService';
-import { TemplateService } from '../../../../Domain/Service/TemplateService';
+import { TemplateService } from '../../../../Domain/Service/Template/TemplateService';
 import { MailContent } from '../../../../Domain/ValueObject/MailContent';
 import { error, Result } from '../../../../Util/Result';
 import * as fs from 'fs-extra';
