@@ -57,9 +57,9 @@ export class MakeModuleMessage {
 
     let messagePath;
     if (this.isEventMaker()) {
-      messagePath = `Domain/Event`+ ((group !== '') ? `/${group}/` : '');
+      messagePath = `Domain/Event` + (group !== '' ? `/${group}/` : '');
     } else {
-      messagePath = `Application/${this.messageType}`+ ((group !== '') ? `${group}/` : '')+ `${name}`;
+      messagePath = `Application/${this.messageType}/` + (group !== '' ? `${group}/` : '') + `${name}`;
     }
 
     const context = {
@@ -75,7 +75,8 @@ export class MakeModuleMessage {
 
     if (!this.isEventMaker()) {
       files.push(content.srcTemplateFile(`MessageHandler.ts.eta`, `${messagePath}/${messageClassName}Handler.ts`, context));
-      files.push(content.testTemplateFile('unit', 'MessageHandler.test.ts.eta', `${messagePath}/${messageClassName}Handler.test.ts`, context));
+      const testHandlerPath = `Application/${this.messageType}/` + (group !== '' ? `${group}/` : '');
+      files.push(content.testTemplateFile('unit', 'MessageHandler.test.ts.eta', `${testHandlerPath}/${messageClassName}Handler.test.ts`, context));
     }
 
     await Promise.all(files);
