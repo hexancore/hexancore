@@ -35,6 +35,6 @@ const GeneralBusProvider = {
 @Module({
   imports: [CqrsModule, ConfigModuleInstance],
   providers: [GeneralBusProvider, AppHomeProvider],
-  exports: [GeneralBusProvider, ConfigModuleInstance, AppHomeProvider],
+  exports: [GeneralBusProvider, ConfigModuleInstance, AppHomeProvider, CqrsModule],
 })
 export class HexcoreModule {}

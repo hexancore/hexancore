@@ -1,6 +1,9 @@
-import { AppError } from '../..';
-import { FastifyReply } from 'fastify';
+import { AppError, AsyncResult } from '../..';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { Result, SuccessResult } from '../../Util/Result';
+import * as http2 from 'http2';
+
+export declare type FResponse = FastifyReply<http2.Http2SecureServer>;
 
 export function createErrorResponseBody(error: AppError): Record<string, any> {
   let body: Record<string, any>;
@@ -27,7 +30,7 @@ export function createErrorResponseBody(error: AppError): Record<string, any> {
     // when well defined error
     body = {
       type: error.type,
-      code: error.code??500,
+      code: error.code ?? 500,
     };
 
     if (error.data) {
@@ -42,13 +45,13 @@ export function createErrorResponseBody(error: AppError): Record<string, any> {
   return body;
 }
 
-export function sendErrorResponse(error: AppError, response: FastifyReply): void {
+export function sendErrorResponse(error: AppError, response: FResponse): void {
   const body = createErrorResponseBody(error);
   response.status(body.code);
   response.send(body);
 }
 
-export function sendResultResponse(result: Result<any>, response: FastifyReply, successCode = 200): void {
+export function sendResultResponse(result: Result<any>, response: FResponse, successCode = 200): void {
   if (result.isError()) {
     sendErrorResponse(result.value, response);
   }
@@ -61,7 +64,11 @@ export function sendResultResponse(result: Result<any>, response: FastifyReply, 
   response.send(result.value);
 }
 
-export function checkResultAndSendOnError<T>(result: Result<T>, response: FastifyReply): SuccessResult<T> {
+export async function sendAsyncResultResponse(result: AsyncResult<any>, response: FResponse, successCode = 200): Promise<void> {
+  sendResultResponse(await result, response, successCode);
+}
+
+export function checkResultAndSendOnError<T>(result: Result<T>, response: FResponse): SuccessResult<T> {
   if (result.isError()) {
     sendErrorResponse(result.value, response);
     return null;

@@ -1,5 +1,4 @@
 import { FastifyAdapter } from '@nestjs/platform-fastify';
-import { FastifyReply, FastifyRequest } from 'fastify';
 import * as fs from 'fs';
 import * as path from 'path';
 import { APP_CONFIG_PATH } from '@';
@@ -13,14 +12,13 @@ export async function createFastifyAdapter(allExceptionFilter: AllExceptionFilte
       key: fs.readFileSync(path.join(CERT_ROOT_DIR, 'ssl.key')),
       cert: fs.readFileSync(path.join(CERT_ROOT_DIR, 'ssl.crt')),
     },
+    pluginTimeout: 20000,
   });
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  adapter.setErrorHandler(function(error: Error, req: FastifyRequest, res: FastifyReply) {
-    allExceptionFilter.processInternalError(error, res);
+  adapter.setErrorHandler((error: Error, request: any, reply: any) => {
+    allExceptionFilter.processInternalError(error, reply);
   });
-
-  await adapter.register(require('middie'));
 
   await adapter.register(require('fastify-multipart'), {
     limits: {
@@ -38,7 +36,7 @@ export async function createFastifyAdapter(allExceptionFilter: AllExceptionFilte
     parseOptions: {},
   });
 
-  adapter.register(require('fastify-cors'), {
+  await adapter.register(require('fastify-cors'), {
     // TODO fix cors
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     origin: (origin, cb) => {

@@ -1,7 +1,6 @@
-import { AppError, isAppError, sendErrorResponse } from '@';
-import { ExceptionFilter, Catch, ArgumentsHost } from '@nestjs/common';
+import { AppError, FResponse, isAppError, sendErrorResponse } from '@';
+import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException } from '@nestjs/common';
 import { HttpException, LoggerService } from '@nestjs/common';
-import { FastifyReply } from 'fastify';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -11,39 +10,47 @@ export class AllExceptionFilter implements ExceptionFilter {
     this.logger = logger;
   }
 
-  public catch(error: Error, host: ArgumentsHost): void {
+  public catch(error: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
-    if (error instanceof HttpException) {
-      if (error.getStatus() >= 500) {
-        this.processInternalError(error, response);
-        return;
-      }
-
-      if (isAppError(error.getResponse())) {
-        sendErrorResponse(<AppError>error.getResponse(), response);
-        return;
-      }
-
-      const responseBody = <Record<string, any>>error.getResponse();
-      sendErrorResponse(
-        {
-          type: responseBody.error.replace(' ', '_').toLowerCase(),
-          code: error.getStatus(),
-          message: responseBody.message,
-        },
-        response,
-      );
+    if (this.isHttpException(error)) {
+      this.processHttpException(error, response);
       return;
     }
 
     // any other error
-    this.processInternalError(error, response);
+    this.processInternalError(error as Error, response);
   }
 
-  public processInternalError(error: Error, response: FastifyReply): void {
+  private processHttpException(error: HttpException, response: FResponse): void {
+    if (error.getStatus() >= 500) {
+      this.processInternalError(error, response);
+      return;
+    }
+
+    if (isAppError(error.getResponse())) {
+      sendErrorResponse(<AppError>error.getResponse(), response);
+      return;
+    }
+
+    const responseBody = <Record<string, any>>error.getResponse();
+    sendErrorResponse(
+      {
+        type: responseBody.error.replace(' ', '_').toLowerCase(),
+        code: error.getStatus(),
+        message: responseBody.message,
+      },
+      response,
+    );
+  }
+
+  public processInternalError(error: Error, response: FResponse): void {
     this.logger.error(error.message, error.stack);
     sendErrorResponse({ type: 'internal_error', error: error }, response);
+  }
+
+  private isHttpException(e: any): e is HttpException {
+    return e.getStatus;
   }
 }

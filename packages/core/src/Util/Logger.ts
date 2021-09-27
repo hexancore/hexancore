@@ -2,11 +2,16 @@ import { LoggerService } from '@nestjs/common';
 import { LambdaLog } from 'lambda-log';
 
 export class NullLogger implements LoggerService {
-  public log(message: any, context?: string) {}
-  public error(message: any, trace?: string, context?: string) {}
-  public warn(message: any, context?: string) {}
-  public debug?(message: any, context?: string) {}
-  public verbose?(message: any, context?: string) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public log(message: any, ...optionalParams: any[]): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public error(message: any, ...optionalParams: any[]): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public warn(message: any, ...optionalParams: any[]): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public debug?(message: any, ...optionalParams: any[]): any {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public verbose?(message: any, ...optionalParams: any[]): any {}
 }
 
 export class LambdaLogger implements LoggerService {
@@ -24,32 +29,28 @@ export class LambdaLogger implements LoggerService {
       meta: { name },
       tags: tags ?? [],
       levelKey: 'level',
-      tagsKey: 'tags'
+      tagsKey: 'tags',
     });
-
-    console.log(tags);
-
     return new LambdaLogger(native);
   }
 
-  public  log(message: any, context?: string) {
-    this.native.info(message, {ctx: context});
+  public log(message: any, context?: any): any {
+    this.native.info(message, context);
   }
 
-  public  warn(message: any, context?: string) {
-    this.native.warn(message, {ctx: context});
+  public warn(message: any, context?: any): any {
+    this.native.warn(message, context);
   }
 
-  public error(message: any, trace?: string, context?: string) {
-    this.native.error(message, {ctx: context});
+  public error(message: any, context?: any): any {
+    this.native.error(message, context);
   }
 
-  public debug?(message: any, context?: string) {
-    this.native.debug(message, {ctx: context});
+  public debug?(message: any, context?: any): any {
+    this.native.debug(message, context);
   }
 
-  public verbose?(message: any, context?: string) {
-    this.native.debug(message, {ctx: context});
+  public verbose?(message: any, context?: any): any {
+    this.native.debug(message, context);
   }
-
 }

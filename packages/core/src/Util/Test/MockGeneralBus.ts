@@ -40,9 +40,7 @@ export class MockGeneralBus extends GeneralBus {
       return expectation.result;
     }
 
-    throw new Error(
-      'Unexpected command to handle: ' + command.constructor.name + ' ' + JSON.stringify(command, null, 1),
-    );
+    throw new Error('Unexpected command to handle: ' + command.constructor.name + ' ' + JSON.stringify(command, null, 1));
   }
 
   public handleEvent(event: IEvent): AsyncResult<boolean> {
@@ -65,5 +63,19 @@ export class MockGeneralBus extends GeneralBus {
     }
 
     throw new Error('Unexpected query to handle: ' + query.constructor.name + ' ' + JSON.stringify(query, null, 1));
+  }
+
+  public checkAllHandled(): void {
+    if (this.commandsToHandle.length > 0) {
+      throw new Error('Unhandled commands: ' + this.commandsToHandle.map((v) => JSON.stringify(v, null, 1)).join("\n"));
+    }
+
+    if (this.eventsToHandle.length > 0) {
+      throw new Error('Unhandled events: ' + this.eventsToHandle.map((v) => JSON.stringify(v, null, 1)).join("\n"));
+    }
+
+    if (this.queriesToHandle.length > 0) {
+      throw new Error('Unhandled queries: ' + this.queriesToHandle.map((v) => JSON.stringify(v, null, 1)).join("\n"));
+    }
   }
 }
