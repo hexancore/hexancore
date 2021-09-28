@@ -4,11 +4,8 @@ import { MailingService } from '../../../../Domain/Service/MailingService';
 import { TemplateService } from '../../../../Domain/Service/Template/TemplateService';
 import { MailContent } from '../../../../Domain/ValueObject/MailContent';
 import { error, Result } from '../../../../Util/Result';
-import * as fs from 'fs-extra';
 import { Inject } from '@nestjs/common';
-import { TemplateContentType } from '../../../../Domain/Dto/SendMailTemplateDto';
 import { Email } from '../../../../Domain/ValueObject/Email';
-import { FilePath } from '../../../../Util/FilePath';
 import { ITemplateService, IMailingService } from '../../../../Infrastructure/HexcorePublicInfrastructureModule';
 import { ConfigService } from '@nestjs/config';
 
@@ -49,20 +46,8 @@ export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedM
   private async createMailContent(command: SendTemplatedMailCommand): Promise<Result<MailContent>> {
     const subject = await this.templateService.render(command.data.subject, command.templateData);
 
-    const html = await this.templateService.render(await this.loadTemplate(command.data.html), command.templateData);
-    const text = await this.templateService.render(await this.loadTemplate(command.data.text), command.templateData);
+    const html = await this.templateService.render(command.data.html, command.templateData);
+    const text = await this.templateService.render(command.data.text, command.templateData);
     return MailContent.create(subject, html, text);
-  }
-
-  private async loadTemplate(template: TemplateContentType): Promise<string> {
-    if (template instanceof FilePath) {
-      return (await fs.readFile(template.path)).toString('utf8');
-    }
-
-    if (template instanceof Buffer) {
-      return template.toString('utf8');
-    }
-
-    return <string>template;
   }
 }
