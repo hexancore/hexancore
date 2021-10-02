@@ -1,11 +1,7 @@
-import { Global, Module } from '@nestjs/common';
-import { GeneralBus } from './Util/Cqrs/GeneralBus';
-import { CqrsModule } from '@nestjs/cqrs';
-import { ConfigModule } from '@nestjs/config';
+import { Module, Global } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import path from 'path';
 import * as fs from 'fs';
-import { DefaultGeneralBus } from './Util/Cqrs/DefaultGeneralBus';
-import { HexcoreApplicationModule } from './Application/HexcoreApplicationModule';
 
 export const APP_HOME = process.env.APP_HOME ?? path.dirname(path.dirname(process.cwd()));
 export const APP_CONFIG_PATH = path.posix.join(APP_HOME, 'config', process.env.NODE_ENV);
@@ -30,7 +26,7 @@ const AppHomeProvider = {
 @Global()
 @Module({
   imports: [ConfigModuleInstance],
-  providers: [AppHomeProvider],
-  exports: [ConfigModuleInstance, AppHomeProvider],
+  providers: [AppHomeProvider, ConfigService],
+  exports: [ConfigModuleInstance, AppHomeProvider, ConfigService],
 })
 export class HexcoreModule {}

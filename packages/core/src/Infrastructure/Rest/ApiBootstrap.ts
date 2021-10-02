@@ -25,7 +25,9 @@ export async function apiBootstrap(options: ApiBootstrapOptions): Promise<void> 
 
   injectSwagger(app, options.appName, options.appVersion);
 
-  process.on('SIGINT', function () {
+  app.enableShutdownHooks();
+
+  /*process.on('SIGINT', function () {
     console.log('\nGracefully shutting down from SIGINT (Ctrl-C)');
     setTimeout(function () {
       exit(0);
@@ -33,7 +35,7 @@ export async function apiBootstrap(options: ApiBootstrapOptions): Promise<void> 
     app.close().then(() => {
       process.exit(0);
     });
-  });
+  });*/
 
   await app.listen(options.serverPort, '0.0.0.0');
 }

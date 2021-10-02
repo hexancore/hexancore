@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { GeneralBus } from '@';
 import { DefaultGeneralBus } from '@/Util/Cqrs/DefaultGeneralBus';
+import { GeneralBus } from '@/Util/Cqrs/GeneralBus';
 
 const GeneralBusProvider = {
   provide: GeneralBus,
@@ -12,6 +12,6 @@ const GeneralBusProvider = {
 @Module({
   imports: [CqrsModule],
   providers: [GeneralBusProvider],
-  exports: [ CqrsModule, GeneralBusProvider],
+  exports: [GeneralBusProvider],
 })
 export class HexcoreApplicationModule {}
