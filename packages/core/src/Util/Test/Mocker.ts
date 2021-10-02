@@ -1,6 +1,4 @@
-import 'jest-ts-auto-mock';
 /* eslint-disable @typescript-eslint/ban-types */
-import { method, On, ɵMarker } from 'ts-auto-mock/extension';
 
 interface MethodCallExpection {
   method: string;
@@ -26,31 +24,23 @@ interface DoneCallback {
 
 type ProvidesCallback = (cb: DoneCallback) => any;
 
-export class Mocker<T extends object> {
-  public readonly i: T;
+export class Mocker<T> {
+  private readonly mock: Partial<T>;
   public readonly name: string;
-  private methods: Map<string, any>;
   private methodCallExpections: MethodCallExpection[];
 
-  public constructor(instance: T, name = '') {
-    // Hack ts-automock marker when Mocker used in other project tests - instance come here without marker property
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (!instance[ɵMarker.instance.get()]) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      instance[ɵMarker.instance.get()] = true;
-    }
-    // end Hack
-
-    this.i = instance;
+  public constructor(name = '') {
+    this.mock = {};
     this.name = name;
-    this.methods = new Map();
     this.methodCallExpections = [];
   }
 
-  public static of<T extends object>(instance: T, name = ''): Mocker<T> {
-    return new Mocker(instance, name);
+  public static of<T extends object>(name = ''): Mocker<T> {
+    return new Mocker(name);
+  }
+
+  public get i(): T {
+    return this.mock as T;
   }
 
   /**
@@ -71,22 +61,18 @@ export class Mocker<T extends object> {
     };
   }
 
-  public expect(name: keyof T, ...args: any): MethodMock {
-    let methodMock;
-    if (!this.methods.has(<string>name)) {
-      methodMock = On(this.i).get(method(name));
-      this.methods.set(<string>name, methodMock);
-    } else {
-      methodMock = this.methods.get(<string>name);
+  public expect<K extends keyof T>(name: K, ...args: any): MethodMock {
+    if (!this.mock[name]) {
+      this.mock[<string>name] = jest.fn();
     }
 
     this.methodCallExpections.push({ method: <string>name, args });
-    return new MethodMock(methodMock);
+    return new MethodMock(this.mock[<string>name]);
   }
 
   public checkExpections(): void {
     this.methodCallExpections.forEach((expection) => {
-      const callMatcher = expect(this.methods.get(expection.method));
+      const callMatcher = expect(this.mock[expection.method]);
 
       try {
         if (expection.args.length > 0) {

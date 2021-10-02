@@ -1,6 +1,1 @@
-import 'jest-ts-auto-mock';
-import 'reflect-metadata';
-
-process.on('unhandledRejection', (err) => {
-  fail(err);
-});
+import '@/Util/Test/global-test-setup';

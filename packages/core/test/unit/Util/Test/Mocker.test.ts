@@ -1,5 +1,4 @@
 import { Mocker } from '../../../../src/Util/Test/Mocker';
-import { createMock } from 'ts-auto-mock';
 
 /**
  * @group unit/core
@@ -7,12 +6,14 @@ import { createMock } from 'ts-auto-mock';
 
 interface TestMock {
   a(param1: string, param2: boolean): boolean;
+  b(param1: string, param2: boolean): boolean;
 }
 
 
 describe('Mocker', () => {
+
   test('checkExpections() when called with expected arguments', async () => {
-    const mock = new Mocker(createMock<TestMock>());
+    const mock = Mocker.of<TestMock>();
 
     mock.expect("a", "test", true).andReturn(true);
     mock.i.a("test", true);
@@ -21,7 +22,7 @@ describe('Mocker', () => {
   });
 
   test('checkExpections() when called with not expected arguments', async () => {
-    const mock = new Mocker(createMock<TestMock>());
+    const mock = Mocker.of<TestMock>();
 
     mock.expect("a", "test", true).andReturn(true);
     mock.i.a("not test", false);
@@ -30,7 +31,7 @@ describe('Mocker', () => {
   });
 
   test('checkExpections() when not called', async () => {
-    const mock = new Mocker(createMock<TestMock>());
+    const mock = Mocker.of<TestMock>();
 
     mock.expect("a", "test", true).andReturn(true);
 
