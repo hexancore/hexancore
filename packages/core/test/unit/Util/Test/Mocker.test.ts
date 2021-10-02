@@ -9,23 +9,20 @@ interface TestMock {
   b(param1: string, param2: boolean): boolean;
 }
 
-
 describe('Mocker', () => {
-
   test('checkExpections() when called with expected arguments', async () => {
     const mock = Mocker.of<TestMock>();
 
-    mock.expect("a", "test", true).andReturn(true);
-    mock.i.a("test", true);
+    mock.expect('a', 'test', true).andReturn(true);
+    mock.i.a('test', true);
     mock.checkExpections();
-
   });
 
   test('checkExpections() when called with not expected arguments', async () => {
     const mock = Mocker.of<TestMock>();
 
-    mock.expect("a", "test", true).andReturn(true);
-    mock.i.a("not test", false);
+    mock.expect('a', 'test', true).andReturn(true);
+    mock.i.a('not test', false);
 
     expect(() => mock.checkExpections()).toThrow();
   });
@@ -33,9 +30,8 @@ describe('Mocker', () => {
   test('checkExpections() when not called', async () => {
     const mock = Mocker.of<TestMock>();
 
-    mock.expect("a", "test", true).andReturn(true);
-
+    mock.expect('a', 'test', true).andReturn(true);
+    
     expect(() => mock.checkExpections()).toThrow();
   });
-
 });

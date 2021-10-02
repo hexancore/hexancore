@@ -6,7 +6,11 @@ interface MethodCallExpection {
 }
 
 export class MethodMock {
-  public constructor(private readonly mock: any) {}
+  public constructor(private readonly mock: jest.Mock) {}
+
+  public andReturnWith(implementation: (...args: any) => any): void {
+    this.mock.mockImplementationOnce(implementation);
+  }
 
   public andReturn(value: any): void {
     this.mock.mockReturnValueOnce(value);
@@ -24,23 +28,51 @@ interface DoneCallback {
 
 type ProvidesCallback = (cb: DoneCallback) => any;
 
-export class Mocker<T> {
+export class Mocker<T extends object> {
   private readonly mock: Partial<T>;
   public readonly name: string;
   private methodCallExpections: MethodCallExpection[];
 
-  public constructor(name = '') {
+  public constructor(name = 'mock') {
     this.mock = {};
     this.name = name;
     this.methodCallExpections = [];
   }
 
-  public static of<T extends object>(name = ''): Mocker<T> {
+  public static of<T extends object>(name = 'mock'): Mocker<T> {
     return new Mocker(name);
   }
 
   public get i(): T {
     return this.mock as T;
+  }
+
+  public expect<K extends keyof T>(name: K, ...args: any): MethodMock {
+    let mockFunction: jest.Mock;
+    if (!this.mock[name]) {
+      mockFunction = this.mock[<string>name] = jest.fn();
+      mockFunction.mockName(this.name + '.' + <string>name);
+    } else {
+      mockFunction = this.mock[<string>name];
+    }
+
+    this.methodCallExpections.push({ method: <string>name, args });
+    return new MethodMock(mockFunction);
+  }
+
+  public checkExpections(): void {
+    this.methodCallExpections.forEach((expection: MethodCallExpection) => {
+      this.checkExpection(expection);
+    });
+  }
+
+  private checkExpection(expection: MethodCallExpection): void {
+    const callMatcher = expect(this.mock[expection.method]);
+    if (expection.args.length > 0) {
+      callMatcher.toBeCalledWith(...expection.args);
+    } else {
+      callMatcher.toBeCalled();
+    }
   }
 
   /**
@@ -59,33 +91,5 @@ export class Mocker<T> {
       }
       return result;
     };
-  }
-
-  public expect<K extends keyof T>(name: K, ...args: any): MethodMock {
-    if (!this.mock[name]) {
-      this.mock[<string>name] = jest.fn();
-    }
-
-    this.methodCallExpections.push({ method: <string>name, args });
-    return new MethodMock(this.mock[<string>name]);
-  }
-
-  public checkExpections(): void {
-    this.methodCallExpections.forEach((expection) => {
-      const callMatcher = expect(this.mock[expection.method]);
-
-      try {
-        if (expection.args.length > 0) {
-          callMatcher.toBeCalledWith(...expection.args);
-        } else {
-          callMatcher.toBeCalled();
-        }
-      } catch (e) {
-        const message: string = e.matcherResult.message;
-        const callName = (this.name !== '' ? this.name : 'Mock') + '.' + expection.method;
-        e.message = message.replace('jest.fn()', callName);
-        throw e;
-      }
-    });
   }
 }

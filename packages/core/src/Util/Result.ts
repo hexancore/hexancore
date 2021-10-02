@@ -26,6 +26,10 @@ export class ErrorResult<T> {
     throw new ReferenceError("Can't unwarp on ErrorResult: " + this.value.type);
   }
 
+  public get v(): T {
+    return this.unwarp();
+  }
+
   public getErrorType(): string {
     return this.value.type;
   }
@@ -83,6 +87,10 @@ export class SuccessResult<T> {
     return this.value;
   }
 
+  public get v(): T {
+    return this.unwarp();
+  }
+
   public getErrorType(): string {
     throw new ReferenceError("Can't use on SuccessResult");
   }
@@ -119,7 +127,7 @@ export class SuccessResult<T> {
 }
 
 export const error = <T>(error: AppError | string, code = 400): Result<T> => {
-  return new ErrorResult((isAppError(error) ? <AppError>error : { type: <string>error, code }));
+  return new ErrorResult(isAppError(error) ? <AppError>error : { type: <string>error, code });
 };
 
 export const success = <T>(result: T): Result<T> => {
