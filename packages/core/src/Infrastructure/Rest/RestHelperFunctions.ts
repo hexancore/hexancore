@@ -2,6 +2,7 @@ import { AppError, AsyncResult } from '../..';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Result, SuccessResult } from '../../Util/Result';
 import * as http2 from 'http2';
+import { HttpStatus } from '@nestjs/common';
 
 export declare type FResponse = FastifyReply<http2.Http2SecureServer>;
 
@@ -14,7 +15,7 @@ export function createErrorResponseBody(error: AppError): Record<string, any> {
         type: error.type,
         message: error.message,
         error: error.error,
-        code: 500,
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
         data: error.data,
         i18n: 'internal_error',
       };
@@ -23,14 +24,14 @@ export function createErrorResponseBody(error: AppError): Record<string, any> {
       body = {
         type: 'internal_error',
         message: 'Internal server error',
-        code: 500,
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
       };
     }
   } else {
     // when well defined error
     body = {
       type: error.type,
-      code: error.code ?? 500,
+      code: error.code ?? HttpStatus.INTERNAL_SERVER_ERROR,
     };
 
     if (error.data) {
@@ -51,12 +52,12 @@ export function sendErrorResponse(error: AppError, response: FResponse): void {
   response.send(body);
 }
 
-export function sendResultResponse(result: Result<any>, response: FResponse, successCode = 200): void {
+export function sendResultResponse(result: Result<any>, response: FResponse, successCode = HttpStatus.OK): void {
   if (result.isError()) {
     sendErrorResponse(result.value, response);
   }
 
-  if (successCode === 201 || successCode === 204) {
+  if (successCode === HttpStatus.CREATED || successCode === HttpStatus.NO_CONTENT) {
     response.status(successCode);
     response.send();
     return;
@@ -64,7 +65,7 @@ export function sendResultResponse(result: Result<any>, response: FResponse, suc
   response.send(result.value);
 }
 
-export async function sendAsyncResultResponse(result: AsyncResult<any>, response: FResponse, successCode = 200): Promise<void> {
+export async function sendAsyncResultResponse(result: AsyncResult<any>, response: FResponse, successCode = HttpStatus.OK): Promise<void> {
   sendResultResponse(await result, response, successCode);
 }
 
