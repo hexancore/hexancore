@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Testing | Hexcore</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Testing" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps" />
+<meta property="og:description" content="Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps" />
+<link rel="canonical" href="http://localhost:4000/documentation/testing/" />
+<meta property="og:url" content="http://localhost:4000/documentation/testing/" />
+<meta property="og:site_name" content="Hexcore" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Testing" />
+<script type="application/ld+json">
+{"@type":"WebPage","description":"Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps","headline":"Testing","url":"http://localhost:4000/documentation/testing/","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Hexcore" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Hexcore</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/documentation/testing/">Testing</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Testing</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Hexcore has some extra stuff for writing tests and support only Jest now.</p>
+
+<h2 id="global-test-setup">Global test setup</h2>
+<p>Use in your jest setup config file.</p>
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="dl">'</span><span class="s1">@hexcore/core/lib/Util/Test/global-test-setup</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="mockgeneralbus">MockGeneralBus</h2>
+<p>Class for simulate handling command, queries and events</p>
+<h3 id="example">Example</h3>
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">describe</span><span class="p">(</span><span class="dl">'</span><span class="s1">Command.User.Create</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="na">generalBus</span><span class="p">:</span> <span class="nx">MockGeneralBus</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="na">handler</span><span class="p">:</span> <span class="nx">UserCreateCommandHandler</span><span class="p">;</span>
+
+  <span class="nx">beforeEach</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">generalBus</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MockGeneralBus</span><span class="p">();</span> <span class="c1">// instance</span>
+    <span class="nx">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserCreateCommandHandler</span><span class="p">(</span><span class="nx">generalBus</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">test</span><span class="p">(</span><span class="dl">'</span><span class="s1">execute()</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">command</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserCreateCommand</span><span class="p">(</span><span class="dl">"</span><span class="s2">test_username</span><span class="dl">"</span><span class="p">);</span>
+
+    <span class="c1">// simple expection define:</span>
+    <span class="nx">generalBus</span><span class="p">.</span><span class="nx">expectHandleCommand</span><span class="p">(</span><span class="k">new</span> <span class="nx">SendEmailToCommand</span><span class="p">(</span><span class="dl">"</span><span class="s2">test_username</span><span class="dl">"</span><span class="p">));</span>
+
+    <span class="c1">// more complex expection define:</span>
+    <span class="nx">generalBus</span><span class="p">.</span><span class="nx">expectHandleEvent</span><span class="p">((</span><span class="na">event</span><span class="p">:</span> <span class="nx">IEvent</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">event</span> <span class="k">instanceof</span> <span class="nx">UserCreatedEvent</span> <span class="o">&amp;&amp;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">;</span>
+    <span class="p">});</span>
+
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">handler</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">command</span><span class="p">);</span>
+
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">result</span><span class="p">).</span><span class="nx">toMatchObject</span><span class="p">(</span><span class="nx">success</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="mocker">Mocker</h2>
+<p>Very simple helper stuff to create mocks based on Jest.Mock</p>
+
+<p>Example:</p>
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// You can create mock from class or interface</span>
+<span class="kd">let</span> <span class="nx">userRepository</span> <span class="o">=</span> <span class="nx">Mocker</span><span class="p">.</span><span class="k">of</span><span class="o">&lt;</span><span class="nx">UserRepository</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="c1">// setting method expection on mock</span>
+<span class="nx">userRepository</span>
+      <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="dl">'</span><span class="s1">save</span><span class="dl">'</span><span class="p">,</span> <span class="nx">expect</span><span class="p">.</span><span class="nx">objectContaining</span><span class="p">({</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="na">password</span><span class="p">:</span> <span class="nx">hashedPassword</span> <span class="p">}))</span>
+      <span class="p">.</span><span class="nx">andReturn</span><span class="p">(</span><span class="nx">successAsync</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+
+<span class="c1">// on test end call:</span>
+<span class="nx">userRepository</span><span class="p">.</span><span class="nx">checkExpections</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">describe</span><span class="p">(</span><span class="dl">'</span><span class="s1">Command.User.Create</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="na">userRepository</span><span class="p">:</span> <span class="nx">Mocker</span><span class="o">&lt;</span><span class="nx">UserRepository</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="na">generalBus</span><span class="p">:</span> <span class="nx">MockGeneralBus</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="na">handler</span><span class="p">:</span> <span class="nx">UserCreateCommandHandler</span><span class="p">;</span>
+
+  <span class="nx">beforeEach</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">userRepository</span> <span class="o">=</span> <span class="nx">Mocker</span><span class="p">.</span><span class="k">of</span><span class="o">&lt;</span><span class="nx">UserRepository</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="nx">generalBus</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MockGeneralBus</span><span class="p">();</span>
+    <span class="nx">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserCreateCommandHandler</span><span class="p">(</span><span class="nx">userRepository</span><span class="p">.</span><span class="nx">i</span><span class="p">,</span> <span class="nx">generalBus</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">test</span><span class="p">(</span><span class="dl">'</span><span class="s1">execute()</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">email</span> <span class="o">=</span> <span class="nx">Email</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="dl">'</span><span class="s1">test@makeupfield.com</span><span class="dl">'</span><span class="p">).</span><span class="nx">unwarp</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">Username</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="dl">'</span><span class="s1">test</span><span class="dl">'</span><span class="p">).</span><span class="nx">unwarp</span><span class="p">();</span>
+    <span class="kd">const</span> <span class="nx">password</span> <span class="o">=</span> <span class="nx">PlainPassword</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="dl">'</span><span class="s1">Test123!</span><span class="dl">'</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">command</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">UserCreateCommand</span><span class="p">(</span><span class="nx">username</span><span class="p">,</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">password</span><span class="p">);</span>
+
+    <span class="kd">const</span> <span class="nx">hashedPassword</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">test_hash</span><span class="dl">'</span><span class="p">;</span>
+
+    <span class="nx">passwordService</span><span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="dl">'</span><span class="s1">hash</span><span class="dl">'</span><span class="p">,</span> <span class="nx">password</span><span class="p">).</span><span class="nx">andReturn</span><span class="p">(</span><span class="nx">successAsync</span><span class="p">(</span><span class="nx">hashedPassword</span><span class="p">));</span>
+    <span class="nx">userRepository</span>
+      <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="dl">'</span><span class="s1">save</span><span class="dl">'</span><span class="p">,</span> <span class="nx">expect</span><span class="p">.</span><span class="nx">objectContaining</span><span class="p">({</span> <span class="nx">email</span><span class="p">,</span> <span class="nx">username</span><span class="p">,</span> <span class="na">password</span><span class="p">:</span> <span class="nx">hashedPassword</span> <span class="p">}))</span>
+      <span class="p">.</span><span class="nx">andReturn</span><span class="p">(</span><span class="nx">successAsync</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+    <span class="nx">generalBus</span><span class="p">.</span><span class="nx">expectHandleEvent</span><span class="p">((</span><span class="na">event</span><span class="p">:</span> <span class="nx">IEvent</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">event</span> <span class="k">instanceof</span> <span class="nx">UserCreatedEvent</span> <span class="o">&amp;&amp;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">email</span> <span class="o">===</span> <span class="nx">email</span> <span class="o">&amp;&amp;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">username</span> <span class="o">===</span> <span class="nx">username</span><span class="p">;</span>
+    <span class="p">});</span>
+
+    <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">handler</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">command</span><span class="p">);</span>
+
+    <span class="nx">passwordService</span><span class="p">.</span><span class="nx">checkExpections</span><span class="p">();</span>
+    <span class="nx">userRepository</span><span class="p">.</span><span class="nx">checkExpections</span><span class="p">();</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">result</span><span class="p">).</span><span class="nx">toMatchObject</span><span class="p">(</span><span class="nx">success</span><span class="p">(</span><span class="kc">true</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Hexcore</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Hexcore</li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/mararok"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">mararok</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
