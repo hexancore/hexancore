@@ -23,7 +23,7 @@ email:
 description: >- # this means to ignore newlines until "baseurl:"
   Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps
 baseurl: "/hexcore" # the subpath of your site, e.g. /blog
-url: "https://mararok.github.io/hexcore" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://mararok.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:
 github_username:  mararok
 
