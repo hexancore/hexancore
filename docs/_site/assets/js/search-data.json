@@ -2,25 +2,25 @@
     "doc": "Testing",
     "title": "Global test setup",
     "content": "Use in your jest setup config file. import '@hexcore/core/lib/Util/Test/global-test-setup'; . ",
-    "url": "https://mararok.github.io/hexcore/documentation/testing/#global-test-setup",
-    "relUrl": "/documentation/testing/#global-test-setup"
+    "url": "https://mararok.github.io/hexcore/testing#global-test-setup",
+    "relUrl": "/testing#global-test-setup"
   },"1": {
     "doc": "Testing",
     "title": "MockGeneralBus",
     "content": "Class for simulate handling command, queries and events . Example . describe('Command.User.Create', () =&gt; { let generalBus: MockGeneralBus; let handler: UserCreateCommandHandler; beforeEach(() =&gt; { generalBus = new MockGeneralBus(); // instance handler = new UserCreateCommandHandler(generalBus); }); test('execute()', async () =&gt; { const command = new UserCreateCommand(\"test_username\"); // simple expection define: generalBus.expectHandleCommand(new SendEmailToCommand(\"test_username\")); // more complex expection define: generalBus.expectHandleEvent((event: IEvent) =&gt; { return event instanceof UserCreatedEvent &amp;&amp; event.username === username; }); const result = await handler.execute(command); expect(result).toMatchObject(success(true)); }); }); . ",
-    "url": "https://mararok.github.io/hexcore/documentation/testing/#mockgeneralbus",
-    "relUrl": "/documentation/testing/#mockgeneralbus"
+    "url": "https://mararok.github.io/hexcore/testing#mockgeneralbus",
+    "relUrl": "/testing#mockgeneralbus"
   },"2": {
     "doc": "Testing",
     "title": "Mocker",
     "content": "Very simple helper stuff to create mocks based on Jest.Mock . Example: . // You can create mock from class or interface let userRepository = Mocker.of&lt;UserRepository&gt;(); // setting method expection on mock userRepository .expect('save', expect.objectContaining({ email, username, password: hashedPassword })) .andReturn(successAsync(true)); // on test end call: userRepository.checkExpections(); . describe('Command.User.Create', () =&gt; { let userRepository: Mocker&lt;UserRepository&gt;; let generalBus: MockGeneralBus; let handler: UserCreateCommandHandler; beforeEach(() =&gt; { userRepository = Mocker.of&lt;UserRepository&gt;(); generalBus = new MockGeneralBus(); handler = new UserCreateCommandHandler(userRepository.i, generalBus); }); test('execute()', async () =&gt; { const email = Email.create('test@makeupfield.com').unwarp(); const username = Username.create('test').unwarp(); const password = PlainPassword.create('Test123!'); const command = new UserCreateCommand(username, email, password); const hashedPassword = 'test_hash'; passwordService.expect('hash', password).andReturn(successAsync(hashedPassword)); userRepository .expect('save', expect.objectContaining({ email, username, password: hashedPassword })) .andReturn(successAsync(true)); generalBus.expectHandleEvent((event: IEvent) =&gt; { return event instanceof UserCreatedEvent &amp;&amp; event.email === email &amp;&amp; event.username === username; }); const result = await handler.execute(command); passwordService.checkExpections(); userRepository.checkExpections(); expect(result).toMatchObject(success(true)); }); }); . ",
-    "url": "https://mararok.github.io/hexcore/documentation/testing/#mocker",
-    "relUrl": "/documentation/testing/#mocker"
+    "url": "https://mararok.github.io/hexcore/testing#mocker",
+    "relUrl": "/testing#mocker"
   },"3": {
     "doc": "Testing",
     "title": "Testing",
     "content": "Hexcore has some extra stuff for writing tests and support only Jest now. ",
-    "url": "https://mararok.github.io/hexcore/documentation/testing/",
-    "relUrl": "/documentation/testing/"
+    "url": "https://mararok.github.io/hexcore/testing",
+    "relUrl": "/testing"
   }
 }
