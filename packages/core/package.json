@@ -1,6 +1,10 @@
 {
   "name": "@hexcore/core",
   "version": "0.3.0",
+  "engines": {
+    "node": ">=0.14"
+  },
+  "engine-strict": true,
   "description": "Core to build hexagonal architecture designed apps",
   "author": "Mararok",
   "license": "MIT",
