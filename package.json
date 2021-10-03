@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/mararok/hexcore.git"
   },
+  "scripts": {
+    "docs:serve": "cd docs && bundle exec jekyll serve"
+  },
   "homepage": "https://github.com/mararok/hexcore.git",
   "devDependencies": {
     "@types/node": "^14.14.7",
