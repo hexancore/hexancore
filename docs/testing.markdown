@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Testing
-permalink: /documentation/testing/
+permalink: /testing
 ---
 
 Hexcore has some extra stuff for writing tests and support only Jest now.
