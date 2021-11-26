@@ -31,7 +31,12 @@ describe('Mocker', () => {
     const mock = Mocker.of<TestMock>();
 
     mock.expect('a', 'test', true).andReturn(true);
-    
+
     expect(() => mock.checkExpections()).toThrow();
+  });
+
+  test('call method when no expection', async () => {
+    const mock = Mocker.of<TestMock>();
+    expect(() =>  mock.i.a("test", false)).toThrow();
   });
 });

@@ -8,6 +8,9 @@ type AndThenFunc = <T, U>(v: T) => Result<U>;
 type OrElseFunc = <T>(e: AppError) => Result<T>;
 
 export class ErrorResult<T> {
+   /**
+   * @deprecated use v() and e() methods
+   */
   public readonly value: AppError;
 
   public constructor(value: AppError) {
@@ -22,6 +25,9 @@ export class ErrorResult<T> {
     return false;
   }
 
+  /**
+   * @deprecated use v() method
+   */
   public unwarp(): T {
     throw new ReferenceError("Can't unwarp on ErrorResult: " + this.value.type);
   }
@@ -30,8 +36,16 @@ export class ErrorResult<T> {
     return this.unwarp();
   }
 
+  public get e(): AppError {
+    return this.value;
+  }
+
   public getErrorType(): string {
     return this.value.type;
+  }
+
+  public getErrorCode(): number {
+    return this.value.code;
   }
 
   public getError(): Error {
@@ -68,6 +82,9 @@ export class ErrorResult<T> {
 }
 
 export class SuccessResult<T> {
+   /**
+   * @deprecated use v() and e() methods
+   */
   public readonly value: T;
 
   public constructor(value: T) {
@@ -91,7 +108,18 @@ export class SuccessResult<T> {
     return this.unwarp();
   }
 
+  /**
+   * @deprecated use v() method
+   */
+  public get e(): AppError {
+    throw new ReferenceError("Can't use on SuccessResult");
+  }
+
   public getErrorType(): string {
+    throw new ReferenceError("Can't use on SuccessResult");
+  }
+
+  public getErrorCode(): number {
     throw new ReferenceError("Can't use on SuccessResult");
   }
 

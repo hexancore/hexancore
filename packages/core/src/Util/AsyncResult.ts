@@ -1,4 +1,4 @@
-import { AppError } from './AppError';
+import { AppError, isIgnoreError, INTERNAL_ERROR } from './AppError';
 import { error, Result, success } from './Result';
 
 export class AsyncResult<T> implements PromiseLike<Result<T>> {
@@ -13,10 +13,15 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
     return new AsyncResult(newPromise);
   }
 
-  public static fromPromise<T>(promise: Promise<T>, errorFn: (e: unknown) => AppError): AsyncResult<T> {
+  public static fromPromise<T>(promise: Promise<T>, errorFn?: (e: unknown) => AppError): AsyncResult<T> {
+
+    errorFn = errorFn ?? ((e: unknown) => INTERNAL_ERROR(e as Error));
+    
     const newPromise = promise
       .then((value: T) => success<T>(value))
-      .catch((e) => error<T>(errorFn(e)));
+      .catch((e) => {
+        return error<T>(errorFn(e));
+      });
 
     return new AsyncResult(newPromise);
   }
