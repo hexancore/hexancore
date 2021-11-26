@@ -1,6 +1,7 @@
 {
   "name": "@hexcore/mocker",
-  "version": "0.1.2",
+  "version": "0.2.8",
+  "keywords": ["mock", "typescript", "jest", "ts", "mockery", "automock"],
   "engines": {
     "node": ">=14"
   },
