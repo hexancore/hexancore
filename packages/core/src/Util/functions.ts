@@ -11,3 +11,7 @@ export function getClassMethods(obj: Record<string, any>): Array<string> {
 
   return [...properties.keys()].filter((item: string) => typeof obj[item] === 'function');
 }
+
+export function pascalCaseToSnakeCase(s: string): string {
+  return s.replace(/(?:^|\.?)([A-Z])/g, (_x, y) => '_' + y.toLowerCase()).replace(/^_/, '');
+}
