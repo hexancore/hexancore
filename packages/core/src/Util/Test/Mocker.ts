@@ -30,6 +30,7 @@ type ProvidesCallback = (cb: DoneCallback) => any;
 
 export class Mocker<T extends object> {
   private readonly mock: Partial<T>;
+  private readonly mockProxy: T;
   public readonly name: string;
   private methodCallExpections: MethodCallExpection[];
 
@@ -37,6 +38,29 @@ export class Mocker<T extends object> {
     this.mock = {};
     this.name = name;
     this.methodCallExpections = [];
+    this.mockProxy = this.createMockProxy();
+  }
+
+  private createMockProxy(): T {
+    const mock = this.mock;
+    const mockName = this.name;
+
+    return new Proxy<T>(mock as T, {
+      get: (target: T, prop: string) => {
+        if (target[prop]) {
+          return target[prop];
+        } else {
+          return (...args: any[]) => {
+            let message = `expect(${mockName}.${prop}).not.toBeCalled`;
+            message += args.length > 0 ? `With(${args.join(', ')})` : '()';
+            const e = new Error(message);
+            const split = e.stack.split("\n");
+            e.stack = [split[0], split[2]].join("\n");
+            throw e;
+          };
+        }
+      },
+    });
   }
 
   public static of<T extends object>(name = 'mock'): Mocker<T> {
@@ -44,7 +68,7 @@ export class Mocker<T extends object> {
   }
 
   public get i(): T {
-    return this.mock as T;
+    return this.mockProxy;
   }
 
   public expect<K extends keyof T>(name: K, ...args: any): MethodMock {

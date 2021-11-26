@@ -1,5 +1,4 @@
 import { Mocker } from '@hexcore/core';
-import { createMock } from 'ts-auto-mock';
 import { <%=it.messageClassName%> } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>';
 import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>Handler';
 

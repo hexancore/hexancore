@@ -1,5 +1,5 @@
 import { AppError, FResponse, isAppError, sendErrorResponse } from '@';
-import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException, HttpStatus } from '@nestjs/common';
 import { HttpException, LoggerService } from '@nestjs/common';
 
 @Catch()
@@ -24,7 +24,7 @@ export class AllExceptionFilter implements ExceptionFilter {
   }
 
   private processHttpException(error: HttpException, response: FResponse): void {
-    if (error.getStatus() >= 500) {
+    if (error.getStatus() >= HttpStatus.INTERNAL_SERVER_ERROR) {
       this.processInternalError(error, response);
       return;
     }
