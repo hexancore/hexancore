@@ -324,7 +324,7 @@
   dependencies:
     ajv "^6.12.6"
 
-"@hexcore/core@^0.5":
+"@hexcore/core@^0.*":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@hexcore/core/-/core-0.5.0.tgz#7e63d56eacad4e285d2f5860c0d1e3ef67d9d652"
   integrity sha512-fJsROXeTvt2ambcUTlRXsckqAZTwL4sVrLPZ4cca95h+8KA/p517XMaVnoutwkRoiuTBP/iXTP5F2l/YUSdtTw==
@@ -783,7 +783,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.1.tgz#0611b37db4246c937feef529ddcc018cf8e35708"
   integrity sha512-QpLcX9ZSsq3YYUUnD3nFDY8H7wctAhQj/TFKL8Ya8v5fMm3CFXxo8zStsLAl780ltoYoo1WvKUVGBQK+1ifr7g==
 
-"@types/node@^14.0":
+"@types/node@^14.*":
   version "14.18.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.0.tgz#98df2397f6936bfbff4f089e40e06fa5dd88d32a"
   integrity sha512-0GeIl2kmVMXEnx8tg1SlG6Gg8vkqirrW752KqolYo1PHevhhZN3bhJ67qHj+bQaINhX0Ra3TlWwRvMCd9iEfNQ==
