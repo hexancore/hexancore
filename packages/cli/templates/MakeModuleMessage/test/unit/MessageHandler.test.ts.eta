@@ -7,7 +7,7 @@ import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<
  * @group unit/<%=it.moduleImportName%>
  *
  */
-describe('Command.<%=it.group%>.<%=it.name%>', () => {
+describe('<%it.messageType%>.<%=it.group%>.<%=it.name%>', () => {
   let handler: <%=it.messageClassName%>Handler;
 
   beforeEach(() => {
