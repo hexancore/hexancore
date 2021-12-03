@@ -1,7 +1,14 @@
 {
   "name": "@hexcore/mocker",
-  "version": "0.2.8",
-  "keywords": ["mock", "typescript", "jest", "ts", "mockery", "automock"],
+  "version": "0.5.1",
+  "keywords": [
+    "mock",
+    "typescript",
+    "jest",
+    "ts",
+    "mockery",
+    "automock"
+  ],
   "engines": {
     "node": ">=14"
   },
@@ -32,11 +39,11 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/jest": "27.0.*",
     "@types/node": "^14.*",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "eslint": "^8.3.0",
-    "@types/jest": "27.0.*",
     "jest": "27.0.*",
     "jest-docblock": "27.0.*",
     "jest-runner": "27.0.*",
