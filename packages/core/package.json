@@ -26,6 +26,8 @@
     "test": "jest --runInBand",
     "test:clearCache": "jest --clearCache",
     "test:unit": "jest --runInBand --group=unit",
+    "test:watch": "jest --runInBand --watchAll",
+    "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prepublish": "yarn run build"
   },
@@ -52,7 +54,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.3.0",
     "typescript-chained-error": "^1.6.0",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "xss": "^1.0.10"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

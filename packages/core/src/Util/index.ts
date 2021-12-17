@@ -8,3 +8,4 @@ export * from './functions';
 export * from './FileTypeReadable';
 export * from './Test';
 export * from './Cqrs/GeneralBus';
+export * from './SanitizeHelper';

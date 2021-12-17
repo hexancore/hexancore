@@ -6,28 +6,30 @@ const META: ValueObjectMeta = {
   class: 'ImmutableDate',
 };
 
-export class ImmutableDate extends ValueObject {
-  private value:Date;
+export type ImmutableDateRawType = number;
 
-  protected constructor(value:Date) {
+export class ImmutableDate extends ValueObject {
+  private value: Date;
+
+  protected constructor(value: Date) {
     super();
     this.value = value;
   }
 
-  public static now() : ImmutableDate {
-    const now = Math.trunc(Date.now()/1000)*1000;
+  public static now(): ImmutableDate {
+    const now = Math.trunc(Date.now() / 1000) * 1000;
     return new ImmutableDate(new Date(now));
   }
 
-  public static create(value:Date): ImmutableDate {
-      return new ImmutableDate(new Date(value.getTime()));
+  public static create(value: Date): ImmutableDate {
+    return new ImmutableDate(new Date(value.getTime()));
   }
 
-  public static createFromTimestamp(timestamp:number): Result<ImmutableDate> {
+  public static createFromTimestamp(timestamp: number): Result<ImmutableDate> {
     if (timestamp < 0) {
-      return error(ValueObject.createInvalidRawValueError(META, ["'"+timestamp+"' is not valid timestamp"]));
+      return error(ValueObject.createInvalidRawValueError(META, ["'" + timestamp + "' is not valid timestamp"]));
     }
-    return success(new ImmutableDate(new Date(timestamp*1000)));
+    return success(new ImmutableDate(new Date(timestamp * 1000)));
   }
 
   public getRaw(): Date {
@@ -35,7 +37,7 @@ export class ImmutableDate extends ValueObject {
   }
 
   public getTimestamp(): number {
-    return Math.trunc(this.value.getTime()/1000);
+    return Math.trunc(this.value.getTime() / 1000);
   }
 
   public get timestamp(): number {
@@ -45,5 +47,4 @@ export class ImmutableDate extends ValueObject {
   public toString(): string {
     return this.value.toUTCString();
   }
-
 }
