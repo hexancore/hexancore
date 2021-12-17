@@ -1,22 +1,22 @@
 import { ValueObject } from './ValueObject';
 
 export abstract class StringValue<T extends StringValue = any> extends ValueObject {
-  protected readonly value: string;
+  public readonly v: string;
 
   protected constructor(value: string) {
     super();
-    this.value = value;
+    this.v = value;
   }
 
   public equals(other: T): boolean {
-    return this.value === other.value;
+    return this.v === other.v;
   }
 
   public getRaw(): string {
-    return this.value;
+    return this.v;
   }
 
   public toString(): string {
-    return this.value;
+    return this.v;
   }
 }

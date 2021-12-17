@@ -1,9 +1,9 @@
-import { AppError } from '@/Util/AppError';
 import { Id } from './Id';
-import { ValueObject, ValueObjectMeta } from './ValueObject';
-import { Result, success } from '../../Util/Result';
+import { ValueObject } from './ValueObject';
 
 const VALUE_REGEX = /^\d+$/;
+
+export type NumericStringIdRawType = string;
 
 export abstract class NumericStringId<T extends NumericStringId<any>> extends ValueObject implements Id {
   public readonly v: string;

@@ -5,9 +5,14 @@
     "mock",
     "typescript",
     "jest",
-    "ts",
     "mockery",
-    "automock"
+    "automock",
+    "test",
+    "testing",
+    "unit",
+    "stub",
+    "spy",
+    "fake"
   ],
   "engines": {
     "node": ">=14"
