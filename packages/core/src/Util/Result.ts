@@ -8,7 +8,7 @@ type AndThenFunc = <T, U>(v: T) => Result<U>;
 type OrElseFunc = <T>(e: AppError) => Result<T>;
 
 export class ErrorResult<T> {
-   /**
+  /**
    * @deprecated use v() and e() methods
    */
   public readonly value: AppError;
@@ -38,6 +38,10 @@ export class ErrorResult<T> {
 
   public get e(): AppError {
     return this.value;
+  }
+
+  public isErrorType(type: string): boolean {
+    return this.getErrorType() === type;
   }
 
   public getErrorType(): string {
@@ -82,7 +86,7 @@ export class ErrorResult<T> {
 }
 
 export class SuccessResult<T> {
-   /**
+  /**
    * @deprecated use v() and e() methods
    */
   public readonly value: T;
@@ -112,6 +116,11 @@ export class SuccessResult<T> {
    * @deprecated use v() method
    */
   public get e(): AppError {
+    throw new ReferenceError("Can't use on SuccessResult");
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isErrorType(type: string): boolean {
     throw new ReferenceError("Can't use on SuccessResult");
   }
 

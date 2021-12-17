@@ -10,6 +10,8 @@ const META: ValueObjectMeta = {
   class: 'Email',
 };
 
+export type EmailRawType = string;
+
 export class Email extends StringValue {
   public static create(value: string): Result<Email> {
     if (EMAIL_REGEX.test(value)) {
@@ -20,11 +22,11 @@ export class Email extends StringValue {
   }
 
   public getLocalPart(): string {
-    return this.value.split('@', 2)[0];
+    return this.v.split('@', 2)[0];
   }
 
   public getDomain(): string {
-    return this.value.split('@', 2)[1];
+    return this.v.split('@', 2)[1];
   }
 
   public getHash(): EmailHash {
