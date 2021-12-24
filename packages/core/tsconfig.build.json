@@ -6,7 +6,8 @@
     "paths": {
       "@": ["src"],
       "@/*": ["src/*"],
-    }
+    },
+    "types": ["jest", "reflect-metadata", "node"],
   },
   "include": ["src/**/*"]
 }
