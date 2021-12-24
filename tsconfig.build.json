@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./lib",
-    "types": ["jest", "reflect-metadata", "node"],
+    "types": ["jest", "node"],
     "incremental": true,
     "lib": ["ES2020"]
   },
