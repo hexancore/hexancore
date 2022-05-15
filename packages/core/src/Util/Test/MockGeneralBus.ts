@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ICommand, IEvent, IQuery } from '@nestjs/cqrs';
 import deepEqual from 'deep-equal';
-import { AsyncResult, successAsync } from '../AsyncResult';
+import { AsyncResult, successAsync } from '..';
 import { GeneralBus } from '../Cqrs/GeneralBus';
 
 interface HandleExpectation {

@@ -1,6 +1,6 @@
 {
   "name": "@hexcore/hcli",
-  "version": "0.5.2",
+  "version": "0.7.4",
   "description": "CLI to help build hexcore based apps",
   "author": "Mararok",
   "private": false,

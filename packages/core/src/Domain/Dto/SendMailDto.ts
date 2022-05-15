@@ -1,5 +1,4 @@
-import { Email } from '../ValueObject/Email';
-import { MailContent } from '../ValueObject/MailContent';
+import { Email, MailContent } from '@hexcore/common';
 
 export interface SendMailDto {
   readonly typeId: string;

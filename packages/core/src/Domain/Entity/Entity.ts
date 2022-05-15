@@ -1,5 +1,4 @@
-import { Id } from '../ValueObject/Id';
-export abstract class Entity<IdType extends Id> {
+export abstract class Entity<IdType> {
   public id?: IdType;
 
   public tracking: boolean;

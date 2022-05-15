@@ -1,9 +1,6 @@
 import FileType from 'file-type';
 import { Readable } from 'stream';
-import { AppError } from './AppError';
-import { AsyncResult, fromPromise } from './AsyncResult';
-import { success, error } from './Result';
-
+import { AppError, AsyncResult, error, fromPromise, success } from '..';
 export enum FileTypeReadableError {
   UNKNOWN = 'core.util.file_type_readable.unknown',
   UNSUPPORTED_TYPE = 'core.util.file_type_readable.unsupported_type',
@@ -24,10 +21,10 @@ export class FileTypeReadable {
     return fromPromise(FileType.stream(stream), (e: any) => {
       stream.destroy();
       if (e.code === 'ENOENT') {
-        return { type: FileTypeReadableError.NO_FILE, code: 404, e: error };
+        return { type: FileTypeReadableError.NO_FILE, code: 404, error: e };
       }
 
-      return { type: FileTypeReadableError.UNKNOWN, code: 500, e: error };
+      return { type: FileTypeReadableError.UNKNOWN, code: 500, error: e };
     }).andThen((fileTypeStream: any) => {
       if (!fileTypeStream.fileType) {
         fileTypeStream.resume();

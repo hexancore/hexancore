@@ -1,8 +1,8 @@
 import { MailingService } from '../../Domain/Service/MailingService';
 import { SendMailDto } from '../../Domain/Dto/SendMailDto';
-import { Result, success} from '../../Util/Result';
 import { NullLogger } from '../../Util/Logger';
 import { LoggerService } from '@nestjs/common';
+import { Result, success } from '../..';
 
 export class MockMailingService implements MailingService {
   private logger: LoggerService;

@@ -1,5 +1,5 @@
 import { TemplateContentType } from '@';
-import { Email } from '../ValueObject/Email';
+import { Email } from '@hexcore/common';
 
 export interface SendMailTemplateDto {
   readonly typeId: string;

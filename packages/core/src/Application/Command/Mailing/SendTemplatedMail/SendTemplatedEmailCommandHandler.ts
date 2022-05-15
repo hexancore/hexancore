@@ -2,12 +2,11 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { SendTemplatedMailCommand } from './SendTemplatedEmailCommand';
 import { MailingService } from '../../../../Domain/Service/MailingService';
 import { TemplateService } from '../../../../Domain/Service/Template/TemplateService';
-import { MailContent } from '../../../../Domain/ValueObject/MailContent';
-import { error, Result } from '../../../../Util/Result';
 import { Inject } from '@nestjs/common';
-import { Email } from '../../../../Domain/ValueObject/Email';
 import { ITemplateService, IMailingService } from '../../../../Infrastructure/HexcorePublicInfrastructureModule';
 import { ConfigService } from '@nestjs/config';
+import { error, Result } from '../../../../Util';
+import { Email, MailContent } from '../../../..';
 
 @CommandHandler(SendTemplatedMailCommand)
 export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedMailCommand, Result<boolean>> {

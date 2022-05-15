@@ -1,5 +1,5 @@
 import { <%=it.messageType%>Handler, I<%=it.messageType%>Handler } from '@nestjs/cqrs';
-
+import { Result, successAsync } from '@hexcore/core';
 import { <%=it.messageClassName%> } from './<%=it.messageClassName%>';
 
 @<%=it.messageType%>Handler(<%=it.messageClassName%>)
@@ -7,6 +7,7 @@ export class <%=it.messageClassName%>Handler implements I<%=it.messageType%>Hand
   public constructor() {}
 
   public execute(<%=it.messageType.toLowerCase()%>: <%=it.messageClassName%>): Promise<Result<boolean>> {
-    // TODO: need implementation
+    throw new Error("need implementation");
+    return successAsync(true).promise;
   }
 }
