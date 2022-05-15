@@ -5,6 +5,7 @@ import { injectable } from 'inversify';
 import { printError, printInfo } from '../../Util/ConsoleLog';
 import { ModuleContent } from '../../Util/ModuleContent';
 import { FilesystemHelper } from '../../Util/FilesystemHelper';
+import { StringHelper } from '../../Util/StringHelper';
 
 @injectable()
 export class MakeModule {
@@ -35,8 +36,7 @@ export class MakeModule {
   }
 
   private checkModuleName(name: string): boolean {
-    if (!/[a-z]+/.test(name)) {
-      printError('Module name must be only lower letters');
+    if (!this.moduleHelper.checkName(name)) {
       return false;
     }
 
@@ -63,9 +63,9 @@ export class MakeModule {
       'Infrastructure/Service',
       'Infrastructure/Persistence',
       'Infrastructure/Rest',
-    ].map((path) => Path.join('src', content.moduleName, path));
+    ].map((path) => Path.join('src', content.moduleDir, path));
 
-    const testDirs = ['unit', 'integration', 'functional'].map((path) => Path.join('test', path, content.moduleName));
+    const testDirs = ['unit', 'integration', 'functional'].map((path) => Path.join('test', path, content.moduleDir));
 
     srcDirs.concat(testDirs).forEach((path) => content.dir(path, true));
   }

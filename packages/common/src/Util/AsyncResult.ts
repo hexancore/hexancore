@@ -1,4 +1,4 @@
-import { AppError, isIgnoreError, INTERNAL_ERROR } from './AppError';
+import { AppError, INTERNAL_ERROR } from './AppError';
 import { error, Result, success } from './Result';
 
 export class AsyncResult<T> implements PromiseLike<Result<T>> {
@@ -14,9 +14,8 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
   }
 
   public static fromPromise<T>(promise: Promise<T>, errorFn?: (e: unknown) => AppError): AsyncResult<T> {
-
     errorFn = errorFn ?? ((e: unknown) => INTERNAL_ERROR(e as Error));
-    
+
     const newPromise = promise
       .then((value: T) => success<T>(value))
       .catch((e) => {
@@ -30,7 +29,7 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
     return new AsyncResult(
       this.promise.then(async (res: Result<T>) => {
         if (res.isError()) {
-          return error<A>(res.value);
+          return error<A>(res.e);
         }
 
         return success<A>(await f(res.unwarp()));
@@ -39,21 +38,17 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
   }
 
   public mapToTrue(): AsyncResult<boolean> {
-    return new AsyncResult(
-      this.promise.then(() => {
-        return success(true);
-      }),
-    );
+    return this.map(() => true);
   }
 
   public mapError(f: (e: AppError) => AppError | Promise<AppError>): AsyncResult<T> {
     return new AsyncResult(
       this.promise.then(async (res: Result<T>) => {
         if (res.isSuccess()) {
-          return success<T>(res.value);
+          return success<T>(res.v);
         }
 
-        return error<T>(await f(res.value));
+        return error<T>(await f(res.e));
       }),
     );
   }
@@ -62,10 +57,10 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
     return new AsyncResult(
       this.promise.then((res) => {
         if (res.isError()) {
-          return error<U>(res.value);
+          return error<U>(res.e);
         }
 
-        const newValue = f(res.value);
+        const newValue = f(res.v);
         return newValue instanceof AsyncResult ? newValue.promise : newValue;
       }),
     );
@@ -75,10 +70,10 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
     return new AsyncResult(
       this.promise.then(async (res: Result<T>) => {
         if (res.isError()) {
-          return f(res.value);
+          return f(res.e);
         }
 
-        return success<T>(res.value);
+        return success<T>(res.v);
       }),
     );
   }

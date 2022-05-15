@@ -9,8 +9,7 @@
     "url": "https://github.com/mararok/hexcore.git"
   },
   "scripts": {
-    "docs:serve": "cd docs && bundle exec jekyll serve",
-    "publish": "lerna publish"
+    "docs:serve": "cd docs && bundle exec jekyll serve"
   },
   "homepage": "https://github.com/mararok/hexcore.git",
   "devDependencies": {

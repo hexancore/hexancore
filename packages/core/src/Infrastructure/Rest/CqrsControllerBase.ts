@@ -1,8 +1,7 @@
 import { GeneralBus } from '../../Util/Cqrs/GeneralBus';
 import { ICommand, IQuery } from '@nestjs/cqrs';
 import { HttpStatus } from '@nestjs/common';
-import { FResponse, sendAsyncResultResponse } from '@';
-import { AsyncResult } from '../../Util/AsyncResult';
+import { AsyncResult, FResponse, sendAsyncResultResponse } from '@';
 
 export abstract class CqrsControllerBase {
   private readonly generalBus: GeneralBus;

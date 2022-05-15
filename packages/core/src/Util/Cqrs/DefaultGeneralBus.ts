@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, EventBus, ICommand, IEvent, IQuery, QueryBus } from '@nestjs/cqrs';
-import { AsyncResult, fromSafePromise, successAsync } from '../AsyncResult';
+import { AsyncResult, fromSafePromise } from '..';
 import { GeneralBus } from './GeneralBus';
 
 @Injectable()
