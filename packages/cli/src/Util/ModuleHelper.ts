@@ -3,6 +3,7 @@ import * as Path from 'path';
 import { PROJECT_SRC_DIR } from '../Constants';
 import { injectable } from 'inversify';
 import { printError } from './ConsoleLog';
+import { StringHelper } from './StringHelper';
 
 @injectable()
 export class ModuleHelper {
@@ -13,14 +14,17 @@ export class ModuleHelper {
   }
 
   public isExists(name: string): boolean {
-    return this.filesystemHelper.pathExists(Path.join(PROJECT_SRC_DIR, name));
+    const dirname = StringHelper.splitPascalCase(name).join('_').toLowerCase();
+    return this.filesystemHelper.pathExists(Path.join(PROJECT_SRC_DIR, dirname));
   }
 
   public checkName(name: string): boolean {
-    if (!/[a-z]+/.test(name)) {
-      printError('Module name must be only lower letters');
+    if (!/[a-zA-Z]+/.test(name)) {
+      printError('Module name must be only letters');
       return false;
     }
+
+    return true;
   }
 
   public checkExists(name: string): boolean {

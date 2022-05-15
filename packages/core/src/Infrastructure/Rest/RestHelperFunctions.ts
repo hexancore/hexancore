@@ -1,6 +1,5 @@
-import { AppError, AsyncResult } from '../..';
+import { AppError, AsyncResult, Result, SuccessResult } from '../..';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { Result, SuccessResult } from '../../Util/Result';
 import * as http2 from 'http2';
 import { HttpStatus } from '@nestjs/common';
 
@@ -54,7 +53,7 @@ export function sendErrorResponse(error: AppError, response: FResponse): void {
 
 export function sendResultResponse(result: Result<any>, response: FResponse, successCode = HttpStatus.OK): void {
   if (result.isError()) {
-    sendErrorResponse(result.value, response);
+    sendErrorResponse(result.v, response);
   }
 
   if (successCode === HttpStatus.CREATED || successCode === HttpStatus.NO_CONTENT) {
@@ -62,7 +61,7 @@ export function sendResultResponse(result: Result<any>, response: FResponse, suc
     response.send();
     return;
   }
-  response.send(result.value);
+  response.send(result.v);
 }
 
 export async function sendAsyncResultResponse(result: AsyncResult<any>, response: FResponse, successCode = HttpStatus.OK): Promise<void> {
@@ -71,7 +70,7 @@ export async function sendAsyncResultResponse(result: AsyncResult<any>, response
 
 export function checkResultAndSendOnError<T>(result: Result<T>, response: FResponse): SuccessResult<T> {
   if (result.isError()) {
-    sendErrorResponse(result.value, response);
+    sendErrorResponse(result.e, response);
     return null;
   }
 

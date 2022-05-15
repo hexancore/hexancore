@@ -1,7 +1,7 @@
 import { AllExceptionFilter } from '../../../../src/Infrastructure/Rest/AllExceptionFilter';
-import { Mocker } from '../../../../src/Util/Test/Mocker';
+import { Mocker } from '@hexcore/mocker';
+import { AppError } from '@hexcore/common';
 import { LoggerService, UnauthorizedException, ArgumentsHost } from '@nestjs/common';
-import { AppError } from '../../../../lib/Util/AppError';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { FResponse } from '@';
 
@@ -19,13 +19,12 @@ describe('AllExceptionFilter', () => {
     const argumentsHost = Mocker.of<ArgumentsHost>();
     const httpArgumentsHost = Mocker.of<HttpArgumentsHost>();
     const response = Mocker.of<FResponse>();
-    response.expect("status");
-    response.expect("send");
-    httpArgumentsHost.expect('getResponse').andReturn(response.i);
-    argumentsHost.expect('switchToHttp').andReturn(httpArgumentsHost.i);
+    response.expects('status');
+    response.expects('send');
+    httpArgumentsHost.expects('getResponse').andReturn(response.i);
+    argumentsHost.expects('switchToHttp').andReturn(httpArgumentsHost.i);
 
     filter.catch(error, argumentsHost.i as ArgumentsHost);
-
 
     logger.checkExpections();
   });

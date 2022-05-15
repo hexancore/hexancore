@@ -1,4 +1,3 @@
-
 import { NestFactory } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { exit } from 'process';
@@ -8,18 +7,18 @@ import { createFastifyAdapter } from './FastifyBootstrap';
 import { LambdaLogger } from '../../Util/Logger';
 
 export interface ApiBootstrapOptions {
-  mainModule: any,
-  appName: string,
-  appVersion: string,
-  serverPort: 3000
+  mainModule: any;
+  appName: string;
+  appVersion: string;
+  serverPort: number;
 }
 
 export async function apiBootstrap(options: ApiBootstrapOptions): Promise<void> {
-  const apiLogger = LambdaLogger.create("api");
+  const apiLogger = LambdaLogger.create('api');
   const allExceptionFilter = new AllExceptionFilter(apiLogger);
   const adapter = await createFastifyAdapter(allExceptionFilter);
   const app = await NestFactory.create<NestFastifyApplication>(options.mainModule, adapter, {
-    logger: apiLogger
+    logger: apiLogger,
   });
   app.useGlobalFilters(allExceptionFilter);
 

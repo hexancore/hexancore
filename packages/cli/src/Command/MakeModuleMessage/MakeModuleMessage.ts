@@ -20,10 +20,6 @@ export class MakeModuleMessage {
   }
 
   public async execute(moduleName: string, group: string, name: string, options: Record<string, any>): Promise<void> {
-    if (!this.moduleHelper.checkExists(moduleName)) {
-      return;
-    }
-
     group = group !== '' ? StringHelper.upperFirst(group) : '';
     name = StringHelper.upperFirst(name);
     printInfo(`Making ${this.messageType} '${name}' in group '${group}' in module '${moduleName}'`);
@@ -33,6 +29,9 @@ export class MakeModuleMessage {
     if (options.dryRun) {
       content.print();
     } else {
+      if (!this.moduleHelper.checkExists(moduleName)) {
+        return;
+      }
       content.save(this.filesystem);
     }
   }

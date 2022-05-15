@@ -1,4 +1,4 @@
-import { ValueObject, ValueObjectMeta } from './ValueObject';
+import { AbstractValueObject, ValueObjectMeta } from './ValueObject';
 import V from '../../Util/Validator';
 import {SyncCheckFunction} from 'fastest-validator';
 import { Result, error, success } from '../../Util/Result';
@@ -14,7 +14,8 @@ const META: ValueObjectMeta = {
     class: 'MailContent',
 };
 
-export class MailContent extends ValueObject {
+export class MailContent extends AbstractValueObject<MailContent> {
+
   public readonly subject: string;
   public readonly html: string;
   public readonly text: string;
@@ -33,5 +34,15 @@ export class MailContent extends ValueObject {
     }
 
     return success(new MailContent(subject, html, text));
+  }
+
+  public equals(o: MailContent): boolean {
+    return this.subject === o.subject && this.html === o.html && this.text === o.text;
+  }
+  public toString(): string {
+    return JSON.stringify(this);
+  }
+  public toJson(): object {
+    return this;
   }
 }

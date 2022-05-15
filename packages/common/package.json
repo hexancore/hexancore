@@ -1,0 +1,87 @@
+{
+  "name": "@hexcore/common",
+  "version": "0.7.4",
+  "engines": {
+    "node": ">=14"
+  },
+  "engine-strict": true,
+  "description": "Core to build hexagonal architecture designed apps",
+  "author": "Mararok",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mararok/hexcore.git",
+    "directory": "packages/common"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/mararok/hexcore.git",
+  "scripts": {
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "lint": "eslint \"{src,test}/**/*.ts\" --fix",
+    "test": "jest --runInBand",
+    "test:clearCache": "jest --clearCache",
+    "test:unit": "jest --runInBand --group=unit",
+    "test:watch": "jest --runInBand --watchAll",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "prepublish": "yarn run build"
+  },
+  "dependencies": {
+    "fastest-validator": "^1.11.1",
+    "nanoid": "^3.1.28",
+    "uuid": "^8.3.1",
+    "xss": "^1.0.10"
+  },
+  "devDependencies": {
+    "@hexcore/mocker": "*",
+    "@types/jest": "27.0.*",
+    "@types/node": "^14.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "eslint": "^8.3.0",
+    "jest": "27.0.*",
+    "jest-docblock": "27.0.*",
+    "jest-runner": "27.0.*",
+    "jest-runner-groups": "^2.1.0",
+    "reflect-metadata": "0.1.13",
+    "ts-jest": "27.0.*",
+    "typescript": "4.3.5"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "runner": "groups",
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@$": "<rootDir>/src",
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "testMatch": [
+      "<rootDir>/test/unit/**/*.test.ts",
+      "<rootDir>/test/integration/**/*.test.ts"
+    ],
+    "setupFiles": [
+      "<rootDir>/test/config.ts"
+    ],
+    "coverageDirectory": "./test/coverage",
+    "testEnvironment": "node"
+  },
+  "bugs": {
+    "url": "https://github.com/mararok/hexcore/issues"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  }
+}
