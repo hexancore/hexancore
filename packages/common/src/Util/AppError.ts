@@ -1,5 +1,3 @@
-import { HttpStatus } from '@nestjs/common';
-import { error } from './Result';
 /**
  * Represents app error like invalid user input data
  */
@@ -33,7 +31,8 @@ const INTERNAL_ERROR_TYPE = 'internal_error';
 export function INTERNAL_ERROR(error: Error): AppError {
   return {
     type: INTERNAL_ERROR_TYPE,
-    code: HttpStatus.INTERNAL_SERVER_ERROR,
+    code: 500,
+    message: error.message,
     error,
   };
 }

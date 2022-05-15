@@ -1,11 +1,13 @@
-import { Mocker } from '@hexcore/core';
+import { Mocker } from '@hexcore/mocker';
 import { <%=it.messageClassName%> } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>';
 import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>Handler';
 
-
 /**
- * @group unit/<%=it.moduleImportName%>
+ * @group unit
  *
+ * @group <%=it.moduleImportName%>
+ *
+ * @group unit/<%=it.moduleImportName%>
  */
 describe('<%it.messageType%>.<%=it.group%>.<%=it.name%>', () => {
   let handler: <%=it.messageClassName%>Handler;
@@ -14,10 +16,15 @@ describe('<%it.messageType%>.<%=it.group%>.<%=it.name%>', () => {
     handler = new <%=it.messageClassName%>Handler();
   });
 
+  afterEach(() => {
+
+  });
+
   test('execute()', async () => {
     const <%=it.messageType.toLowerCase()%> = new <%=it.messageClassName%>();
 
     await handler.execute(<%=it.messageType.toLowerCase()%>);
+
     fail('Need implementation');
   });
 });

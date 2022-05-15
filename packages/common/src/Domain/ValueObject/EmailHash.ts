@@ -1,15 +1,18 @@
 import { StringValue } from './StringValue';
 import * as crypto from 'crypto';
 import { Email } from './Email';
+import { ValueObject } from './ValueObject';
+import { RegexStringIdRawType } from './RegexStringValue';
 
-export type EmailHashRawType = string;
+export type EmailHashRawType = RegexStringIdRawType;
 
+@ValueObject("Core")
 export class EmailHash extends StringValue {
   public static createFromEmail(email: Email): EmailHash {
     return new EmailHash(
       crypto
         .createHash('sha1')
-        .update(email.getRaw())
+        .update(email.v)
         .digest('hex'),
     );
   }

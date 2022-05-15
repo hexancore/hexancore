@@ -3,11 +3,12 @@ import * as Eta from 'eta';
 import * as Path from 'path';
 import { CLI_ROOT_DIR } from '../Constants';
 import { FilesystemHelper } from './FilesystemHelper';
+import { StringHelper } from '../Util/StringHelper';
 const TEMPLATE_ROOT_DIR = Path.join(CLI_ROOT_DIR, 'templates');
 
 export declare type TestType = 'unit' | 'integration' | 'functional';
 export class ModuleContent {
-  public readonly moduleName: string;
+  public readonly moduleDir: string;
   public readonly moduleClassPrefix;
   public readonly rootDir: string;
   public readonly templateRootDir: string;
@@ -16,8 +17,9 @@ export class ModuleContent {
   public readonly files: Array<FileItem>;
 
   private constructor(moduleName: string, rootDir: string, templateRootDir: string) {
-    this.moduleName = moduleName;
-    this.moduleClassPrefix = moduleName.charAt(0).toUpperCase() + moduleName.slice(1);
+    this.moduleDir = StringHelper.splitPascalCase(moduleName).join('_').toLowerCase();
+    this.moduleClassPrefix = moduleName;
+
     this.rootDir = rootDir;
     this.templateRootDir = templateRootDir;
 
@@ -44,7 +46,7 @@ export class ModuleContent {
   }
 
   public srcModuleDir(path: string, addGitKeep = false): this {
-    this.dir(Path.join('src', this.moduleName, path), addGitKeep);
+    this.dir(Path.join('src', this.moduleDir, path), addGitKeep);
     return this;
   }
 
@@ -71,7 +73,7 @@ export class ModuleContent {
   public async templateFile(templateFilePath: string, moduleFilePath: string, context?: Record<string, any>): Promise<this> {
     context = context ?? {};
     context.moduleName = this.moduleClassPrefix;
-    context.moduleImportName = this.moduleName;
+    context.moduleImportName = this.moduleDir;
     const content = (await Eta.renderFile(Path.join(TEMPLATE_ROOT_DIR, this.templateRootDir, templateFilePath), context)) as string;
     return this.stringFile(moduleFilePath, content);
   }
@@ -102,10 +104,10 @@ export class ModuleContent {
   }
 
   private srcFile(filePath: string): string {
-    return Path.join('src', this.moduleName, filePath);
+    return Path.join('src', this.moduleDir, filePath);
   }
 
   private testFile(testType: TestType, filePath: string): string {
-    return Path.join('test', testType, this.moduleName, filePath);
+    return Path.join('test', testType, this.moduleDir, filePath);
   }
 }

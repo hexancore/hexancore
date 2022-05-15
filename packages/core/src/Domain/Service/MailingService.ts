@@ -1,4 +1,5 @@
-import { Result } from '../../Util/Result';
+
+import { Result } from '../..';
 import { SendMailDto } from '../Dto/SendMailDto';
 
 export interface MailingService {
