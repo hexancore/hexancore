@@ -78,7 +78,7 @@ describe('Command.User.Create', () => {
   });
 
   test('execute()', async () => {
-    const email = Email.create('test@makeupfield.com').unwarp();
+    const email = Email.create('test@test.com').unwarp();
     const username = Username.create('test').unwarp();
     const password = PlainPassword.create('Test123!');
     const command = new UserCreateCommand(username, email, password);
