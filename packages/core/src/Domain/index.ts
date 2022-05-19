@@ -1,7 +1,6 @@
 export * from './Entity/Entity';
-export * from '@hexcore/common/lib/Util/AppError';
 
-export * from '@hexcore/common/lib/Domain';
+export * from './Repository/EntityRepository';
 
 export * from './Dto/SendMailDto';
 export * from './Dto/SendMailTemplateDto';

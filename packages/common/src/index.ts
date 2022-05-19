@@ -1,2 +1,2 @@
-export * from './Util'
-export * from './Domain/ValueObject'
+export * from './Util';
+export * from './Domain';

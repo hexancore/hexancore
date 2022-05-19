@@ -12,7 +12,7 @@ export class MockMailingService implements MailingService {
   }
 
   public async sendEmail(data: SendMailDto): Promise<Result<boolean>> {
-    this.logger.log({ msg:'Sent mail', typeId: data.typeId, to: data.to.getHash() });
+    this.logger.log({ msg:'Sent mail', typeId: data.typeId, to: data.to.hash });
     return success(true);
   }
 }

@@ -1,0 +1,35 @@
+.DEFAULT_GOAL := help
+.PHONY: help
+
+HELP_TARGET_MAX_CHAR_NUM ?= 30
+SUBPROJECTS_FOLDER ?= services
+BOLD   := $(shell tput -Txterm bold)
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
+
+.ONESHELL:
+## Shows this help
+help:
+	@echo '${BOLD}Info${RESET}'
+	@echo ' ${YELLOW}${INFO}${RESET}'
+	@echo '${BOLD}Usage:${RESET}'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}${EXTRA_MAKE_ARGS} <target>${RESET}'
+	@echo '${BOLD}Subprojects:${RESET}'
+	@printf '  %s\n' $(foreach subproject,$(shell ls ${SUBPROJECTS_FOLDER}),"${GREEN}${subproject}${RESET}")
+	@echo '${BOLD}Targets:${RESET}'
+	@awk '/^(.+):/ { \
+		helpMessage = match(lastLine, /^## (.*)/); \
+		if (helpMessage) { \
+			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
+			is_subproject_target = match($$1, /^.+_subproject(_.+):/); \
+			if (is_subproject_target) { \
+				helpCommand = substr($$2, 0, index($$2, ":")-2)"<subproject>"; \
+            } else { \
+				helpCommand = substr($$1, 0, index($$1, ":")-1); \
+			} \
+			printf "  ${YELLOW}%-$(HELP_TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+		} \
+	} \
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)

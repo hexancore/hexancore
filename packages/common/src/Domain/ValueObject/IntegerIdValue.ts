@@ -3,6 +3,14 @@ import { AbstractValueObject } from './ValueObject';
 
 export type IntegerIdRawType = number;
 
+/**
+ * For pass child class constructor as parameter
+ */
+export type IntegerIdValueConstructor<T extends IntegerIdValue<T>> = {
+  new (v: number): T;
+  c<T extends IntegerIdValue<T>>(this: IntegerIdValueConstructor<T>, value: number): Result<T>;
+};
+
 export abstract class IntegerIdValue<T extends IntegerIdValue<any>> extends AbstractValueObject<T> {
   public readonly v: number;
 
