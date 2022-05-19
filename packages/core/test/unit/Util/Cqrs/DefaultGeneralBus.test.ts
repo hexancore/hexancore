@@ -3,27 +3,28 @@
  */
 
 import { CommandBus, EventBus, ICommand, IEvent, IQuery, QueryBus } from '@nestjs/cqrs';
-import { Email, successAsync, success, GeneralBus, DefaultGeneralBus, errorAsync, error } from '@';
 import { Mocker } from '@hexcore/mocker';
+import { Email, successAsync, success, errorAsync, error } from '@hexcore/common';
+import { GeneralBus, DefaultGeneralBus } from '../../../../src';
 
 class TestCommand implements ICommand {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 
 class TestEvent implements IEvent {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 
 class TestQuery implements IQuery {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 

@@ -1,11 +1,11 @@
 {
-  "name": "@hexcore/core",
+  "name": "@hexcore/typeorm",
   "version": "0.8.0",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "engine-strict": true,
-  "description": "Core to build hexagonal architecture designed apps",
+  "description": "Hexcore typeorm support package",
   "author": "Mararok",
   "license": "MIT",
   "main": "lib/index.js",
@@ -13,12 +13,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mararok/hexcore.git",
-    "directory": "packages/core"
+    "directory": "packages/typeorm"
   },
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/mararok/hexcore.git",
+  "homepage": "https://mararok.github.io/hexcore/",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -31,51 +31,36 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prepublish": "yarn run build"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
+    "@hexcore/core": "^0.8.0",
     "@nestjs/common": "^8.4.5",
     "@nestjs/config": "^2.0.1",
     "@nestjs/core": "^8.4.5",
+    "@nestjs/typeorm": "^8.0.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.3.0",
-    "//": "end common module deps",
-    "@nestjs/cqrs": "^8.0.4",
-    "@nestjs/platform-fastify": "^8.4.5",
-    "@nestjs/swagger": "^5.2.1"
+    "typeorm": "^0.2.34",
+    "mysql2": "^2.3.3"
   },
+
   "dependencies": {
-    "@hexcore/common": "^0.8.0",
-    "class-transformer": "^0.4.0",
-    "class-validator": "^0.13.0",
-    "deep-equal": "^2.0.5",
-    "eta": "^1.12.3",
-    "fastest-validator": "^1.11.1",
-    "fastify": "^3.21.*",
-    "fastify-cookie": "^5.3.1",
-    "fastify-multipart": "^5.0.0",
-    "fastify-swagger": "^4.12.1",
-    "file-type": "^16.4.0",
-    "lambda-log": "^3",
-    "middie": "^5.3.0",
-    "nanoid": "^3.1.28",
-    "typescript-chained-error": "^1.6.0",
-    "uuid": "^8.3.1",
-    "xss": "^1.0.10"
+    "@hexcore/common": "^0.8.0"
   },
   "devDependencies": {
+    "@hexcore/core": "^0.8.0",
     "@nestjs/common": "^8.4.5",
     "@nestjs/config": "^2.0.1",
     "@nestjs/core": "^8.4.5",
+    "@nestjs/typeorm": "^8.0.3",
+    "@nestjs/testing": "^8.4.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.3.0",
-    "@nestjs/cqrs": "^8.0.4",
-    "@nestjs/platform-fastify": "^8.4.5",
-    "@nestjs/swagger": "^5.2.1",
-    "//": "end optional module deps",
-    "@hexcore/mocker": "^0.8.0",
-    "@nestjs/cli": "8.1.6",
+    "typeorm": "^0.2.34",
+    "mysql2": "^2.3.3",
+    "//": "optional deps end",
+    "@hexcore/mocker": "*",
     "@types/jest": "27.0.*",
-    "@types/node": "^14.0",
-    "@types/uuid": "^8.3.0",
+    "@types/node": "^16.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "eslint": "^8.3.0",

@@ -6,7 +6,7 @@ import { Inject } from '@nestjs/common';
 import { ITemplateService, IMailingService } from '../../../../Infrastructure/HexcorePublicInfrastructureModule';
 import { ConfigService } from '@nestjs/config';
 import { error, Result } from '../../../../Util';
-import { Email, MailContent } from '../../../..';
+import { Email, MailContent } from '@hexcore/common';
 
 @CommandHandler(SendTemplatedMailCommand)
 export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedMailCommand, Result<boolean>> {
@@ -29,16 +29,16 @@ export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedM
     if (content.isError()) {
       return error({
         type: 'core.application.command.mailing.send_templated_mail.rendered_content_error',
-        data: content.value.data,
+        data: content.e.data,
       });
     }
 
     return this.mailingService.sendEmail({
       typeId: command.data.typeId,
-      from: command.data.from ?? Email.create(this.config.get<string>("CORE_MAILING_FROM")).unwarp(),
+      from: command.data.from ?? Email.c(this.config.get<string>("CORE_MAILING_FROM")).v,
       fromName: command.data.fromName ?? this.config.get<string>("CORE_MAILING_FROMNAME"),
       to: command.data.to,
-      content: content.value,
+      content: content.v,
     });
   }
 

@@ -3,27 +3,27 @@
  */
 
 import { ICommand, IEvent, IQuery } from '@nestjs/cqrs';
-import { Email, successAsync, success } from '@';
 import { MockGeneralBus } from '@/Util/Test';
+import { Email, successAsync, success } from '@hexcore/common';
 
 class TestCommand implements ICommand {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 
 class TestEvent implements IEvent {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 
 class TestQuery implements IQuery {
   public readonly email: Email;
   public constructor(emailRaw: string) {
-    this.email = Email.create(emailRaw).unwarp();
+    this.email = Email.c(emailRaw).v;
   }
 }
 
@@ -79,7 +79,7 @@ describe('MockGeneralBus', () => {
   });
 
   test('handleEvent() when use function matcher and expected is correct', () => {
-    generalBus.expectHandleEvent((event: IEvent) => event instanceof TestEvent && event.email.getRaw() === 'test@test.com');
+    generalBus.expectHandleEvent((event: IEvent) => event instanceof TestEvent && event.email.v === 'test@test.com');
 
     expect(() => generalBus.handleEvent(new TestEvent('test@test.com'))).not.toThrow();
   });

@@ -9,7 +9,7 @@ export function isEntityNotFoundErrorType(e: AppError, module: string, entityTyp
   return entityNotFoundErrorType(module, entityType) === e.type;
 }
 
-export function NotFoundEntityError(module: string, entityType: string, searchCriteria: Record<string, string>): AppError {
+export function NotFoundEntityError(module: string, entityType: string, searchCriteria: Record<string, any>): AppError {
   return {
     type: entityNotFoundErrorType(module, entityType),
     code: 404,

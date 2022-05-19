@@ -4,4 +4,4 @@ coverage
 *.tsbuildinfo
 /**/test/coverage
 .yarn
-yarn-error.log
+*.log

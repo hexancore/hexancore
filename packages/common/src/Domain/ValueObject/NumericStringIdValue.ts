@@ -5,10 +5,16 @@ const VALUE_REGEX = /^\d+$/;
 
 export type NumericStringIdRawType = string;
 
+/**
+ * For pass child class constructor as parameter
+ */
+export type NumericStringIdValueConstructor<T extends NumericStringIdValue<T>> = {
+  new (v: string): T;
+  c<T extends NumericStringIdValue<T>>(this: NumericStringIdValueConstructor<T>, value: string): Result<T>;
+};
+
 export abstract class NumericStringIdValue<T extends NumericStringIdValue<any>> extends RegexStringValue<T> {
-
-  public static c<T extends NumericStringIdValue<T>>(this: {new(value: string): T}, value: string): Result<T> {
-
+  public static c<T extends NumericStringIdValue<T>>(this: { new (value: string): T }, value: string): Result<T> {
     return NumericStringIdValue.create.call(this, value, VALUE_REGEX);
   }
 
