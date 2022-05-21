@@ -2,6 +2,7 @@
 layout: page
 title: Testing
 permalink: /testing
+nav_order: 4
 ---
 
 Hexcore has some extra stuff for writing tests and support only Jest now.
