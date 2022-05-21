@@ -8,7 +8,8 @@ url: "https://mararok.github.io"
 github_username:  mararok
 
 theme: just-the-docs
-remote_theme: pmarsceill/just-the-docs
+remote_theme: just-the-docs/just-the-docs
+
 plugins:
   - jekyll-feed
 
