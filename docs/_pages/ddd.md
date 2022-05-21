@@ -2,6 +2,7 @@
 layout: page
 title: Domain Driven Design
 permalink: /ddd
+nav_order: 3
 ---
 
 # Intro
