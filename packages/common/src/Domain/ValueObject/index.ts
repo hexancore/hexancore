@@ -5,4 +5,5 @@ export * from './ImmutableDate';
 export * from './StringValue';
 export * from './NumericStringIdValue';
 export * from './IntegerIdValue';
+export * from './UnsignedBigIntValue';
 export * from './MailContent';

@@ -7,7 +7,7 @@ permalink: /testing
 Hexcore has some extra stuff for writing tests and support only Jest now.
 
 ## Global test setup
-Use in your jest setup config file.
+Use in your Jest setup config file.
 ```ts
 import '@hexcore/core/lib/Util/Test/global-test-setup';
 ```
@@ -43,10 +43,40 @@ describe('Command.User.Create', () => {
 });
 ```
 
-## Mocker
+## Mocker package `@hexcore/mocker`
+
 Very simple helper stuff to create mocks based on Jest.Mock
 
-Example:
+### Usage:
+```ts
+import { Mocker } from '@hexcore/mocker';
+
+interface TestMock {
+  a(param1: string, param2: boolean): boolean;
+  b(param1: string, param2: boolean): boolean;
+}
+
+// you can simply mock interface or class and give it descriptive name(used in errors)
+const mock = Mocker.of<TestMock>("test_mock");
+
+// define method call expectation(available methods list will be shows in VS)
+mock.expects('a', 'test', true).andReturn(true);
+
+// mock "i" attribute is object of mocked class, pass it where you need
+mock.i.a('test', true);
+
+// after execute your code, you can check sets expectations results with it(for many tests call it in jest "afterEach")
+mock.checkExpections();
+```
+
+### Defining expectation
+
+`Mocker::expects(method, ...args)` returns `MethodMock` object with you can define return value by:
+*  `andReturnWith((implementation: (...args: any) => any)` - you can define your own method implementation
+*  `andReturn(value: any)` - define returns passed value once
+*  `andReturnResolved` - simple sugar function for andReturnWith((() => Promise.resolve(value))
+
+### More complex example:
 ```ts
 // You can create mock from class or interface
 let userRepository = Mocker.of<UserRepository>();
@@ -59,11 +89,6 @@ userRepository
 // on test end call:
 userRepository.checkExpections();
 ```
-
-
-
-
-
 
 ```ts
 describe('Command.User.Create', () => {
