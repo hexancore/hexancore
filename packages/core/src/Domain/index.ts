@@ -1,6 +1,8 @@
-export * from './Entity/Entity';
+export * from './Entity/EntityBase';
+export * from './Entity/EntityDecorator';
+export * from './Entity/Collection/EntityCollection';
 
-export * from './Repository/EntityRepository';
+export * from './Repository';
 
 export * from './Dto/SendMailDto';
 export * from './Dto/SendMailTemplateDto';

@@ -4,7 +4,7 @@
 
 import { ICommand, IEvent, IQuery } from '@nestjs/cqrs';
 import { MockGeneralBus } from '@/Util/Test';
-import { Email, successAsync, success } from '@hexcore/common';
+import { Email, OK, OKA, } from '@hexcore/common';
 
 class TestCommand implements ICommand {
   public readonly email: Email;
@@ -34,29 +34,29 @@ describe('MockGeneralBus', () => {
   });
 
   test('handleCommand() when expected is correct', async () => {
-    const expectedResult = successAsync(true);
+    const expectedResult = OKA(true);
     generalBus.expectHandleCommand(new TestCommand('test@test.com'), expectedResult);
 
     const currentResult = await generalBus.handleCommand(new TestCommand('test@test.com'));
 
-    expect(currentResult).toEqual(success(true));
+    expect(currentResult).toEqual(OK(true));
   });
 
   test('handleCommand() then return in expects order', async () => {
-    const expectedResult1 = successAsync(true);
-    const expectedResult2 = successAsync(true);
+    const expectedResult1 = OKA(true);
+    const expectedResult2 = OKA(true);
     generalBus.expectHandleCommand(new TestCommand('test1@test.com'), expectedResult1);
     generalBus.expectHandleCommand(new TestCommand('test2@test.com'), expectedResult2);
 
     const currentResult1 = await generalBus.handleCommand(new TestCommand('test1@test.com'));
     const currentResult2 = await generalBus.handleCommand(new TestCommand('test2@test.com'));
 
-    expect(currentResult1).toEqual(success(true));
-    expect(currentResult2).toEqual(success(true));
+    expect(currentResult1).toEqual(OK(true));
+    expect(currentResult2).toEqual(OK(true));
   });
 
   test('handleCommand() when expected is not correct', async () => {
-    generalBus.expectHandleCommand(new TestCommand('test@test.com'), successAsync(true));
+    generalBus.expectHandleCommand(new TestCommand('test@test.com'), OKA(true));
     const expectedNotCorrectCommand = new TestCommand('test2@test.com');
 
     expect(() => generalBus.handleCommand(expectedNotCorrectCommand)).toThrowError(
@@ -100,29 +100,29 @@ describe('MockGeneralBus', () => {
   });
 
   test('handleQuery() when expected is correct', async () => {
-    const expectedResult = successAsync(true);
+    const expectedResult = OKA(true);
     generalBus.expectHandleQuery(new TestQuery('test@test.com'), expectedResult);
 
     const currentResult = await generalBus.handleQuery(new TestQuery('test@test.com'));
 
-    expect(currentResult).toEqual(success(true));
+    expect(currentResult).toEqual(OK(true));
   });
 
   test('handleQuery() then return in expects order', async () => {
-    const expectedResult1 = successAsync(true);
-    const expectedResult2 = successAsync(true);
+    const expectedResult1 = OKA(true);
+    const expectedResult2 = OKA(true);
     generalBus.expectHandleQuery(new TestQuery('test1@test.com'), expectedResult1);
     generalBus.expectHandleQuery(new TestQuery('test2@test.com'), expectedResult2);
 
     const currentResult1 = await generalBus.handleQuery(new TestQuery('test1@test.com'));
     const currentResult2 = await generalBus.handleQuery(new TestQuery('test2@test.com'));
 
-    expect(currentResult1).toEqual(success(true));
-    expect(currentResult2).toEqual(success(true));
+    expect(currentResult1).toEqual(OK(true));
+    expect(currentResult2).toEqual(OK(true));
   });
 
   test('handleQuery() when expected is not correct', async () => {
-    generalBus.expectHandleQuery(new TestQuery('test@test.com'), successAsync(true));
+    generalBus.expectHandleQuery(new TestQuery('test@test.com'), OKA(true));
     const expectedNotCorrectQuery = new TestQuery('test2@test.com');
 
     expect(() => generalBus.handleQuery(expectedNotCorrectQuery)).toThrowError(

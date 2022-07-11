@@ -1,7 +1,7 @@
+import { AsyncResult, OKA } from '@hexcore/common';
 import { Injectable } from '@nestjs/common';
 import { ICommand, IEvent, IQuery } from '@nestjs/cqrs';
 import deepEqual from 'deep-equal';
-import { AsyncResult, successAsync } from '..';
 import { GeneralBus } from '../Cqrs/GeneralBus';
 
 interface HandleExpectation {
@@ -53,7 +53,7 @@ export class MockGeneralBus extends GeneralBus {
       throw new Error('Unexpected event to handle: ' + event.constructor.name + ' ' + JSON.stringify(event, null, 1));
     }
 
-    return successAsync(true);
+    return OKA(true);
   }
 
   public handleQuery(query: IQuery): AsyncResult<any> {

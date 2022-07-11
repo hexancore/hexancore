@@ -29,46 +29,49 @@
     "test:watch": "jest --runInBand --watchAll",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn test && yarn run build"
   },
   "peerDependencies": {
-    "@hexcore/core": "^0.8.0",
+    "@hexcore/core": "^0.9.0",
     "@nestjs/common": "^8.4.5",
     "@nestjs/config": "^2.0.1",
     "@nestjs/core": "^8.4.5",
     "@nestjs/typeorm": "^8.0.3",
+    "mysql2": "^2.3.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.3.0",
-    "typeorm": "^0.2.34",
-    "mysql2": "^2.3.3"
+    "typeorm": "^0.2.34"
   },
-
   "dependencies": {
-    "@hexcore/common": "^0.8.0"
+    "@hexcore/common": "^0.9.0"
   },
   "devDependencies": {
-    "@hexcore/core": "^0.8.0",
+    "//": "optional deps end",
+    "@hexcore/core": "^0.9.0",
+    "@hexcore/mocker": "*",
     "@nestjs/common": "^8.4.5",
     "@nestjs/config": "^2.0.1",
     "@nestjs/core": "^8.4.5",
-    "@nestjs/typeorm": "^8.0.3",
+    "@nestjs/cqrs": "^8.0.4",
+    "@nestjs/platform-fastify": "^8.4.5",
+    "@nestjs/swagger": "^5.2.1",
     "@nestjs/testing": "^8.4.5",
-    "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.3.0",
-    "typeorm": "^0.2.34",
-    "mysql2": "^2.3.3",
-    "//": "optional deps end",
-    "@hexcore/mocker": "*",
+    "@nestjs/typeorm": "^8.1",
     "@types/jest": "27.0.*",
     "@types/node": "^16.0",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "eslint": "^8.3.0",
+    "fs-extra": "^10.1.0",
     "jest": "27.0.*",
     "jest-docblock": "27.0.*",
     "jest-runner": "27.0.*",
     "jest-runner-groups": "^2.1.0",
+    "mysql2": "^2.3.3",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.3.0",
     "ts-jest": "27.0.*",
+    "typeorm": "^0.3.0",
     "typescript": "4.3.5"
   },
   "jest": {

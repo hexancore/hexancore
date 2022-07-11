@@ -1,13 +1,13 @@
 import { <%=it.messageType%>Handler, I<%=it.messageType%>Handler } from '@nestjs/cqrs';
-import { Result, successAsync } from '@hexcore/core';
+import { ARP, OKAP } from '@hexcore/common';
 import { <%=it.messageClassName%> } from './<%=it.messageClassName%>';
 
 @<%=it.messageType%>Handler(<%=it.messageClassName%>)
 export class <%=it.messageClassName%>Handler implements I<%=it.messageType%>Handler<<%=it.messageClassName%>> {
   public constructor() {}
 
-  public execute(<%=it.messageType.toLowerCase()%>: <%=it.messageClassName%>): Promise<Result<boolean>> {
+  public execute(<%=it.messageType.toLowerCase()%>: <%=it.messageClassName%>): ARP<boolean> {
     throw new Error("need implementation");
-    return successAsync(true).promise;
+    return OKAP(true);
   }
 }

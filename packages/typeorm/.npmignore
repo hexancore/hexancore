@@ -4,3 +4,6 @@ tsconfig.json
 src
 *.tsbuildinfo
 yarn-error.log
+.yalc
+yalc.lock
+yarn.lock

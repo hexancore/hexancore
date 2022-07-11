@@ -15,7 +15,7 @@ describe('AllExceptionFilter', () => {
   });
 
   test('catch()', () => {
-    const error = new UnauthorizedException({ type: 'test', code: 401 } as AppError);
+    const error = new UnauthorizedException(new AppError({ type: 'test', code: 401 }));
     const argumentsHost = Mocker.of<ArgumentsHost>();
     const httpArgumentsHost = Mocker.of<HttpArgumentsHost>();
     const response = Mocker.of<FResponse>();

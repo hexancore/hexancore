@@ -26,6 +26,7 @@ Hexcore is microframework based on NestJS to build modern modular scalable apps.
 
 #### Worth reading:
 
+- <https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together>
 - <https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs>
 - <https://vaadin.com/learn/tutorials/ddd/ddd_and_hexagonal>
 - <https://julien-topcu.medium.com/decoupling-your-technical-code-from-your-business-logic-with-the-hexagonal-architecture-hexarch-b4da7ba62079>

@@ -1,4 +1,6 @@
-export * from './MySqlModule';
+export * from './TypeOrmMySqlModule';
 export * from './Test/TypeOrmTestHelper';
-export * from './Transformer/ValueObject';
-export * from './EntityRepository';
+export * from './Schema/ValueObject';
+export * from './Schema/TypeOrmEntitySchema';
+export * from './Repository';
+

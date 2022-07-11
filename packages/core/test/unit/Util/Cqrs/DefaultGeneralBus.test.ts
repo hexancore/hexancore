@@ -4,7 +4,7 @@
 
 import { CommandBus, EventBus, ICommand, IEvent, IQuery, QueryBus } from '@nestjs/cqrs';
 import { Mocker } from '@hexcore/mocker';
-import { Email, successAsync, success, errorAsync, error } from '@hexcore/common';
+import { Email, ERR, ERRA, OK, OKA } from '@hexcore/common';
 import { GeneralBus, DefaultGeneralBus } from '../../../../src';
 
 class TestCommand implements ICommand {
@@ -48,24 +48,24 @@ describe('DefaultGeneralBus', () => {
   });
 
   test('handleCommand() when success result', async () => {
-    const expectedResult = successAsync(true);
+    const expectedResult = OKA(true);
     const command = new TestCommand('test@test.com');
 
-    commandBus.expects("execute", command).andReturn(expectedResult);
+    commandBus.expects('execute', command).andReturn(expectedResult);
 
     const currentResult = await generalBus.handleCommand(command);
 
-    expect(currentResult).toEqual(success(true));
+    expect(currentResult).toEqual(OK(true));
   });
 
   test('handleCommand() when error result', async () => {
-    const expectedResult = errorAsync({type:"test"});
+    const expectedResult = ERRA({ type: 'test' });
     const command = new TestCommand('test@test.com');
 
-    commandBus.expects("execute", command).andReturn(expectedResult);
+    commandBus.expects('execute', command).andReturn(expectedResult);
 
     const currentResult = await generalBus.handleCommand(command);
 
-    expect(currentResult).toEqual(error({type:"test"}));
+    expect(currentResult).toEqual(ERR({ type: 'test' }));
   });
 });

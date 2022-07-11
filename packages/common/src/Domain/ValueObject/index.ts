@@ -1,9 +1,18 @@
+// BASE
 export * from './ValueObject';
+export * from './SimpleValueObject';
+
+// MAILING
 export * from './Email';
 export * from './EmailHash';
-export * from './ImmutableDate';
-export * from './StringValue';
-export * from './NumericStringIdValue';
-export * from './IntegerIdValue';
-export * from './UnsignedBigIntValue';
 export * from './MailContent';
+
+// TIME
+export * from './ImmutableDate';
+
+// PRIMITIVE
+export * from './StringValue';
+export * from './UBigIntValue';
+export * from './UIntValue';
+export * from './RegexStringValue';
+

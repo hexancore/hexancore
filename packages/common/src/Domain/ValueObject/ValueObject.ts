@@ -1,4 +1,4 @@
-import { AppError, error, pascalCaseToSnakeCase, Result } from '../../Util';
+import { AppError, ERR, pascalCaseToSnakeCase, Result } from '../../Util';
 
 export interface ValueObjectMeta {
   readonly module: string;
@@ -21,11 +21,11 @@ export function ValueObject(moduleName: string): (constructor: Function) => void
 }
 
 export function ValueObjectInvalidRawValueError(meta: ValueObjectMeta, data: any = null): AppError {
-  return {
+  return new AppError({
     type: pascalCaseToSnakeCase(meta.module) + '.domain.value_object.' + pascalCaseToSnakeCase(meta.class) + '.invalid_raw_value',
     data,
     code: 400,
-  };
+  });
 }
 
 export function checkEnumValueObject(value: any, enumType: any, meta: ValueObjectMeta, data: any = null): AppError | null {
@@ -36,6 +36,12 @@ export function checkEnumValueObject(value: any, enumType: any, meta: ValueObjec
 }
 
 export abstract class AbstractValueObject<T extends AbstractValueObject<any>> {
+  /**
+   * @deprecated use invalidRaw
+   * @param meta
+   * @param data
+   * @returns
+   */
   protected static createInvalidRawValueError(meta: ValueObjectMeta, data: any = null): AppError {
     return ValueObjectInvalidRawValueError(this.prototype[VALUE_OBJECT_META_PROPERTY], data);
   }
@@ -45,10 +51,10 @@ export abstract class AbstractValueObject<T extends AbstractValueObject<any>> {
     if (!meta) {
       throw new Error(VALUE_OBJECT_META_PROPERTY + " property isn't defined, add @ValueObject decorator to " + valueObjectClass.name);
     }
-    return error(ValueObjectInvalidRawValueError(meta, data));
+    return ERR(ValueObjectInvalidRawValueError(meta, data));
   }
 
   public abstract equals(o: T): boolean;
   public abstract toString(): string;
-  public abstract toJson(): any;
+  public abstract toJSON(): any;
 }

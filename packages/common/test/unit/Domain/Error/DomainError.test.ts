@@ -1,25 +1,42 @@
 /**
- * @group unit/core
+ * @group unit/common
  */
 
-import { entityNotFoundErrorType, NotFoundEntityError } from '@/Domain/Error/DomainError';
+import { ERR } from '@';
+import { DefineDomainErrors, standard_entity_error_types } from '@/Domain/Error/DomainError';
 
 describe('DomainError', () => {
-  test('entityNotFoundErrorType()', () => {
-    expect(entityNotFoundErrorType('TestModule', 'TestEntityType')).toBe('test_module.domain.entity.test_entity_type.not_found');
-  });
+  test('DefineDomainErrors', () => {
+    const errors = DefineDomainErrors(
+      'Test',
+      new (class TestDomainErrors {
+        entity_test_1: standard_entity_error_types = 'not_found';
+        entity_test_2: standard_entity_error_types | 'custom_1' = 'not_found';
+        other_error = '';
+      })(),
+    );
 
-  test('NotFoundEntityError()', () => {
-    const expected = {
-      type: 'test_module.domain.entity.test_entity_type.not_found',
-      code: 404,
-      data: {
-        module: 'TestModule',
-        entityType: 'TestEntityType',
+    expect(errors.entity.test_1.t('not_found')).toBe('test.domain.entity.test_1.not_found');
+    expect(errors.entity.test_1.t('duplicate')).toBe('test.domain.entity.test_1.duplicate');
 
-        searchCriteria: { id: 'test' },
-      },
+    expect(errors.entity.test_1.err('not_found', 'test_data')).toEqual(ERR('test.domain.entity.test_1.not_found', 404, 'test_data'));
+    expect(errors.entity.test_1.err('duplicate')).toEqual(ERR('test.domain.entity.test_1.duplicate', 400));
+
+    expect(errors.entity.test_2.t('not_found')).toBe('test.domain.entity.test_2.not_found');
+    expect(errors.entity.test_2.t('duplicate')).toBe('test.domain.entity.test_2.duplicate');
+    expect(errors.entity.test_2.t('custom_1')).toBe('test.domain.entity.test_2.custom_1');
+
+    expect(errors.entity.test_2.err('not_found', 'test_data')).toEqual(ERR('test.domain.entity.test_2.not_found', 404, 'test_data'));
+    expect(errors.entity.test_2.err('duplicate')).toEqual(ERR('test.domain.entity.test_2.duplicate', 400));
+    expect(errors.entity.test_2.err('custom_1')).toEqual(ERR('test.domain.entity.test_2.custom_1', 400));
+
+    expect(errors.other_error + '').toBe('test.domain.other_error');
+    expect(errors.other_error.err()).toEqual(ERR('test.domain.other_error', 400));
+
+    const objectStringProp = {
+      [errors.other_error]: 'test',
     };
-    expect(NotFoundEntityError('TestModule', 'TestEntityType', { id: 'test' })).toEqual(expected);
+
+    expect(objectStringProp).toEqual({ 'test.domain.other_error': 'test' });
   });
 });

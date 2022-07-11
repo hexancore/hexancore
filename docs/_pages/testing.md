@@ -7,12 +7,6 @@ nav_order: 4
 
 Hexcore has some extra stuff for writing tests and support only Jest now.
 
-## Global test setup
-Use in your Jest setup config file.
-```ts
-import '@hexcore/core/lib/Util/Test/global-test-setup';
-```
-
 ## MockGeneralBus
 Class for simulate handling command, queries and events
 ### Example
@@ -85,7 +79,7 @@ let userRepository = Mocker.of<UserRepository>();
 // setting method expection on mock
 userRepository
       .expect('save', expect.objectContaining({ email, username, password: hashedPassword }))
-      .andReturn(successAsync(true));
+      .andReturn(OKA(true));
 
 // on test end call:
 userRepository.checkExpections();
@@ -104,17 +98,17 @@ describe('Command.User.Create', () => {
   });
 
   test('execute()', async () => {
-    const email = Email.create('test@test.com').unwarp();
-    const username = Username.create('test').unwarp();
-    const password = PlainPassword.create('Test123!');
+    const email = Email.cs('test@test.com');
+    const username = Username.cs('test');
+    const password = PlainPassword.c('Test123!');
     const command = new UserCreateCommand(username, email, password);
 
     const hashedPassword = 'test_hash';
 
-    passwordService.expect('hash', password).andReturn(successAsync(hashedPassword));
+    passwordService.expect('hash', password).andReturn(OKA(hashedPassword));
     userRepository
       .expect('save', expect.objectContaining({ email, username, password: hashedPassword }))
-      .andReturn(successAsync(true));
+      .andReturn(OKA(true));
     generalBus.expectHandleEvent((event: IEvent) => {
       return event instanceof UserCreatedEvent && event.email === email && event.username === username;
     });

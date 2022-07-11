@@ -1,6 +1,6 @@
+import { AsyncResult } from '@hexcore/common';
 import { Injectable } from '@nestjs/common';
 import { ICommand, IEvent, IQuery } from '@nestjs/cqrs';
-import { AsyncResult } from '..';
 
 @Injectable()
 export abstract class GeneralBus {

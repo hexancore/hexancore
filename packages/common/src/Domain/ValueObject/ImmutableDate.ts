@@ -1,5 +1,5 @@
 import { AbstractValueObject, ValueObject } from './ValueObject';
-import { Result, success } from '../../Util/Result';
+import { OK, Result } from '../../Util/Result';
 
 export type ImmutableDateRawType = number;
 
@@ -17,18 +17,45 @@ export class ImmutableDate extends AbstractValueObject<ImmutableDate> {
     return new ImmutableDate(new Date(now));
   }
 
-  public static c(value: Date): ImmutableDate {
-    return new ImmutableDate(new Date(value.getTime()));
+  public static c(v: Date | number | string): Result<ImmutableDate> {
+    if (typeof v === 'number') {
+      return this.fromTimestamp(v);
+    }
+
+    if (v instanceof Date) {
+      return OK(new this(new Date(v.getTime())));
+    }
+
+    try {
+      return OK(new this(new Date(v)));
+    } catch (e) {
+      return AbstractValueObject.invalidRaw(ImmutableDate, {
+        raw: v,
+        msg: 'invalid datetime format: ' + e.message,
+      });
+    }
+  }
+
+  public static cs(v: Date | number | string): ImmutableDate {
+    if (typeof v === 'number') {
+      return new this(new Date(v * 1000));
+    }
+
+    if (v instanceof Date) {
+      return new this(new Date(v.getTime()));
+    }
+
+    return new this(new Date(v));
   }
 
   public static fromTimestamp(timestamp: number): Result<ImmutableDate> {
     if (timestamp < 0) {
       return AbstractValueObject.invalidRaw(ImmutableDate, {
         raw: timestamp,
-        msg: "invalid timestamp",
+        msg: 'invalid timestamp',
       });
     }
-    return success(new this(new Date(timestamp * 1000)));
+    return OK(new this(new Date(timestamp * 1000)));
   }
 
   public get v(): Date {
@@ -47,7 +74,7 @@ export class ImmutableDate extends AbstractValueObject<ImmutableDate> {
     return this.value.toUTCString();
   }
 
-  public toJson() {
-    return this.value;
+  public toJSON() {
+    return this.t;
   }
 }

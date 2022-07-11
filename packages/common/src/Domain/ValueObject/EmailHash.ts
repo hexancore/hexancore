@@ -6,14 +6,9 @@ import { RegexStringIdRawType } from './RegexStringValue';
 
 export type EmailHashRawType = RegexStringIdRawType;
 
-@ValueObject("Core")
-export class EmailHash extends StringValue {
+@ValueObject('Core')
+export class EmailHash extends StringValue<EmailHash> {
   public static createFromEmail(email: Email): EmailHash {
-    return new EmailHash(
-      crypto
-        .createHash('sha1')
-        .update(email.v)
-        .digest('hex'),
-    );
+    return new EmailHash(crypto.createHash('sha1').update(email.v).digest('hex'));
   }
 }
