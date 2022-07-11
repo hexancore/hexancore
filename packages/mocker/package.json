@@ -40,7 +40,7 @@
     "test:unit": "jest --runInBand --group=unit",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "build": "tsc --build tsconfig.build.json",
-    "prepublish": "yarn run build"
+    "prepublish": "yarn test && yarn run build"
   },
   "dependencies": {},
   "devDependencies": {

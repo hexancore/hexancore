@@ -5,8 +5,7 @@ import { TemplateService } from '../../../../Domain/Service/Template/TemplateSer
 import { Inject } from '@nestjs/common';
 import { ITemplateService, IMailingService } from '../../../../Infrastructure/HexcorePublicInfrastructureModule';
 import { ConfigService } from '@nestjs/config';
-import { error, Result } from '../../../../Util';
-import { Email, MailContent } from '@hexcore/common';
+import { Email, ERR, MailContent, Result } from '@hexcore/common';
 
 @CommandHandler(SendTemplatedMailCommand)
 export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedMailCommand, Result<boolean>> {
@@ -27,7 +26,7 @@ export class SendTemplatedEmailHandler implements ICommandHandler<SendTemplatedM
   public async execute(command: SendTemplatedMailCommand): Promise<Result<boolean>> {
     const content = await this.createMailContent(command);
     if (content.isError()) {
-      return error({
+      return ERR({
         type: 'core.application.command.mailing.send_templated_mail.rendered_content_error',
         data: content.e.data,
       });

@@ -4,3 +4,6 @@ export * from './AsyncResult';
 export * from './Validator';
 export * from './SanitizeHelper';
 export * from './functions';
+export * from './types';
+export * from './CurrentTime';
+export * from './DtoBase';

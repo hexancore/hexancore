@@ -1,102 +1,60 @@
-import { AppError, isAppError } from './AppError';
-import { AsyncResult, errorAsync } from './AsyncResult';
-export type Result<T> = ErrorResult<T> | SuccessResult<T>;
+import { AppError, AppErrorProps, INTERNAL_ERROR } from './AppError';
+import { AR, AsyncResult, ERRA } from './AsyncResult';
 
-type MapFunc = <T, U>(v: T) => U;
-type MapErrorFunc = (e: AppError) => AppError;
-type AndThenFunc = <T, U>(v: T) => Result<U>;
-type OrElseFunc = <T>(e: AppError) => Result<T>;
+export type Result<T> = ErrorResult<T> | SuccessResult<T>;
+export type R<T> = Result<T>;
 
 export class ErrorResult<T> {
-  /**
-   * @deprecated use v() and e() methods
-   */
-  public readonly value: AppError;
-
-  public constructor(value: AppError) {
-    this.value = value;
-  }
+  public constructor(private readonly value: AppError) {}
 
   public isError(): this is ErrorResult<T> {
     return true;
   }
 
-  public isSuccess(): this is SuccessResult<T> {
-    return false;
-  }
-
-  /**
-   * @deprecated use v() method
-   */
-  public unwarp(): T {
-    throw new ReferenceError("Can't unwarp on ErrorResult: " + this.value.type);
-  }
-
-  public get v(): T {
-    return this.unwarp();
-  }
-
   public get e(): AppError {
     return this.value;
   }
 
-  public isErrorType(type: string): boolean {
-    return this.getErrorType() === type;
+  public mapErr(fn: (e: AppError) => AppError | AppErrorProps): R<T> {
+    return ERR(fn(this.value));
   }
 
-  public getErrorType(): string {
-    return this.value.type;
+  public onErr<U>(fn: ((e: AppError) => R<U>) | Record<string, (e: AppError) => R<U>>): R<U | T> {
+    if (fn instanceof Function) {
+      return fn(this.value);
+    }
+
+    const c = fn[this.value.type];
+    return c ? c(this.value) : this;
   }
 
-  public getErrorCode(): number {
-    return this.value.code;
+  public isSuccess(): this is SuccessResult<T> {
+    return false;
   }
 
-  public getError(): Error {
-    return this.value.error;
+  public get v(): T {
+    throw new ReferenceError("Can't use on ErrorResult: " + this.value.type);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public map<U>(fn: MapFunc): Result<U> {
-    return error(this.value);
+  public map<U>(fn: (v: T) => U): R<U> {
+    return this as unknown as Result<U>;
   }
 
-  public mapError(fn: MapErrorFunc): Result<T> {
-    return error(fn(this.value));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public andThen<U>(fn: AndThenFunc): Result<U> {
-    return error(this.value);
-  }
-
-  public orElse(fn: OrElseFunc): Result<T> {
-    return fn(this.value);
+  public onOk<U>(fn: (v: T) => R<U>): R<U> {
+    return this as unknown as R<U>;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public andThenAsync<U>(f: (v: T) => AsyncResult<U>): AsyncResult<U> {
-    return errorAsync<U>(this.value);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public asyncMap<U>(_f: (t: T) => Promise<U>): AsyncResult<U> {
-    return errorAsync<U>(this.value);
+  public onOkA<U>(fn: (v: T) => AR<U>): AR<U> {
+    return ERRA(this.value);
   }
 }
 
 export class SuccessResult<T> {
-  /**
-   * @deprecated use v() and e() methods
-   */
-  public readonly value: T;
-
-  public constructor(value: T) {
-    this.value = value;
-  }
+  public constructor(private readonly value: T) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isError(type?: string): this is ErrorResult<T> {
+  public isError(): this is ErrorResult<T> {
     return false;
   }
 
@@ -104,73 +62,63 @@ export class SuccessResult<T> {
     return true;
   }
 
-  public unwarp(): T {
+  public get v(): T {
     return this.value;
   }
 
-  public get v(): T {
-    return this.unwarp();
-  }
-
-  /**
-   * @deprecated use v() method
-   */
   public get e(): AppError {
     throw new ReferenceError("Can't use on SuccessResult");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isErrorType(type: string): boolean {
-    throw new ReferenceError("Can't use on SuccessResult");
+  public map<U>(fn: (v: T) => U): R<U> {
+    return OK(fn(this.value));
   }
 
-  public getErrorType(): string {
-    throw new ReferenceError("Can't use on SuccessResult");
+  /**
+   * Calls function with result value when result is success
+   * @param fn
+   * @returns new result from function
+   */
+  public onOk<U>(fn: (v: T) => R<U>): R<U> {
+    return fn(this.value);
   }
 
-  public getErrorCode(): number {
-    throw new ReferenceError("Can't use on SuccessResult");
+  public onOkA<U>(fn: (v: T) => AR<U>): AR<U> {
+    return fn(this.value);
   }
 
-  public getError(): Error {
-    throw new ReferenceError("Can't use on SuccessResult");
-  }
-
-  public map<U>(fn: MapFunc): Result<U> {
-    return success(fn(this.value));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public mapError(fn: MapErrorFunc): Result<T> {
+  public mapErr(fn: (e: AppError) => AppError | AppErrorProps): R<T> {
     return this;
   }
 
-  public andThen<U>(f: AndThenFunc): Result<U> {
-    return f(this.value);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public orElse(f: OrElseFunc): Result<T> {
-    return success(this.value);
-  }
-
-  public andThenAsync<U>(f: (t: T) => AsyncResult<U>): AsyncResult<U> {
-    return f(this.value);
-  }
-
-  public mapAsync<U>(f: (t: T) => Promise<U>): AsyncResult<U> {
-    return AsyncResult.fromSafePromise(f(this.value));
+  /**
+   * Calls function with result value when result is error
+   * @param fn
+   * @returns new result from function
+   */
+  public onErr<U>(fn: ((e: AppError) => R<U>) | Record<string, (e: AppError) => R<U>>): R<U | T> {
+    return this;
   }
 }
 
-export const error = <T>(error: AppError | string, code = 400): Result<T> => {
-  return new ErrorResult(isAppError(error) ? <AppError>error : { type: <string>error, code });
-};
-
-export const success = <T>(result: T): Result<T> => {
-  if (result instanceof SuccessResult || result instanceof ErrorResult) {
-    return result;
+export const OK = <T>(v: T): R<T> => {
+  if (v instanceof SuccessResult || v instanceof ErrorResult) {
+    return v;
   }
 
-  return new SuccessResult<T>(result);
+  return new SuccessResult<T>(v);
 };
+
+export const ERR = <T>(error: AppError | Partial<AppError> | string, code = 400, data?: any): R<T> => {
+  let e: AppError;
+  if (typeof error === 'string') {
+    e = new AppError({ type: error, code, data });
+  } else {
+    e = error instanceof AppError ? error : new AppError(error);
+  }
+  return new ErrorResult(e);
+};
+
+export const INTERNAL_ERR = <T>(error: Error): R<T> => {
+  return ERR(INTERNAL_ERROR(error));
+}

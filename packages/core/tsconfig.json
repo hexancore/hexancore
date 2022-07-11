@@ -10,6 +10,6 @@
     },
     "types": ["jest", "reflect-metadata", "node"],
   },
-  "include": ["src/**/*", "test/**/*"],
+  "include": ["src/**/*", "test/**/*", "../common/src/Util/CurrentTime.ts"],
   "exclude": ["lib", "node_modules"]
 }

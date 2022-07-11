@@ -2,11 +2,12 @@ import { DynamicModule, ForwardReference, Module, Provider, Type } from '@nestjs
 import { TypeOrmModule, TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmMySqlModuleRootOptions } from '../MySqlModule';
+import { TypeOrmMySqlModuleRootOptions } from '../TypeOrmMySqlModule';
 
 // load encodings - JEST hack
 import iconv from 'iconv-lite';
 import encodings from 'iconv-lite/encodings';
+import { EntitySchema } from 'typeorm';
 iconv['encodings'] = encodings;
 // load encodings - JEST hack
 
@@ -23,9 +24,14 @@ export const TypeOrmMySqlTestingModuleRootOptions = {
       password: options.password,
       database: options.database,
       charset: options.charset,
+      retryAttempts: options.retryAttempts,
+      retryDelay: options.retryDelay,
+      namingStrategy: options.namingStrategy,
       synchronize: true,
       dropSchema: true,
       autoLoadEntities: true,
+      logging: false,
+      loggerLevel: 'error',
     };
   },
 };
@@ -35,7 +41,7 @@ export interface MySqlTestingModuleOptions {
   providers?: Provider[];
 }
 
-export function createMySqlTestingModule(options: MySqlTestingModuleOptions): Promise<TestingModule> {
+export function MySqlTestingModule(options: MySqlTestingModuleOptions): Promise<TestingModule> {
   const imports = [TypeOrmModule.forRootAsync(TypeOrmMySqlTestingModuleRootOptions), ...options.imports];
   return Test.createTestingModule({
     imports,

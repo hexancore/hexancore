@@ -15,3 +15,7 @@ export function getClassMethods(obj: Record<string, any>): Array<string> {
 export function pascalCaseToSnakeCase(s: string): string {
   return s.replace(/(?:^|\.?)([A-Z])/g, (_x, y) => '_' + y.toLowerCase()).replace(/^_/, '');
 }
+
+export function pascalCaseToCamelCase(s: string): string {
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}

@@ -4,12 +4,10 @@ import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<
 
 /**
  * @group unit
- *
  * @group <%=it.moduleImportName%>
- *
  * @group unit/<%=it.moduleImportName%>
  */
-describe('<%it.messageType%>.<%=it.group%>.<%=it.name%>', () => {
+describe('<%=it.moduleName%>.<%=it.messageType%>.<%=it.group%>.<%=it.name%>', () => {
   let handler: <%=it.messageClassName%>Handler;
 
   beforeEach(() => {

@@ -4,7 +4,7 @@ import { exit } from 'process';
 import { AllExceptionFilter } from './AllExceptionFilter';
 import { injectSwagger } from './SwaggerBootstrap';
 import { createFastifyAdapter } from './FastifyBootstrap';
-import { LambdaLogger } from '../../Util/Logger';
+import { HexcoreLogger } from '../../Util/Logger';
 
 export interface ApiBootstrapOptions {
   mainModule: any;
@@ -14,7 +14,7 @@ export interface ApiBootstrapOptions {
 }
 
 export async function apiBootstrap(options: ApiBootstrapOptions): Promise<void> {
-  const apiLogger = LambdaLogger.create('api');
+  const apiLogger = HexcoreLogger.create('api');
   const allExceptionFilter = new AllExceptionFilter(apiLogger);
   const adapter = await createFastifyAdapter(allExceptionFilter);
   const app = await NestFactory.create<NestFastifyApplication>(options.mainModule, adapter, {

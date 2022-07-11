@@ -1,6 +1,7 @@
-import { AppError, FResponse, isAppError, sendErrorResponse } from '@';
+import { AppError, isAppError } from '@hexcore/common';
 import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException, HttpStatus } from '@nestjs/common';
 import { HttpException, LoggerService } from '@nestjs/common';
+import { FResponse, sendErrorResponse } from './RestHelperFunctions';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -36,18 +37,18 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const responseBody = <Record<string, any>>error.getResponse();
     sendErrorResponse(
-      {
+      new AppError({
         type: responseBody.error.replace(' ', '_').toLowerCase(),
         code: error.getStatus(),
         message: responseBody.message,
-      },
+      }),
       response,
     );
   }
 
   public processInternalError(error: Error, response: FResponse): void {
     this.logger.error(error.message, error.stack);
-    sendErrorResponse({ type: 'internal_error', error: error }, response);
+    sendErrorResponse(new AppError({ type: 'internal_error', error: error }), response);
   }
 
   private isHttpException(e: any): e is HttpException {

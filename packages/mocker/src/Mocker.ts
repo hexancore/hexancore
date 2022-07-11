@@ -5,18 +5,18 @@ interface MethodCallExpection {
   args?: any[];
 }
 
-export class MethodMock {
+export class MethodMock<A extends (...args: any) => any> {
   public constructor(private readonly mock: jest.Mock) {}
 
-  public andReturnWith(implementation: (...args: any) => any): void {
+  public andReturnWith(implementation: (...args: Parameters<A>) => ReturnType<A>): void {
     this.mock.mockImplementationOnce(implementation);
   }
 
-  public andReturn(value: any): void {
+  public andReturn(value: ReturnType<A>): void {
     this.mock.mockReturnValueOnce(value);
   }
 
-  public andReturnResolved(value: any): void {
+  public andReturnResolved(value: ReturnType<A>): void {
     this.mock.mockResolvedValueOnce(value);
   }
 }
@@ -34,7 +34,7 @@ export class Mocker<T extends object> {
   public readonly name: string;
   private methodCallExpections: MethodCallExpection[];
 
-  public constructor(name = 'mock') {
+  public constructor(name: string = `mock`) {
     this.mock = {};
     this.name = name;
     this.methodCallExpections = [];
@@ -54,8 +54,8 @@ export class Mocker<T extends object> {
             let message = `expect(${mockName}.${prop}).not.toBeCalled`;
             message += args.length > 0 ? `With(${args.join(', ')})` : '()';
             const e = new Error(message);
-            const split = e.stack.split("\n");
-            e.stack = [split[0], split[2]].join("\n");
+            const split = e.stack.split('\n');
+            e.stack = [split[0], split[2]].join('\n');
             throw e;
           };
         }
@@ -71,17 +71,7 @@ export class Mocker<T extends object> {
     return this.mockProxy;
   }
 
-  /**
-   * @deprecated only for backward compatibility
-   * @param name
-   * @param args
-   * @returns
-   */
-  public expect<K extends keyof T>(name: K, ...args: any): MethodMock {
-    return this.expects(name, ...args);
-  }
-
-  public expects<K extends keyof T>(name: K, ...args: any): MethodMock {
+  public expects<K extends keyof T, A extends ((...args: any) => any) & T[K]>(name: K, ...args: Parameters<A>): MethodMock<A> {
     let mockFunction: jest.Mock;
     if (!this.mock[name]) {
       mockFunction = this.mock[<string>name] = jest.fn();
@@ -91,7 +81,7 @@ export class Mocker<T extends object> {
     }
 
     this.methodCallExpections.push({ method: <string>name, args });
-    return new MethodMock(mockFunction);
+    return new MethodMock<A>(mockFunction);
   }
 
   public checkExpections(): void {

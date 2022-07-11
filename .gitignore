@@ -5,3 +5,7 @@ coverage
 /**/test/coverage
 .yarn
 *.log
+.yalc
+yalc.lock
+/**/yarn.lock
+yarn.lock

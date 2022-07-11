@@ -9,6 +9,7 @@
       "@/*": ["src/*"],
     },
     "types": ["jest", "node"],
+    "useDefineForClassFields": false
   },
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["lib", "node_modules"]

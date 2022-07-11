@@ -1,7 +1,5 @@
-import { StringValue } from './StringValue';
-import { ValueObjectMeta, AbstractValueObject, ValueObject } from './ValueObject';
+import { ValueObject } from './ValueObject';
 import { EmailHash } from './EmailHash';
-import { Result, error, success } from '../../Util/Result';
 import { RegexStringIdRawType, RegexStringValue } from './RegexStringValue';
 
 const EMAIL_REGEX =
@@ -11,8 +9,9 @@ export type EmailRawType = RegexStringIdRawType;
 
 @ValueObject('Core')
 export class Email extends RegexStringValue<Email> {
-  public static c(value: string): Result<Email> {
-    return this.create(value, EMAIL_REGEX);
+
+  protected static getRegex(): RegExp {
+    return EMAIL_REGEX;
   }
 
   public get local(): string {
