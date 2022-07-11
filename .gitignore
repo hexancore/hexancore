@@ -8,3 +8,4 @@ coverage
 .yalc
 yalc.lock
 /**/yarn.lock
+yarn.lock
