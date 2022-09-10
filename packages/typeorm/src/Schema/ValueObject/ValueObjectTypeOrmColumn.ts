@@ -10,9 +10,12 @@ export type ValueObjectAsPrimaryKeyColumnOptions = {
   generated?: true | null;
 };
 
-export interface ValueObjectTypeOrmColumn<OP extends ValueObjectTypeOrmColumnOptions = ValueObjectTypeOrmColumnOptions> {
-  asRaw(options?: OP): EntitySchemaColumnOptions;
-  asSelf(options?: OP): EntitySchemaColumnOptions;
-  asPrimaryKey(voConstructor: any, options?: ValueObjectAsPrimaryKeyColumnOptions): EntitySchemaColumnOptions;
-  as(voConstructor: any, options?: OP): EntitySchemaColumnOptions;
+export interface ValueObjectTypeOrmColumn<
+  O extends ValueObjectTypeOrmColumnOptions = ValueObjectTypeOrmColumnOptions,
+  OP extends ValueObjectAsPrimaryKeyColumnOptions = ValueObjectAsPrimaryKeyColumnOptions,
+> {
+  asRaw(options?: O): EntitySchemaColumnOptions;
+  asSelf(options?: O): EntitySchemaColumnOptions;
+  asPrimaryKey(voConstructor: any, options?: OP): EntitySchemaColumnOptions;
+  as(voConstructor: any, options?: O): EntitySchemaColumnOptions;
 }

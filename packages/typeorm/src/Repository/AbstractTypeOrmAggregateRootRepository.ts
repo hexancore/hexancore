@@ -1,15 +1,15 @@
-import { AbstractValueObject as AVO, AsyncResult, P } from '@hexcore/common';
-import { AbstractAggregateRootRepository, EntityBase } from '@hexcore/core';
+import { AbstractValueObject as AVO, AsyncResult, OK, P } from '@hexcore/common';
+import { AbstractAggregateRootRepository, AggregateRootBase, EIDT } from '@hexcore/core';
 import { EntityManager, FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { TypeOrmEntityRepositoryCommon } from './TypeOrmEntityRepositoryCommon';
 
 export abstract class AbstractTypeOrmAggregateRootRepository<
-  T extends EntityBase<IdType>,
-  IdType extends AVO<IdType>,
-> extends AbstractAggregateRootRepository<T, IdType> {
-  protected common: TypeOrmEntityRepositoryCommon<T, IdType>;
+  T extends AggregateRootBase<any>,
+  EID = EIDT<T>,
+> extends AbstractAggregateRootRepository<T> {
+  protected common: TypeOrmEntityRepositoryCommon<T, EID>;
 
   public constructor(@InjectEntityManager() em: EntityManager) {
     super();
@@ -20,7 +20,7 @@ export abstract class AbstractTypeOrmAggregateRootRepository<
     return this.common.persist(entity);
   }
 
-  public getById(id: IdType): AsyncResult<T> {
+  public getById(id: EIDT<T>): AsyncResult<T> {
     return this.common.getById(id);
   }
 

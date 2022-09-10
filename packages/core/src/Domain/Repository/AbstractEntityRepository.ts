@@ -1,43 +1,31 @@
-import { AbstractValueObject, AsyncResult, pascalCaseToCamelCase } from '@hexcore/common';
-import { ENTITY_COLLECTIONS_META_PROPERTY } from '../Entity/Collection/EntityCollectionDecorator';
+import { AsyncResult } from '@hexcore/common';
 import { EntityCollectionQueries } from '../Entity/Collection/EntityCollectionQueries';
-import { EntityBase } from '../Entity/EntityBase';
+import { EntityBase, RT } from '../Entity/EntityBase';
+import { EIDT } from '../Entity/EntityCommonBase';
 import { AbstractEntityRepositoryCommon } from './AbstractEntityRepositoryCommon';
 
 /**
  * Entity Repository base class
  */
 export abstract class AbstractEntityRepository<
-  T extends EntityBase<IdType>,
-  IdType extends AbstractValueObject<any>,
-  RT extends EntityBase<any>,
-  RIdType extends AbstractValueObject<any>,
-  ECQ extends EntityCollectionQueries<T> = EntityCollectionQueries<T>,
-> extends AbstractEntityRepositoryCommon<T, IdType> {
-  protected ecq?: ECQ;
-
+  T extends EntityBase<any, any>,
+  EID = EIDT<T>,
+  ECQ extends EntityCollectionQueries<T, EID> = EntityCollectionQueries<T, EID>,
+> extends AbstractEntityRepositoryCommon<T> {
   public constructor() {
     super();
   }
 
-  protected get collectionQueries(): ECQ {
-    if (!this.ecq) {
-      this.ecq = this.createCollectionQueries();
-    }
+  public abstract persistCollectionFromRoot(root: RT<T> | RT<T>[]): AsyncResult<boolean>;
 
-    return this.ecq;
+  public injectCollectionQueries(entity: RT<T> | RT<T>[]): void {
+    const entities = Array.isArray(entity) ? entity : [entity];
+    entities.forEach((re: any) => {
+      re[this.rootCollectionProperty].__queries = this.createCollectionQueries();
+    });
   }
 
   protected abstract createCollectionQueries(): ECQ;
-
-  public abstract persistCollectionFromRoot(root: RT | RT[]): AsyncResult<boolean>;
-
-  public injectCollectionQueries(entity: RT | RT[]): void {
-    const entities = Array.isArray(entity) ? entity : [entity];
-    entities.forEach((re: any) => {
-      re[this.rootCollectionProperty].__queries = this.collectionQueries;
-    });
-  }
 
   protected get rootCollectionProperty(): string {
     return this.entityRepositoryMeta.rootCollectionProperty;

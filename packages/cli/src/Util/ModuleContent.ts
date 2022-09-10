@@ -28,6 +28,7 @@ export class ModuleContent {
     Eta.configure({
       root: TEMPLATE_ROOT_DIR,
       async: true,
+      autoTrim: false,
     });
   }
 
@@ -93,8 +94,8 @@ export class ModuleContent {
   }
 
   public print(): void {
-    console.log("Dirs:", this.dirs);
-    console.log("Files:", this.files);
+    console.log('Dirs:', this.dirs);
+    console.log('Files:', this.files);
   }
 
   public save(filesystem: FilesystemHelper): Promise<void> {

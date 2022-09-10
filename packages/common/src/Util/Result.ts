@@ -1,25 +1,77 @@
 import { AppError, AppErrorProps, INTERNAL_ERROR } from './AppError';
-import { AR, AsyncResult, ERRA } from './AsyncResult';
+import { AR, ERRA } from './AsyncResult';
 
-export type Result<T> = ErrorResult<T> | SuccessResult<T>;
 export type R<T> = Result<T>;
 
-export class ErrorResult<T> {
-  public constructor(private readonly value: AppError) {}
+export type ExtractInnerResultType<P> = P extends Result<infer T> ? T : never;
 
-  public isError(): this is ErrorResult<T> {
-    return true;
+export class Result<T> {
+  private readonly value: any;
+  public constructor(value: AppError | T) {
+    this.value = value;
   }
 
-  public get e(): AppError {
+  public isSuccess(): boolean {
+    return !this.isError();
+  }
+
+  public get v(): T {
+    if (this.isError()) {
+      throw new ReferenceError("Can't use on ErrorResult: " + this.value.type);
+    }
+
     return this.value;
   }
 
+  public map<U>(fn: (v: T) => U): R<U> {
+    if (this.isError()) {
+      return this as unknown as R<U>;
+    }
+
+    return OK(fn(this.value));
+  }
+
+  public onOk<U>(fn: (v: T) => R<U>): R<U> {
+    if (this.isError()) {
+      return this as unknown as R<U>;
+    }
+
+    return fn(this.value);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public onOkA<U>(fn: (v: T) => AR<U>): AR<U> {
+    if (this.isError()) {
+      return ERRA(this.value);
+    }
+
+    return fn(this.value);
+  }
+
+  public isError(): boolean {
+    return this.value instanceof AppError;
+  }
+
+  public get e(): AppError {
+    if (this.isError()) {
+      return this.value;
+    }
+
+    throw new ReferenceError("Can't use on SuccessResult");
+  }
+
   public mapErr(fn: (e: AppError) => AppError | AppErrorProps): R<T> {
+    if (this.isSuccess()) {
+      return this;
+    }
     return ERR(fn(this.value));
   }
 
   public onErr<U>(fn: ((e: AppError) => R<U>) | Record<string, (e: AppError) => R<U>>): R<U | T> {
+    if (this.isSuccess()) {
+      return this;
+    }
+
     if (fn instanceof Function) {
       return fn(this.value);
     }
@@ -28,85 +80,25 @@ export class ErrorResult<T> {
     return c ? c(this.value) : this;
   }
 
-  public isSuccess(): this is SuccessResult<T> {
-    return false;
-  }
+  public static all<T extends readonly R<unknown>[] | []>(results: T): R<any> | R<{ -readonly [P in keyof T]: ExtractInnerResultType<T[P]> }> {
+    const values = [];
+    for (let r of results) {
+      if (r.isError()) {
+        return r;
+      }
+      values.push(r.v);
+    }
 
-  public get v(): T {
-    throw new ReferenceError("Can't use on ErrorResult: " + this.value.type);
-  }
-
-  public map<U>(fn: (v: T) => U): R<U> {
-    return this as unknown as Result<U>;
-  }
-
-  public onOk<U>(fn: (v: T) => R<U>): R<U> {
-    return this as unknown as R<U>;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public onOkA<U>(fn: (v: T) => AR<U>): AR<U> {
-    return ERRA(this.value);
-  }
-}
-
-export class SuccessResult<T> {
-  public constructor(private readonly value: T) {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public isError(): this is ErrorResult<T> {
-    return false;
-  }
-
-  public isSuccess(): this is SuccessResult<T> {
-    return true;
-  }
-
-  public get v(): T {
-    return this.value;
-  }
-
-  public get e(): AppError {
-    throw new ReferenceError("Can't use on SuccessResult");
-  }
-
-  public map<U>(fn: (v: T) => U): R<U> {
-    return OK(fn(this.value));
-  }
-
-  /**
-   * Calls function with result value when result is success
-   * @param fn
-   * @returns new result from function
-   */
-  public onOk<U>(fn: (v: T) => R<U>): R<U> {
-    return fn(this.value);
-  }
-
-  public onOkA<U>(fn: (v: T) => AR<U>): AR<U> {
-    return fn(this.value);
-  }
-
-  public mapErr(fn: (e: AppError) => AppError | AppErrorProps): R<T> {
-    return this;
-  }
-
-  /**
-   * Calls function with result value when result is error
-   * @param fn
-   * @returns new result from function
-   */
-  public onErr<U>(fn: ((e: AppError) => R<U>) | Record<string, (e: AppError) => R<U>>): R<U | T> {
-    return this;
+    return OK(values);
   }
 }
 
 export const OK = <T>(v: T): R<T> => {
-  if (v instanceof SuccessResult || v instanceof ErrorResult) {
+  if (v instanceof Result) {
     return v;
   }
 
-  return new SuccessResult<T>(v);
+  return new Result<T>(v);
 };
 
 export const ERR = <T>(error: AppError | Partial<AppError> | string, code = 400, data?: any): R<T> => {
@@ -116,9 +108,9 @@ export const ERR = <T>(error: AppError | Partial<AppError> | string, code = 400,
   } else {
     e = error instanceof AppError ? error : new AppError(error);
   }
-  return new ErrorResult(e);
+  return new Result<T>(e);
 };
 
 export const INTERNAL_ERR = <T>(error: Error): R<T> => {
   return ERR(INTERNAL_ERROR(error));
-}
+};

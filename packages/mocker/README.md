@@ -1,5 +1,8 @@
 # Hexcore Mocker
 
+Package moved to https://www.npmjs.com/package/@hexancore/mocker
+
+
 Mocker package is super simple wrapper for Jest mocks util with extra stuff :).
 
 ## Usage

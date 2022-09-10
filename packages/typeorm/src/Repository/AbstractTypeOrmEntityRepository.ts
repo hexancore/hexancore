@@ -1,18 +1,26 @@
-import { Repository, EntitySchema, FindManyOptions, FindOneOptions, EntityManager, UpdateValuesMissingError } from 'typeorm';
-import { AsyncResult, AbstractValueObject as AVO, OK, IGNORE_ERROR, INTERNAL_ERROR, AppError, isIgnoreError, ERR, P } from '@hexcore/common';
-import { AbstractEntityRepository, EntityBase, EntityCollectionInterface, EntityCollectionWaitingChangesCollector } from '@hexcore/core';
+import { Repository, FindManyOptions, FindOneOptions, EntityManager } from 'typeorm';
+import { AsyncResult, P } from '@hexcore/common';
+import {
+  AbstractEntityRepository,
+  EIDT,
+  EntityBase,
+  EntityCollectionImpl,
+  EntityCollectionInterface,
+  EntityCollectionWaitingChangesCollector,
+  RT,
+} from '@hexcore/core';
 import { InjectEntityManager } from '@nestjs/typeorm';
 import { TypeOrmEntityRepositoryCommon } from './TypeOrmEntityRepositoryCommon';
 import { TypeOrmEntityCollectionQueries } from './TypeOrmEntityCollectionQueries';
 
 export abstract class AbstractTypeOrmEntityRepository<
-  T extends EntityBase<IdType>,
-  IdType extends AVO<IdType>,
-  RT extends EntityBase<RIdType>,
-  RIdType extends AVO<RIdType>,
-  ECQ extends TypeOrmEntityCollectionQueries<T, IdType, RT, RIdType> = TypeOrmEntityCollectionQueries<T, IdType, RT, RIdType>,
-> extends AbstractEntityRepository<T, IdType, RT, RIdType, ECQ> {
-  protected common: TypeOrmEntityRepositoryCommon<T, IdType>;
+  T extends EntityBase<any, any>,
+  EID = EIDT<T>,
+  ECQ extends TypeOrmEntityCollectionQueries<T, EID> = TypeOrmEntityCollectionQueries<T, EID>,
+> extends AbstractEntityRepository<T, EID, ECQ> {
+  protected common: TypeOrmEntityRepositoryCommon<T, EID>;
+
+  protected isRootIdPropertyPrimary?: boolean;
 
   public constructor(@InjectEntityManager() em: EntityManager) {
     super();
@@ -23,7 +31,7 @@ export abstract class AbstractTypeOrmEntityRepository<
     return this.common.persist(entity);
   }
 
-  public persistCollectionFromRoot(entity: RT | RT[]): AsyncResult<boolean> {
+  public persistCollectionFromRoot(entity: RT<T> | RT<T>[]): AsyncResult<boolean> {
     const collections: EntityCollectionInterface<T, any>[] = [];
     if (Array.isArray(entity)) {
       entity.reduce((collected: any[], root: any) => {
@@ -35,14 +43,22 @@ export abstract class AbstractTypeOrmEntityRepository<
     }
 
     const collector = EntityCollectionWaitingChangesCollector.collectFrom(collections);
+
     return this.persist(collector.waitingAdd).onOk(() => {
-      this.common.markEntitiesAsTracked(collector.waitingAdd);
-      // todo implement updates
-      return P(this.r.remove(collector.waitingRemove)).mapToTrue();
+      return this.persist(collector.waitingUpdate).onOk(() => P(this.r.remove(collector.waitingRemove)).mapToTrue());
     });
   }
 
-  public getById(id: IdType): AsyncResult<T> {
+  public getById(id: EID, collection: EntityCollectionImpl<T, EID>): AsyncResult<T> {
+    const rootIdProperty = collection.rootIdPropertyName;
+    if (this.isRootIdPropertyPrimary === undefined) {
+      this.isRootIdPropertyPrimary = this.r.metadata.columns.find((c) => c.propertyName == rootIdProperty && c.isPrimary) !== undefined;
+    }
+
+    if (this.isRootIdPropertyPrimary) {
+      return this.common.getById({ [rootIdProperty]: collection.root.id, id } as any);
+    }
+
     return this.common.getById(id);
   }
 
@@ -66,11 +82,15 @@ export abstract class AbstractTypeOrmEntityRepository<
     return this.common.em;
   }
 
+  protected set em(value: EntityManager) {
+    this.common.em = value;
+  }
+
   protected get r(): Repository<T> {
     return this.common.r;
   }
 
   protected createCollectionQueries(): ECQ {
-    return new TypeOrmEntityCollectionQueries<T, IdType, RT, RIdType>({ repository: this }) as any;
+    return new TypeOrmEntityCollectionQueries(this) as any;
   }
 }

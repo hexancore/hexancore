@@ -1,4 +1,5 @@
-import { EntityBase, ENTITY_META_PROPERTY } from '@hexcore/core';
+import { AbstractValueObject } from '@hexcore/common';
+import { EntityBase, EntityCommonBase, ENTITY_META_PROPERTY } from '@hexcore/core';
 import { EntitySchema, EntitySchemaColumnOptions, EntitySchemaEmbeddedColumnOptions, EntitySchemaIndexOptions, EntitySchemaOptions } from 'typeorm';
 import { EntitySchemaUniqueOptions } from 'typeorm/entity-schema/EntitySchemaUniqueOptions';
 
@@ -13,7 +14,10 @@ type TypeOrmEntitySchemaOptions<T> = {
   };
 };
 
-export const TypeOrmEntitySchema = <T extends EntityBase<any>>(entityClass: { new (...args: any[]): T }, options: TypeOrmEntitySchemaOptions<T>) => {
+export const TypeOrmEntitySchema = <T extends EntityCommonBase<any> | AbstractValueObject<any>>(
+  entityClass: { new (...args: any[]): T },
+  options: TypeOrmEntitySchemaOptions<T>,
+) => {
   if (!entityClass[ENTITY_META_PROPERTY]) {
     throw new ReferenceError(`Missing Entity or AggregateRoot decorator on entity class: ${entityClass.name}`);
   }

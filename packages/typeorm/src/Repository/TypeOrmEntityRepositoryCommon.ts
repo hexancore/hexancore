@@ -1,17 +1,14 @@
 import { Repository, EntitySchema, FindManyOptions, FindOneOptions, EntityManager, UpdateValuesMissingError } from 'typeorm';
 import { AsyncResult, AbstractValueObject as AVO, OK, IGNORE_ERROR, INTERNAL_ERROR, AppError, isIgnoreError, ERR, P, AR, SAR } from '@hexcore/common';
-import { AbstractEntityRepository, AbstractEntityRepositoryCommon, EntityBase, EntityCollectionQueries } from '@hexcore/core';
+import { AbstractEntityRepository, AbstractEntityRepositoryCommon, EIDT, EntityBase } from '@hexcore/core';
 import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata';
 
-export class TypeOrmEntityRepositoryCommon<T extends EntityBase<IdType>, IdType extends AVO<IdType>> extends AbstractEntityRepositoryCommon<
-  T,
-  IdType
-> {
+export class TypeOrmEntityRepositoryCommon<T extends EntityBase<any, any>, EID = EIDT<T>> extends AbstractEntityRepositoryCommon<T> {
   private propertiesToFillWithNow: string[];
 
   protected repository: Repository<T>;
 
-  public constructor(public readonly em: EntityManager, protected meta: any, protected domainErrors: Object) {
+  public constructor(public em: EntityManager, protected meta: any, protected domainErrors: Object) {
     super();
   }
 
@@ -36,11 +33,13 @@ export class TypeOrmEntityRepositoryCommon<T extends EntityBase<IdType>, IdType 
       });
   }
 
-  public getById(id: IdType): AsyncResult<T> {
+  public getById(id: EID): AsyncResult<T> {
+    let key: any = { id };
+    if (this.r.metadata.hasMultiplePrimaryKeys) {
+      key = { ...id };
+    }
     return this.getOne({
-      where: {
-        id,
-      } as any,
+      where: key,
     });
   }
 

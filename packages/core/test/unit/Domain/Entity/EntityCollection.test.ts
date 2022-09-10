@@ -1,11 +1,17 @@
 import { ValueObject, UIntValue } from '@hexcore/common';
-import { EntityCollection, EntityCollectionInterface, ENTITY_COLLECTIONS_META_PROPERTY, ROOT_ID_PROPERTY_META_PROPERTY } from '../../../../src';
+import {
+  AggregateRootBase,
+  EntityCollection,
+  EntityCollectionInterface,
+  ENTITY_COLLECTIONS_META_PROPERTY,
+  ROOT_ID_PROPERTY_META_PROPERTY,
+} from '../../../../src';
 import { EntityBase } from '../../../../src/Domain/Entity/EntityBase';
 
 @ValueObject('Test')
 class BookId extends UIntValue {}
 
-class Book extends EntityBase<BookId> {
+class Book extends EntityBase<BookId, Author> {
   public readonly authorId?: AuthorId;
 
   public constructor(public name: string) {
@@ -17,7 +23,7 @@ class Book extends EntityBase<BookId> {
 @ValueObject('Test')
 class AuthorId extends UIntValue {}
 
-class Author extends EntityBase<AuthorId> {
+class Author extends AggregateRootBase<AuthorId> {
   @EntityCollection(Book)
   public readonly books: EntityCollectionInterface<Book>;
 

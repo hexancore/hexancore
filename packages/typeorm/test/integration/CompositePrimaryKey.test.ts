@@ -28,12 +28,13 @@ import { TypeOrmEntitySchema } from '@/Schema/TypeOrmEntitySchema';
 class BookId extends UIntValue {}
 
 @Entity('Test')
-class Book extends EntityBase<BookId, Author> {
+class UniqueBook extends EntityBase<BookId, Author> {
   public readonly authorId: AuthorId;
   public readonly createdAt: ImmutableDate;
 
-  public constructor(public name: string) {
+  public constructor(id: BookId, public name: string) {
     super();
+    this.id = id;
     return this.proxify();
   }
 }
@@ -43,8 +44,8 @@ class AuthorId extends UIntValue {}
 
 @AggregateRoot('Test')
 class Author extends AggregateRootBase<AuthorId> {
-  @EntityCollection(Book)
-  public declare readonly books: EntityCollectionInterface<Book>;
+  @EntityCollection(UniqueBook)
+  public declare readonly books: EntityCollectionInterface<UniqueBook, BookId>;
 
   public constructor() {
     super();
@@ -52,10 +53,10 @@ class Author extends AggregateRootBase<AuthorId> {
   }
 }
 
-const BookSchema = TypeOrmEntitySchema<Book>(Book, {
+const UniqueBookSchema = TypeOrmEntitySchema<UniqueBook>(UniqueBook, {
   columns: {
-    id: UIntValueColumn.asPrimaryKey(BookId),
-    authorId: UIntValueColumn.as(AuthorId, { type: 'smallint' }),
+    authorId: UIntValueColumn.asPrimaryKey(AuthorId, { type: 'smallint', generated: null }),
+    id: UIntValueColumn.asPrimaryKey(BookId, { type: 'smallint', generated: null }),
     name: {
       type: 'varchar',
       length: 255,
@@ -79,9 +80,9 @@ const TestDomainError = DefineDomainErrors(
   })(),
 );
 
-@TypeOrmEntityRepository({ moduleName: 'Test', rootEntityClass: Author, entitySchema: BookSchema, rootCollectionProperty: 'books' })
+@TypeOrmEntityRepository({ moduleName: 'Test', rootEntityClass: Author, entitySchema: UniqueBookSchema, rootCollectionProperty: 'books' })
 @Injectable()
-class TypeOrmBookRepository extends AbstractTypeOrmEntityRepository<Book> {
+class TypeOrmBookRepository extends AbstractTypeOrmEntityRepository<UniqueBook> {
   protected getDomainErrors(): Object {
     return TestDomainError;
   }
@@ -129,7 +130,7 @@ describe('TypeOrmEntityRepository', () => {
 
   beforeEach(async () => {
     module = await MySqlTestingModule({
-      imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, BookSchema])],
+      imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, UniqueBookSchema])],
       providers: [AuthorRepositoryProvider, TypeOrmAuthorRepository],
     });
 
@@ -143,8 +144,11 @@ describe('TypeOrmEntityRepository', () => {
   test('persist()', async () => {
     const author = new Author();
 
-    const book = new Book('test');
-    author.books.add(book);
+    const book1 = new UniqueBook(BookId.cs(1), 'test_1');
+    author.books.add(book1);
+
+    const book2 = new UniqueBook(BookId.cs(2), 'test_2');
+    author.books.add(book2);
 
     let rp = await authorRepository.persist(author);
     expect(rp).toEqual(OK(true));
@@ -157,12 +161,12 @@ describe('TypeOrmEntityRepository', () => {
     const abr = await r.v[0].books.getAllAsArray();
     expect(abr.isSuccess()).toBeTruthy();
     const ab = abr.v;
-    expect(ab.length).toBe(1);
-    expect(ab[0]).toEqual(book);
+    expect(ab.length).toBe(2);
+    expect(ab).toEqual([book1,book2]);
 
     const currentBookById = await r.v[0].books.getById(ab[0].id);
 
-    expect(currentBookById).toEqual(OK(book));
+    expect(currentBookById).toEqual(OK(book1));
   });
 
   test('getById() when not exists', async () => {

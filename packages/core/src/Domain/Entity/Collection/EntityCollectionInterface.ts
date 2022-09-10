@@ -1,9 +1,13 @@
-import { Result } from '@hexcore/common';
+import { AbstractValueObject as AVO, AR, Result } from '@hexcore/common';
 import { EntityBase } from '../EntityBase';
+import { EIDT } from '../EntityCommonBase';
 import { EntityCollectionQueries } from './EntityCollectionQueries';
 
-export interface EntityCollectionInterface<T extends EntityBase<any>, ECQ extends EntityCollectionQueries<T> = EntityCollectionQueries<T>>
-  extends AsyncIterable<Result<T>> {
+export interface EntityCollectionInterface<
+  T extends EntityBase<any, any>,
+  EID = EIDT<T>,
+  ECQ extends EntityCollectionQueries<T, EID> = EntityCollectionQueries<T>,
+> extends AsyncIterable<Result<T>> {
   add(entity: T): void;
   update(entity: T): void;
   remove(entity: T): void;
@@ -17,4 +21,5 @@ export interface EntityCollectionInterface<T extends EntityBase<any>, ECQ extend
 
   all(): AsyncGenerator<Result<T>, void, void>;
   getAllAsArray(): Promise<Result<T[]>>;
+  getById(id: EID): AR<T>;
 }
