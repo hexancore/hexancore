@@ -1,5 +1,4 @@
 import { pascalCaseToCamelCase } from '@hexcore/common';
-import { EntityBase } from '../EntityBase';
 import { EntityCollectionImpl } from './EntityCollectionImpl';
 
 /**

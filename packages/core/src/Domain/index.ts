@@ -1,4 +1,6 @@
+export * from './Entity/EntityCommonBase';
 export * from './Entity/EntityBase';
+export * from './Entity/AggregateRootBase';
 export * from './Entity/EntityDecorator';
 export * from './Entity/Collection/EntityCollection';
 

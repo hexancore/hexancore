@@ -1,8 +1,8 @@
-import { CurrentTime, Result, pascalCaseToSnakeCase, INTERNAL_ERR, AbstractValueObject, R } from '@hexcore/common';
-import { EntityBase } from '../Entity/EntityBase';
+import { CurrentTime, pascalCaseToSnakeCase, INTERNAL_ERR, R } from '@hexcore/common';
+import { EntityCommonBase } from '../Entity/EntityCommonBase';
 import { ENTITY_REPOSITORY_META_PROPERTY } from './EntityRepositoryDecorator';
 
-export abstract class AbstractEntityRepositoryCommon<T extends EntityBase<IdType>, IdType extends AbstractValueObject<any>> {
+export abstract class AbstractEntityRepositoryCommon<T extends EntityCommonBase<any>> {
   public ct: CurrentTime;
 
   public constructor() {

@@ -1,10 +1,10 @@
-import { Mocker } from '@hexcore/mocker';
+import { mocks, mock, M } from '@hexancore/mocker';
 import { <%=it.messageClassName%> } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>';
 import { <%=it.messageClassName%>Handler } from '@app/<%=it.moduleImportName%>/<%=it.messagePath%>/<%=it.messageClassName%>Handler';
 
 /**
  * @group unit
- * @group <%=it.moduleImportName%>
+ * @group module/<%=it.moduleImportName%>
  * @group unit/<%=it.moduleImportName%>
  */
 describe('<%=it.moduleName%>.<%=it.messageType%>.<%=it.group%>.<%=it.name%>', () => {

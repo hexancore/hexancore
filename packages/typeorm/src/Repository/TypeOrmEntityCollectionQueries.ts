@@ -1,26 +1,18 @@
-import { AbstractValueObject as AVO, ERRA, OKA, P, Result } from '@hexcore/common';
-import { EntityBase, EntityCollectionImpl, EntityCollectionQueriesImpl } from '@hexcore/core';
+import { AR, ERRA, OKA, P, Result } from '@hexcore/common';
+import { EIDT, EntityBase, EntityCollectionImpl, EntityCollectionQueriesImpl } from '@hexcore/core';
 import { AbstractTypeOrmEntityRepository as AbstractRepository } from './AbstractTypeOrmEntityRepository';
 
-export interface TypeOrmEntityCollectionQueriesOptions<
-  T extends EntityBase<IdType>,
-  IdType extends AVO<IdType>,
-  RT extends EntityBase<RIdType>,
-  RIdType extends AVO<RIdType>,
-> {
-  repository: AbstractRepository<T, IdType, RT, RIdType>;
+type RT = AbstractRepository<any, any, any>;
+export interface TypeOrmEntityCollectionQueriesOptions<R extends RT = RT> {
+  r: R;
 }
 
-export class TypeOrmEntityCollectionQueries<
-  T extends EntityBase<any>,
-  IdType extends AVO<IdType>,
-  RT extends EntityBase<any>,
-  RIdType extends AVO<RIdType>,
-> implements EntityCollectionQueriesImpl<T>
+export class TypeOrmEntityCollectionQueries<T extends EntityBase<any, any>, EID = EIDT<T>, R extends RT = any>
+  implements EntityCollectionQueriesImpl<T, EID>
 {
-  public collection: EntityCollectionImpl<T, EntityCollectionQueriesImpl<T>>;
+  public collection: EntityCollectionImpl<T, EID>;
 
-  public constructor(private options: TypeOrmEntityCollectionQueriesOptions<T, IdType, RT, RIdType>) {}
+  public constructor(public r: R) {}
 
   public all(): AsyncGenerator<Result<T>, void, void> {
     const that = this;
@@ -28,7 +20,7 @@ export class TypeOrmEntityCollectionQueries<
       const propertyName = that.collection.rootIdPropertyName;
 
       const entities = await P(
-        that.options.repository.find({
+        that.r.find({
           where: {
             [propertyName]: that.collection.root.id,
           } as any,
@@ -47,5 +39,9 @@ export class TypeOrmEntityCollectionQueries<
     }
 
     return g();
+  }
+
+  public getById(id: EID): AR<T> {
+    return this.r.getById(id, this.collection);
   }
 }

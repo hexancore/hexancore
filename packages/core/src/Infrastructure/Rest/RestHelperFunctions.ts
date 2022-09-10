@@ -1,4 +1,4 @@
-import { AppError, AsyncResult, Result, SuccessResult } from '@hexcore/common';
+import { AppError, AsyncResult, R, Result } from '@hexcore/common';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import * as http2 from 'http2';
 import { HttpStatus } from '@nestjs/common';
@@ -68,7 +68,7 @@ export async function sendAsyncResultResponse(result: AsyncResult<any>, response
   sendResultResponse(await result, response, successCode);
 }
 
-export function checkResultAndSendOnError<T>(result: Result<T>, response: FResponse): SuccessResult<T> {
+export function checkResultAndSendOnError<T>(result: Result<T>, response: FResponse): R<T> {
   if (result.isError()) {
     sendErrorResponse(result.e, response);
     return null;

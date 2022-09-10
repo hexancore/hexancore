@@ -44,7 +44,7 @@
     "rxjs": "^7.3.0"
   },
   "dependencies": {
-    "@hexcore/common": "^0.9.0",
+    "@hexcore/common": "file:.yalc/@hexcore/common",
     "bull": "^4.8.4",
     "class-transformer": "^0.5.0",
     "class-validator": "^0.13.0",

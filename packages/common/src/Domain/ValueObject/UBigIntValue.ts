@@ -1,4 +1,4 @@
-import { ERR,  OK, Result } from '../../Util';
+import { ERR, OK, Result } from '../../Util';
 import { SimpleValueObject, SimpleValueObjectConstructor } from './SimpleValueObject';
 import { AbstractValueObject, ValueObject } from './ValueObject';
 
@@ -20,9 +20,7 @@ export class UBigIntValue<T extends UBigIntValue<any> = any> extends SimpleValue
   }
 
   public static cs<T extends SimpleValueObject<T, bigint>>(this: UBigIntValueConstructor<T>, value: any): T {
-    if (typeof value === 'string') {
-      value = BigInt(value);
-    }
+    value = BigInt(value.toString());
     return new this(value);
   }
 

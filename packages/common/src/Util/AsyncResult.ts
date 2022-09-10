@@ -1,6 +1,7 @@
 import { AppError, AppErrorProps, INTERNAL_ERROR } from './AppError';
-import { ERR, OK, Result } from './Result';
-import { DropLastParam } from './types';
+import { isIterable } from './functions';
+import { ERR, INTERNAL_ERR, OK, R, Result } from './Result';
+import { DropLastParam, ExtractIterableType } from './types';
 
 /**
  * Alias type Promise<Result<T>>
@@ -12,8 +13,10 @@ export type ARP<T> = Promise<Result<T>>;
  */
 export type BoolAsyncResultPromise = Promise<Result<boolean>>;
 
-export type SAR<U> = Result<U> | AsyncResult<U>;
+export type SAR<U> = Result<U> | AsyncResult<U> | ARP<U>;
 export type AR<T> = AsyncResult<T>;
+
+type CastToIterable<T> = T extends Iterable<any> ? ExtractIterableType<T> : never;
 
 export class AsyncResult<T> implements PromiseLike<Result<T>> {
   private callbackThis: any;
@@ -100,6 +103,34 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
         return newValue instanceof AsyncResult ? newValue.p : newValue;
       }),
     );
+  }
+
+  public onEachAsArray<U, IT = CastToIterable<T>>(onEach: (v: IT) => SAR<U>): AR<U[]> {
+    return this.onOk(async (it) => {
+      if (!isIterable(it)) {
+        return INTERNAL_ERR(new Error('Result value is not Iterable'));
+      }
+
+      const list = [];
+      for (let i of it as any) {
+        let r = onEach(i);
+        if (r instanceof Promise) {
+          r = new AsyncResult(r);
+        }
+
+        if (r instanceof AsyncResult) {
+          r = await r;
+        }
+
+        if (r.isError()) {
+          return r as any;
+        }
+
+        list.push(r.v);
+      }
+
+      return OK(list);
+    });
   }
 
   public onOkBind<F extends (...args: [...any, T]) => SAR<U>, U = any | T>(f: F, thisArg: any, ...argArray: DropLastParam<F>): AR<U> {

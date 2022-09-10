@@ -117,3 +117,6 @@ export class Mocker<T extends object> {
     };
   }
 }
+
+export type M<T extends object> = Mocker<T>;
+export const mock = <T extends object>(name = 'mock'): Mocker<T> => Mocker.of<T>(name);

@@ -1,9 +1,9 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SnakeNamingStrategy } from './SnakeNamingStrategy';
 
-export const TypeOrmMySqlModuleRootOptions = {
+export const TypeOrmMySqlModuleRootOptions: TypeOrmModuleAsyncOptions = {
   imports: [ConfigModule],
   useFactory: async (config: ConfigService): Promise<TypeOrmModuleOptions> => ({
     type: 'mysql',

@@ -1,3 +1,4 @@
+import { AppError } from '@hexcore/common';
 import { LoggerService } from '@nestjs/common';
 import { LambdaLog } from 'lambda-log';
 
@@ -28,8 +29,13 @@ export class HexcoreLogger implements LoggerService {
       silent: !!(process.env.HEXCORE_LOGGING_SILENT || false),
       meta: { name, appId: process.env.HEXCORE_APPID ?? 'App' },
       tags: tags ?? [],
-      levelKey: 'level',
+      levelKey: 'lvl',
       tagsKey: 'tags',
+      dynamicMeta: () => {
+        return {
+          t: new Date().toISOString(),
+        };
+      },
     });
     return new HexcoreLogger(native);
   }
@@ -43,6 +49,12 @@ export class HexcoreLogger implements LoggerService {
   }
 
   public error(message: any, context?: any): any {
+    let tmpMessage = message;
+    if (message instanceof AppError) {
+      tmpMessage = 'Error:' + message.type;
+      context = message;
+    }
+
     if (context instanceof Error) {
       context = JSON.stringify(context, Object.getOwnPropertyNames(context));
     } else {
@@ -57,7 +69,7 @@ export class HexcoreLogger implements LoggerService {
       }
     }
 
-    this.native.error(message, { ctx: context });
+    this.native.error(tmpMessage, { ctx: context });
   }
 
   public debug?(message: any, context?: any): any {

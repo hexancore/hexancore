@@ -1,7 +1,7 @@
 import { AbstractValueObject } from '@/Domain';
 import { instanceToPlain, plainToInstance, Transform, TransformationType } from 'class-transformer';
 import { INTERNAL_ERROR } from './AppError';
-import { ERR, ErrorResult, OK, Result, SuccessResult } from './Result';
+import { ERR, OK, Result } from './Result';
 
 export const INVALID_PLAIN_OBJECT_ERROR_TYPE = 'core.dto.invalid_plain_object';
 
@@ -47,13 +47,14 @@ export abstract class DtoBase {
     const errors = [];
 
     for (const p in i) {
-      if (i[p] instanceof ErrorResult) {
-        errors.push(i[p].e);
-      } else {
-        if (i[p] instanceof SuccessResult) {
-          i[p] = i[p].v;
+      const v = i[p];
+      if (v instanceof Result) {
+        if (v.isError()) {
+          errors.push(v.e);
+        } else {
+          i[p] = v.v;
         }
-      }
+      } 
     }
     if (errors.length > 0) {
       return ERR(INVALID_PLAIN_OBJECT_ERROR_TYPE, 400, {

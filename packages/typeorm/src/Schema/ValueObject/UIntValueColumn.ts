@@ -2,13 +2,16 @@ import { EntitySchemaColumnOptions } from 'typeorm';
 import { UIntValue, UIntValueConstructor } from '@hexcore/common';
 import { ValueObjectAsPrimaryKeyColumnOptions, ValueObjectTypeOrmColumn, ValueObjectTypeOrmColumnOptions } from './ValueObjectTypeOrmColumn';
 
-type VOCtor = UIntValueConstructor;
+type VOCtor = UIntValueConstructor<any>;
 
+export type UIntColumnTypeOption = 'tinyint' | 'smallint' | 'mediumint' | 'int';
 export type UIntValueColumnOptions = ValueObjectTypeOrmColumnOptions & {
-  type: 'tinyint' | 'smallint' | 'mediumint' | 'int';
+  type: UIntColumnTypeOption;
 };
 
-export const UIntValueColumn: ValueObjectTypeOrmColumn<UIntValueColumnOptions> = {
+export type UIntPrimaryKeyColumnOptions = ValueObjectAsPrimaryKeyColumnOptions & { type: UIntColumnTypeOption };
+
+export const UIntValueColumn: ValueObjectTypeOrmColumn<UIntValueColumnOptions, UIntPrimaryKeyColumnOptions> = {
   asRaw(options: UIntValueColumnOptions = { type: 'int', nullable: false }): EntitySchemaColumnOptions {
     return {
       type: options.type,
@@ -28,7 +31,7 @@ export const UIntValueColumn: ValueObjectTypeOrmColumn<UIntValueColumnOptions> =
     return s;
   },
 
-  asPrimaryKey(voConstructor: VOCtor, options: ValueObjectAsPrimaryKeyColumnOptions = { generated: true }): EntitySchemaColumnOptions {
+  asPrimaryKey(voConstructor: VOCtor, options: UIntPrimaryKeyColumnOptions = { generated: true, type: 'int' }): EntitySchemaColumnOptions {
     const s = UIntValueColumn.as(voConstructor);
     s.primary = true;
     s.generated = options.generated;
