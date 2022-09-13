@@ -4,10 +4,10 @@ nav_order: 1
 ---
 
 # Intro
-[![https://www.npmjs.com/package/@hexcore/core](https://badgen.net/npm/v/@hexcore/core?cache=21600)](https://www.npmjs.com/package/@hexcore/core)
-[![https://www.npmjs.com/package/@hexcore/core](https://badgen.net/npm/dw/@hexcore/core?cache=21600)](https://www.npmjs.com/package/@hexcore/core)
-[![https://www.npmjs.com/package/@hexcore/core](https://badgen.net/npm/node/@hexcore/core?cache=21600)](https://www.npmjs.com/package/@hexcore/core)
-![https://www.npmjs.com/package/@hexcore/core](https://badgen.net/npm/license/@hexcore/core?cache=21600)
+[![https://www.npmjs.com/package/@hexancore/core](https://badgen.net/npm/v/@hexancore/core?cache=21600)](https://www.npmjs.com/package/@hexancore/core)
+[![https://www.npmjs.com/package/@hexancore/core](https://badgen.net/npm/dw/@hexancore/core?cache=21600)](https://www.npmjs.com/package/@hexancore/core)
+[![https://www.npmjs.com/package/@hexancore/core](https://badgen.net/npm/node/@hexancore/core?cache=21600)](https://www.npmjs.com/package/@hexancore/core)
+![https://www.npmjs.com/package/@hexancore/core](https://badgen.net/npm/license/@hexancore/core?cache=21600)
 
 Hexcore is microframework based on NestJS to build modern modular scalable apps.
 
@@ -19,10 +19,10 @@ Hexcore is microframework based on NestJS to build modern modular scalable apps.
 - CQRS
 
 #### Packages
-- **@hexcore/common** - contains common stuff used in other packages(has minimal deps for use on frontend)
-- **@hexcore/core** - contains core concepts: hex, modules and CQRS(based on NestJS)
-- **@hexcore/mocker** - contains very simple and powerful mocks stuff
-- **@hexcore/typeorm** - contains typeorm helpers for use with rest of framework
+- **@hexancore/common** - contains common stuff used in other packages(has minimal deps for use on frontend)
+- **@hexancore/core** - contains core concepts: hex, modules and CQRS(based on NestJS)
+- **@hexancore/mocker** - contains very simple and powerful mocks stuff
+- **@hexancore/typeorm** - contains typeorm helpers for use with rest of framework
 
 #### Worth reading:
 

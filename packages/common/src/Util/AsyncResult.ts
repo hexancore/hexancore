@@ -83,6 +83,7 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
   public mapErr(f: (e: AppError) => AppError | AppErrorProps | Promise<AppError | AppErrorProps>): AR<T> {
     return new AsyncResult(
       this.p.then(async (res: Result<T>) => {
+
         if (res.isSuccess()) {
           return OK<T>(res.v);
         }
@@ -100,6 +101,9 @@ export class AsyncResult<T> implements PromiseLike<Result<T>> {
         }
 
         const newValue = f(res.v);
+        if (!newValue) {
+          return INTERNAL_ERR(new Error('Callback must always return some Result: ' + f.toString()));
+        }
         return newValue instanceof AsyncResult ? newValue.p : newValue;
       }),
     );

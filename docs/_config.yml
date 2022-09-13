@@ -1,11 +1,11 @@
 environment: production
-title: Hexcore
+title: Hexancore
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Hexcore is advanced framework based on NestJs to build hexagonal architecture designed apps
-baseurl: "/hexcore"
-url: "https://mararok.github.io"
-github_username:  mararok
+  Hexancore is advanced framework based on NestJs to build hexagonal architecture designed apps
+baseurl: "/hexancore"
+url: "https://hexancore.github.io"
+github_username:  haxancore
 
 remote_theme: just-the-docs/just-the-docs
 
@@ -14,4 +14,4 @@ plugins:
 
 include: ['_pages']
 
-footer_content: "Copyright &copy; 2021-2022 Mararok"
+footer_content: "Copyright &copy; 2021-2022 Andrzej Wasiak<Mararok>"
