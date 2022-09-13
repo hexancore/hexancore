@@ -17,7 +17,7 @@ From the book “Domain modeling made functional”; A great read, really recomm
 - Throwing errors is expensive (stack traces etc), while for the error cases you would return, generally I see no use for stack traces. Now I’ll be the first to say: don’t prematurely optimize, but if you can design your application from the ground up to be performant, even in the expectable error cases; that’s great.
 
 ## `Result<T>`(`R<T>`)
-In package `@hexcore/common` you can find some result stuff.
+In package `@hexancore/common` you can find some result stuff.
 
 **`OK<T>(result: T): R<T>`**
 Creates success `Result`(`R` is alias) with given value.

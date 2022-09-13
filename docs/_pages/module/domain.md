@@ -14,7 +14,7 @@ Is immutable byte, light-weight objects that don’t have any identity.
 
 Value objects reduce complexity by performing complex calculations, isolating heavy computational logic from entities.
 
-In package `@hexcore/common` you can find some basic Value objects implementation like `Email` and cool base to build custom one like `RegexStringValue`.
+In package `@hexancore/common` you can find some basic Value objects implementation like `Email` and cool base to build custom one like `RegexStringValue`.
 
 **Example**
 ```ts
@@ -59,7 +59,7 @@ In context of programming, it generally persisted as a row in DB and it consists
 
 **Important for design**
 Entity in `Domain` directory of module(read more about modules [here](/hexagonal_module)) must be not polluted with specify persistance packages stuff like `@typeorm` decorators for maximum transparency.
-`EntityBase` from `@hexcore/core` can be used for tracking changes of properties.
+`EntityBase` from `@hexancore/core` can be used for tracking changes of properties.
 That information is useful when you are not using orm/odm with support tracking changes in objects.
 
 **Example**
