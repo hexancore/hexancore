@@ -1,5 +1,5 @@
 /**
- * @group unit/common
+ * @group unit
  */
 
 import { ERR, OK, OKA, R } from '@';

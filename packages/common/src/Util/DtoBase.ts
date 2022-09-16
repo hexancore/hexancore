@@ -13,15 +13,45 @@ export const TT = TransformationType;
 export const isPT = (type: TransformationType) => type === TransformationType.CLASS_TO_PLAIN;
 
 export function ValueObjectTransformer<T extends AbstractValueObject<any>>(t: { c: (value: any) => Result<T> }) {
-  return Transform(({ value, type }) => (value ? (isPT(type) ? value.toJSON() : (t as any).c(value)) : undefined));
+  return Transform(({ value, type }) => {
+    if (value) {
+      if (isPT(type)) {
+        return Array.isArray(value) ? value.map((v) => v.toJSON()) : value.toJSON();
+      } else {
+        return Array.isArray(value) ? value.map((v) => (t as any).c(v)) : (t as any).c(value);
+      }
+    }
+
+    return undefined;
+  });
 }
 
 export function DtoTransformer<T extends DtoBase>(t: { new (): T }) {
-  return Transform(({ value, type }) => (value ? (isPT(type) ? value.toJSON() : (t as any).fromPlain(value)) : undefined));
+  return Transform(({ value, type }) => {
+    if (value) {
+      if (isPT(type)) {
+        return Array.isArray(value) ? value.map((v) => v.toJSON()) : value.toJSON();
+      } else {
+        return Array.isArray(value) ? value.map((v) => (t as any).fromPlain(v)) : (t as any).fromPlain(value);
+      }
+    }
+
+    return undefined;
+  });
 }
 
 export function BigIntTransformer() {
-  return Transform(({ value, type }) => (isPT(type) ? value.toString() : BigInt(value)));
+  return Transform(({ value, type }) => {
+    if (value) {
+      if (isPT(type)) {
+        return Array.isArray(value) ? value.map((v) => v.toString()) : value.toString();
+      } else {
+        return Array.isArray(value) ? value.map((v) => BigInt(v)) : BigInt(value);
+      }
+    }
+
+    return undefined;
+  });
 }
 
 export abstract class DtoBase {
@@ -54,7 +84,7 @@ export abstract class DtoBase {
         } else {
           i[p] = v.v;
         }
-      } 
+      }
     }
     if (errors.length > 0) {
       return ERR(INVALID_PLAIN_OBJECT_ERROR_TYPE, 400, {
