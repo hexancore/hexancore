@@ -1,5 +1,5 @@
 /**
- * @group unit/common
+ * @group unit
  */
 
 import { AppError, ERR, OK, Result } from '@';
