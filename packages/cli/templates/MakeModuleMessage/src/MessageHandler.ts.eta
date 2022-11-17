@@ -1,5 +1,5 @@
 import { <%=it.messageType%>Handler, I<%=it.messageType%>Handler } from '@nestjs/cqrs';
-import { ARP, OKAP } from '@hexcore/common';
+import { ARP, OKAP, OK, OKA, ERR  } from '@hexcore/common';
 import { <%=it.messageClassName%> } from './<%=it.messageClassName%>';
 
 @<%=it.messageType%>Handler(<%=it.messageClassName%>)

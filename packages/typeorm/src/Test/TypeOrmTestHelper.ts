@@ -1,13 +1,11 @@
-import { DynamicModule, ForwardReference, Module, Provider, Type } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DynamicModule, ForwardReference, ModuleMetadata, Provider, Type } from '@nestjs/common';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmMySqlModuleRootOptions } from '../TypeOrmMySqlModule';
 
 // load encodings - JEST hack
 import iconv from 'iconv-lite';
 import encodings from 'iconv-lite/encodings';
-import { EntitySchema } from 'typeorm';
 iconv['encodings'] = encodings;
 // load encodings - JEST hack
 
@@ -41,10 +39,10 @@ export interface MySqlTestingModuleOptions {
   providers?: Provider[];
 }
 
-export function MySqlTestingModule(options: MySqlTestingModuleOptions): Promise<TestingModule> {
+export function MySqlTestingModule(options: MySqlTestingModuleOptions): ModuleMetadata {
   const imports = [TypeOrmModule.forRootAsync(TypeOrmMySqlTestingModuleRootOptions), ...options.imports];
-  return Test.createTestingModule({
+  return {
     imports,
     providers: options.providers ?? [],
-  }).compile();
+  };
 }

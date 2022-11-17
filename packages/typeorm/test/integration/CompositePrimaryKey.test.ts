@@ -14,7 +14,7 @@ import {
   AggregateRootBase,
 } from '@hexcore/core';
 import { Injectable, Provider } from '@nestjs/common';
-import { TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { InjectEntityManager, TypeOrmModule } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { MySqlTestingModule } from '../../src/Test/TypeOrmTestHelper';
@@ -129,10 +129,12 @@ describe('TypeOrmEntityRepository', () => {
   let authorRepository: AuthorRepository;
 
   beforeEach(async () => {
-    module = await MySqlTestingModule({
-      imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, UniqueBookSchema])],
-      providers: [AuthorRepositoryProvider, TypeOrmAuthorRepository],
-    });
+    module = await Test.createTestingModule(
+      MySqlTestingModule({
+        imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, UniqueBookSchema])],
+        providers: [AuthorRepositoryProvider, TypeOrmAuthorRepository],
+      }),
+    ).compile();
 
     authorRepository = await module.get(SAuthorRepository);
   });
@@ -162,7 +164,7 @@ describe('TypeOrmEntityRepository', () => {
     expect(abr.isSuccess()).toBeTruthy();
     const ab = abr.v;
     expect(ab.length).toBe(2);
-    expect(ab).toEqual([book1,book2]);
+    expect(ab).toEqual([book1, book2]);
 
     const currentBookById = await r.v[0].books.getById(ab[0].id);
 
