@@ -2,9 +2,7 @@
 set -e -u
 version=$1
 
-#cd ./packages/mocker && yarn publish --no-git-tag-version --new-version $version
-
-cd ../../packages/common && yarn publish --no-git-tag-version --new-version $version
+cd packages/common && yarn publish --no-git-tag-version --new-version $version
 
 cd ../../packages/core && yarn publish --no-git-tag-version --new-version $version
 

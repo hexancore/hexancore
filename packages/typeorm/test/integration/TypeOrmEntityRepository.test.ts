@@ -14,7 +14,7 @@ import {
   AggregateRootBase,
 } from '@hexcore/core';
 import { Injectable, Provider } from '@nestjs/common';
-import { TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { InjectEntityManager, TypeOrmModule } from '@nestjs/typeorm';
 import { EntityManager } from 'typeorm';
 import { MySqlTestingModule } from '../../src/Test/TypeOrmTestHelper';
@@ -128,10 +128,12 @@ describe('TypeOrmEntityRepository', () => {
   let authorRepository: AuthorRepository;
 
   beforeEach(async () => {
-    module = await MySqlTestingModule({
-      imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, BookSchema])],
-      providers: [AuthorRepositoryProvider, TypeOrmAuthorRepository],
-    });
+    module = await Test.createTestingModule(
+      MySqlTestingModule({
+        imports: [HexcoreModule, TypeOrmModule.forFeature([AuthorSchema, BookSchema])],
+        providers: [AuthorRepositoryProvider, TypeOrmAuthorRepository],
+      }),
+    ).compile();
 
     authorRepository = await module.get(SAuthorRepository);
   });
@@ -179,5 +181,28 @@ describe('TypeOrmEntityRepository', () => {
       },
     });
     expect(r).toEqual(expectedError);
+  });
+
+  test('persist() when updated entity', async () => {
+    const author = new Author();
+
+    const book = new Book('test');
+    author.books.add(book);
+
+    await authorRepository.persist(author);
+    let r = await authorRepository.getAllAsArray();
+
+    const abr = await r.v[0].books.getAllAsArray();
+    const ab = abr.v;
+
+    ab[0].name = 'test_new_name';
+
+    r.v[0].books.update(ab[0]);
+
+    await authorRepository.persist(r.v[0]);
+
+    r = await authorRepository.getAllAsArray();
+
+    expect((await r.v[0].books.getAllAsArray()).v[0].name).toEqual('test_new_name');
   });
 });
