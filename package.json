@@ -1,6 +1,6 @@
 {
   "name": "@hexcore/core",
-  "version": "0.0.1",
+  "version": "0.10.0",
   "description": "Core to build hexagonal architecture designed apps",
   "author": "Mararok",
   "license": "MIT",
@@ -10,7 +10,9 @@
   },
   "scripts": {
     "docs:serve": "cd docs && bundle exec jekyll serve",
-    "docs:build": "cd docs && bundle exec jekyll build"
+    "docs:build": "cd docs && bundle exec jekyll build",
+    "preversion": "echo 'run tests'",
+    "postversion": "bash bin/publish-all.sh $npm_package_version"
   },
   "homepage": "https://github.com/mararok/hexcore.git",
   "devDependencies": {
