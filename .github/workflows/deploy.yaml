@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: pnpm install --frozen-lockfile --no-color
       - name: Build with VitePress
-        run: pnpm docs:build
+        run: pnpm build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
