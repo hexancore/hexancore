@@ -1,7 +1,0 @@
-test/**
-tsconfig.build.json
-tsconfig.json
-src
-*.tsbuildinfo
-yarn-error.log
-yarn.lock
