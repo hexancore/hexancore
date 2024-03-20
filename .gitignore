@@ -9,3 +9,5 @@ coverage
 yalc.lock
 /**/yarn.lock
 yarn.lock
+.vitepress/cache/
+.vitepress/dist/

@@ -1,3 +1,0 @@
-export class <%=it.messageClassName%> {
-  public constructor() {}
-}
