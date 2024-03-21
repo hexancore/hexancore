@@ -24,24 +24,35 @@ Hexancore result implementation is located in [@hexancore/common](https://www.np
 Asynchronous operation will use `AsyncResult` for this purpose.
 
 Let's see how to return success `Result` from function.
-```ts
+
+::: hc-sandbox {template=vanilla-ts}
+<<< @/snippets/HtmlConsole.ts{prefix=#hidden/}
+```ts index.ts [active]
+import { println } from './HtmlConsole';
+import { OK, R } from '@hexancore/common';
+
 function getData(): R<string> {
   return OK("data");
 }
 
 const dataResult = getData();
 if (dataResult.isSuccess()) {
-  console.log(dataResult.v);
+  println(dataResult.v);
 } else {
-  console.log("Result error");
+  println("Result error");
 }
 ```
+:::
 
 In Example we used `OK()` to create `Result` instance with value `"data"`. After function call we can check is result is sucess with `Result.isSuccess()`. Value of result can be access with `Result.v` getter.
 
-Now, let's see how to return error `Result`.
+Now, let's see how to return error in `Result`.
 
-```ts
+::: hc-sandbox {template=vanilla-ts}
+<<< @/snippets/HtmlConsole.ts{prefix=#hidden/}
+```ts index.ts [active]
+import { println } from './HtmlConsole';
+import { OK, R, ERR } from '@hexancore/common';
 function parse(input: string): R<string, "my_module.domain.invalid_input"> {
   if (input.startsWith("test_")) {
     return OK("done");
@@ -52,10 +63,46 @@ function parse(input: string): R<string, "my_module.domain.invalid_input"> {
 
 const parseResult = parse("invalid");
 if (parseResult.isError()) {
-  console.log(parseResult.e);
+  println(parseResult.e);
 } else {
-  console.log(parseResult.v);
+  println(parseResult.v);
 }
+
 ```
+:::
 
+`ERR()` is factory function for `Result` with `AppError`.
+Convention of error type is `<module_id>.<application|domain|infra|util>.<rest_of_id>`.
 
+### Result Chain
+
+::: hc-sandbox {template=vanilla-ts}
+<<< @/snippets/HtmlConsole.ts{prefix=#hidden/}
+```ts index.ts [active]
+import { println } from './HtmlConsole';
+import { OK, R, ERR } from '@hexancore/common';
+
+function parse(input: string): R<string, "my_module.domain.invalid_input"> {
+  if (input.startsWith("test_")) {
+    return OK("parsed :param");
+  }
+
+  return ERR("my_module.domain.invalid_input");
+}
+
+function replace(input: string, param: string): R<string, "my_module.domain.invalid_input"> {
+  return parse(input).onOk(parsed => parsed.replace(":param", param));
+}
+
+replace("test_string", "param_value")
+  .onOk((parsed) => {
+    println(parsed)
+  })
+  .onErr((e) => {
+    println(e);
+  });
+```
+:::
+
+With chaining we can process success or error result without `ifs` and even start an asynchronous operation
+ that returns AsyncResult - which will be discussed later in this tutorial.
