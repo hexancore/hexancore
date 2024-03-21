@@ -1,4 +1,7 @@
 import { defineConfig } from 'vitepress'
+import container from 'markdown-it-container';
+import { renderSandbox } from 'vitepress-plugin-sandpack';
+import vueJsx from "@vitejs/plugin-vue-jsx";
 
 export default defineConfig({
   title: "Hexancore",
@@ -6,6 +9,11 @@ export default defineConfig({
   lang: 'en-US',
   srcDir: './src',
   cleanUrls: true,
+  vite: {
+    plugins: [
+      vueJsx(),
+    ],
+  },
   description: "Full-Stack TypeScript framework for building Epic Modular HexArch designed apps",
   themeConfig: {
     search: {
@@ -58,5 +66,21 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/hexancore' }
     ]
-  }
-})
+  },
+  markdown: {
+    config(md) {
+      md
+        // the second parameter is html tag name
+        .use(container, 'sandbox', {
+          render(tokens, idx) {
+            return renderSandbox(tokens, idx, 'sandbox');
+          },
+        })
+        .use(container, 'hc-sandbox', {
+          render(tokens, idx) {
+            return renderSandbox(tokens, idx, 'hc-sandbox');
+          },
+        });
+    },
+  },
+});
