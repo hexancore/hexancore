@@ -9,6 +9,9 @@ export default defineConfig({
   lang: 'en-US',
   srcDir: './src',
   cleanUrls: true,
+  head: [
+    ['link', { rel: 'icon', href: '/hexancore/favicon.ico' }]
+  ],
   vite: {
     plugins: [
       vueJsx(),

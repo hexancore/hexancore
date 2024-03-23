@@ -2,7 +2,7 @@ import { h } from 'vue'
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { Sandbox } from 'vitepress-plugin-sandpack';
-import { HcSandbox } from './components/HcSandbox';
+import HcSandbox from './components/HcSandbox.vue';
 import 'vitepress-plugin-sandpack/dist/style.css';
 import './style.css'
 
