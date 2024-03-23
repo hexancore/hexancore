@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import container from 'markdown-it-container';
 import { renderSandbox } from 'vitepress-plugin-sandpack';
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import GuideSidebar from './sidebar/GuideSidebar';
 
 export default defineConfig({
   title: "Hexancore",
@@ -29,24 +30,7 @@ export default defineConfig({
     ],
 
     sidebar: {
-      '/guide/': [
-        {
-          text: 'Introduction',
-          collapsed: false,
-          items: [
-            { text: 'What is hexancore', link: '/guide/what-is-hexancore' },
-            { text: 'Getting Started', link: '/guide/getting-started' },
-          ]
-        },
-        {
-          text: 'Basics',
-          collapsed: false,
-          items: [
-            { text: 'Result', link: '/guide/result' },
-            { text: 'Module', link: '/guide/module' },
-          ]
-        }
-      ],
+      '/guide/': GuideSidebar,
       '/cookbook/': [
         {
           text: 'TODO',
