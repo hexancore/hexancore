@@ -17,6 +17,7 @@ In package `@hexancore/common` you can find some basic Value objects implementat
 
 **Example**
 ```ts
+// src/Bookstore/Domain/Author/AuthorId.ts
 import { UIntValue, ValueObject } from '@hexcore/common';
 
 @ValueObject('Test')
@@ -27,6 +28,7 @@ export class AuthorId extends UIntValue<AuthorId> {}
 Aggregate is a cluster of domain objects that can be treated as a single unit.
 
 ```ts
+// src/Bookstore/Domain/Author/Author.ts
 import { AbstractAggregateRoot, AggregateRoot, EntityCollection, IEntityCollection } from '@';
 import { UIntValue, ValueObject } from '@hexancore/common';
 import { Book } from './Book';
@@ -41,7 +43,6 @@ export class Author extends AbstractAggregateRoot<AuthorId> {
     return this.proxify();
   }
 }
-
 ```
 
 ## Entity
@@ -51,6 +52,7 @@ In context of programming, it generally persisted in some form in DB and it cons
 
 **Example**
 ```ts
+// src/Bookstore/Domain/Author/Book.ts
 import { Entity, AbstractEntity} from '@';
 import { UIntValue, ValueObject } from '@hexancore/common';
 import { Author, AuthorId } from './Author';
@@ -65,13 +67,37 @@ export class Book extends AbstractEntity<BookId, Author> {
     return this.proxify();
   }
 }
-
 ```
+
 ## Repository
-// TODO
+Repository acts as an interface to the collection of domain objects, abstracting the details of data access and storage.
+
+It provides a clean separation between the domain logic and data persistence mechanisms, allowing for more flexible data management and easier testing of the domain logic without worrying about the database interactions.
+
+Only AggregateRoot can have public interface in Module Domain Layer, entities can be managed only by AggregateRoot.
+
+```ts
+// src/Bookstore/Domain/Author/AuthorRepository.ts
+interface AuthorRepository extends IAggregateRootRepository<Author> {}
+```libs/decisiotea/backend/src/Decision/Infrastructure/Persistance/TypeOrm/TypeOrmDecisionRepository.ts
+
+```ts
+// src/Bookstore/Infrastructure/Persistance/Domain/Author/MemoryBookReposiotry.ts
+@EntityRepository(Book, 'memory')
+export class MemoryBookRepository extends MemoryEntityRepository<Book> {}
+```
+
+```ts
+// src/Bookstore/Infrastructure/Persistance/Domain/Author/MemoryAuthorReposiotry.ts
+@AggregateRootRepository(Author, 'memory')
+export class MemoryAuthorRepository extends MemoryAggregateRootRepository<Author> implements AuthorRepository {}
+```
 
 ## Domain Service
-// TODO
+A Domain Service in the Module Domain Layer encapsulates business logic that doesn't naturally fit within a single entity or value object, often coordinating tasks across multiple domain models.
+
+This service is crucial for handling complex business rules and operations that are specific to the domain, ensuring that the business logic remains clean and maintainable.
+
 
 ## Error
 // TODO
