@@ -79,7 +79,7 @@ Only AggregateRoot can have public interface in Module Domain Layer, entities ca
 ```ts
 // src/Bookstore/Domain/Author/AuthorRepository.ts
 interface AuthorRepository extends IAggregateRootRepository<Author> {}
-```libs/decisiotea/backend/src/Decision/Infrastructure/Persistance/TypeOrm/TypeOrmDecisionRepository.ts
+```
 
 ```ts
 // src/Bookstore/Infrastructure/Persistance/Domain/Author/MemoryBookReposiotry.ts
