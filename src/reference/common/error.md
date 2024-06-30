@@ -7,10 +7,10 @@ title: Error
 
 Unified error representation
 **Properties**
-- `type: string` - error type id: `<module>.<custom_id>`
-- `code?: number` - code for use with REST api like `404`
+- `type: string` - error type ID: `<module>.<custom_id>`
+- `code?: number` - code for use with REST API like `404`
 - `data?: any` - some extra error context data
-- `i18n?: string` - i18n message id for frontend
+- `i18n?: string` - i18n message ID for frontend
 - `message?: string` - error message
 - `error?: ET` - Error instance throws from wrapped 3rd code
 - `cause?: AppError<Error>` - another `AppError` object that caused this error

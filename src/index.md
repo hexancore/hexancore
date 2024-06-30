@@ -1,13 +1,13 @@
 ---
 layout: home
-
+pageClass: custom-homepage
 hero:
   name: Hexancore
   text: Modular HexArch Framework
-  tagline: Architecting Excellence for TypeScript Titans
+  tagline: 'Architectural excellence for TypeScript titans<a style="margin: 16px auto; max-width:300px; display: block" class="wip-label main-wip-label" href="/guide/what-is-hexancore">Documentation status WIP🏗️</a>'
   image:
-    src: https://avatars.githubusercontent.com/u/113235766?s=200&v=4
-    alt: VitePress
+    src: /hexancore-logo-256.png
+    alt: Hexancore-Logo
   actions:
     - theme: brand
       text: What is Hexancore ?
@@ -17,6 +17,9 @@ hero:
       link: /guide/getting-started
 
 features:
+  - icon: 📐
+    title: Opinionated
+    details: Designed to guide you towards the "right" way of implementing solutions with well-established practices and default configurations.
   - icon: 🛠️
     title: Modular HexArch
     details: Enhances application scalability and maintainability through clear separation of concerns.
@@ -30,7 +33,16 @@ features:
     title: Comprehensive SecDevOps Integration <br>(⏳Soon...)
     details: Integrates SecDevOps practices into the development lifecycle ensuring top-notch security and compliance from start to finish.
   - icon: ✨
-    title: Integrated IDE Enhancements <br>(⏳Soon...)
-    details: Features advanced IDE integrations and tooling for seamless development experiences.
+    title: Focused on Developer Experience(DX) <br>(⏳Soon...)
+    details: Enhance your coding journey with a framework that prioritizes developer satisfaction, offering intuitive tools, seamless integration, and comprehensive documentation designed to minimize friction and maximize productivity.
 ---
 
+<script setup>
+import { onMounted } from 'vue';
+onMounted(() => {
+  const page = document.querySelector(".custom-homepage");
+  //page.style.opacity = 1;
+
+});
+
+</script>

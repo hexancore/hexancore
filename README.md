@@ -7,4 +7,4 @@
 <h2 align="center">Documentation</h2>
 
 
-https://hexancore.github.io/hexancore/
+<h3 align="center"><a href="https://hexancore.dev">https://hexancore.dev</a></h3>

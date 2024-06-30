@@ -3,8 +3,17 @@ layout: doc
 title: What is Hexancore ?
 ---
 
+# The Hexancore Saga
+
+In a galaxy not so far away, a new adventure begins for the bold and the brave. Starting with Hexancore might feel like navigating an asteroid field, but with this guide, you’ll find your way with ease.
+
+It’s not always simple, but the rewards of a well-structured, powerful application are worth the journey. Grab your keyboard, set your sights on the stars, and let’s embark on this epic coding adventure together. The force of Hexancore is strong with you! 🌌
+
+![An image](../assets/spaceship-asteroids.webp){ class="storytelling-img" }
+
 Hexancore is a Full-Stack TypeScript framework designed for building fast, secure, maintainable applications.
-It's blends principles from multiple architectural and design patterns into a comprehensive approach that addresses many of the common challenges in software development, aiming for a balance between structural clarity, performance, and adaptability.
+
+It's blends principles from multiple architectural and design patterns into a comprehensive approach that addresses of the common challenges in software development, aiming for a balance between structural clarity, performance, and adaptability.
 
 > [!TIP]
 > Just want to try it out? Skip to the [Quickstart](./getting-started).
@@ -14,7 +23,6 @@ On other hand Hexancore hides some complications behind abstractions and provide
 
 Before start work with framework you need some basic knowledge about:
 - Clean Architecture
-- Onion Architecture
 - Hexagonal Architecture
 - Modular Monolithic Architecture
 - Microservices Architecture
@@ -22,4 +30,4 @@ Before start work with framework you need some basic knowledge about:
 - Domain-Driven Design(DDD)
 - Command-query Separation(CQRS)
 
-Hexancore utilize **NestJS** and **VueJS**, knowledge in that frameworks is a key to efficient works with this.
+Hexancore utilize **Nest.js** and **Vue.js**, knowledge in that frameworks is a key to efficient works with this.

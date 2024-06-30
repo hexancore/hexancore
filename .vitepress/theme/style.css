@@ -8,7 +8,7 @@
  *
  * Each colors have exact same color scale system with 3 levels of solid
  * colors with different brightness, and 1 soft color.
- * 
+ *
  * - `XXX-1`: The most solid color used mainly for colored text. It must
  *   satisfy the contrast ratio against when used on top of `XXX-soft`.
  *
@@ -49,25 +49,45 @@
   --vp-c-default-3: var(--vp-c-gray-3);
   --vp-c-default-soft: var(--vp-c-gray-soft);
 
-  --vp-c-brand-1: var(--vp-c-indigo-1);
-  --vp-c-brand-2: var(--vp-c-indigo-2);
-  --vp-c-brand-3: var(--vp-c-indigo-3);
-  --vp-c-brand-soft: var(--vp-c-indigo-soft);
+  --vp-c-brand-1: #00aeef;
+  --vp-c-brand-2: #33c3ff;
+  --vp-c-brand-3: #008ec3;
+  --vp-c-brand-soft: #33c3ff;
 
-  --vp-c-tip-1: var(--vp-c-brand-1);
-  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-1: #FFFFFF;
+  --vp-c-tip-2: #FFFFFF;
   --vp-c-tip-3: var(--vp-c-brand-3);
   --vp-c-tip-soft: var(--vp-c-brand-soft);
 
-  --vp-c-warning-1: var(--vp-c-yellow-1);
-  --vp-c-warning-2: var(--vp-c-yellow-2);
-  --vp-c-warning-3: var(--vp-c-yellow-3);
-  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+  --vp-c-warning-1: #fff200;
+  --vp-c-warning-2: #fff200;
+  --vp-c-warning-3: #fff200;
+  --vp-c-warning-soft: #fefbbd;
 
-  --vp-c-danger-1: var(--vp-c-red-1);
-  --vp-c-danger-2: var(--vp-c-red-2);
-  --vp-c-danger-3: var(--vp-c-red-3);
-  --vp-c-danger-soft: var(--vp-c-red-soft);
+  --vp-c-danger-1: #c82333;
+  --vp-c-danger-2: #c82333;
+  --vp-c-danger-3: #c82333;
+  --vp-c-danger-soft: #c82333;
+
+  --vp-c-text-1: black;
+  --vp-c-text-2: #777777;
+  --vp-custom-block-tip-bg: var(--vp-c-brand-3) !important;
+  --vp-custom-block-tip-text: white !important;
+  --vp-code-color: var(--vp-c-brand-3) !important;
+ }
+
+.dark {
+  --vp-c-text-1: #eeeeee;
+  --vp-c-text-2: #aaaaaa;
+  --vp-c-divider: var(--vp-c-text-1) !important;
+  --vp-custom-block-tip-text: black;
+  --vp-custom-block-tip-bg: var(--vp-c-brand-3) !important;
+  --vp-custom-block-tip-text: white !important;
+  --vp-c-bg-soft: #222222;
+}
+
+.DocSearch span{
+  color: var(--vp-c-text-1) !important;
 }
 
 /**
@@ -78,6 +98,15 @@
   --vp-button-brand-border: transparent;
   --vp-button-brand-text: var(--vp-c-white);
   --vp-button-brand-bg: var(--vp-c-brand-3);
+
+  --vp-button-alt-text: var(--vp-c-white) !important;
+  --vp-button-alt-bg: #2e8b57;
+  --vp-button-alt-hover-bg: #3cb371;
+  --vp-button-alt-hover-text: var(--vp-c-white) !important;
+
+  --vp-button-alt-active-bg: #3cb371;
+  --vp-button-alt-active-text: var(--vp-c-white) !important;
+
   --vp-button-brand-hover-border: transparent;
   --vp-button-brand-hover-text: var(--vp-c-white);
   --vp-button-brand-hover-bg: var(--vp-c-brand-2);
@@ -118,6 +147,21 @@
   }
 }
 
+
+/**
+ * Layouts
+ * -------------------------------------------------------------------------- */
+
+ :root {
+  --vp-layout-max-width: 1740px;
+  --vp-sidebar-width: 272px;
+  overflow-y: scroll;
+}
+
+.content-container {
+  max-width: 900px !important;
+}
+
 /**
  * Component: Custom Block
  * -------------------------------------------------------------------------- */
@@ -130,6 +174,18 @@
 }
 
 /**
+  Code block
+*/
+:root {
+--vp-code-tab-divider: var(--vp-code-block-divider-color);
+--vp-code-tab-text-color: #DDD;
+--vp-code-tab-bg: var(--vp-c-brand-3);
+--vp-code-tab-hover-text-color: white;
+--vp-code-tab-active-text-color: white;
+--vp-code-tab-active-bar-color: white;
+}
+
+/**
  * Component: Algolia
  * -------------------------------------------------------------------------- */
 
@@ -137,3 +193,89 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+.custom-homepage {
+  background-image: url('/assets/home-bg.webp');
+  background-color: black;
+  background-size: cover;
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  height: fit-content;
+}
+
+.custom-homepage .main,.tagline,header {
+  color: white !important;
+}
+
+.custom-homepage header span {
+  color: white;
+}
+
+.custom-homepage header .VPSocialLink {
+  color: white !important;
+}
+
+.custom-homepage .main {
+  backdrop-filter: blur(16px) contrast(20%) saturate(16) opacity(0.8);
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 16px;
+  border: 1px;
+  padding: 1em;
+  padding-top: 1.5em;
+  text-align: center;
+}
+
+.custom-homepage .main > .name {
+  border-radius: 16px;
+  border: 1px;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.custom-homepage .main > .text {
+  font-size: 2em !important;
+}
+
+.custom-homepage .main > .actions {
+  justify-content: center !important;
+}
+
+.custom-homepage .VPNavBar:not(.has-sidebar):not(.home.top) {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(16px) contrast(40%) !important;
+}
+
+.VPNavBarMenuLink {
+  font-size: 16px !important;
+}
+
+.storytelling-img {
+  width: 420px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: 4px solid black
+}
+
+.doc-img {
+  width: 620px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: none;
+}
+
+.wip-label {
+  padding: 0.3em 0.3em;
+  font-size: 1em;
+  margin-left: 0.3em;
+  border-radius: 6px;
+  color: black;
+  background-color: var(--vp-c-warning-1);
+}
+
+/**
+TODO: remove after full docs
+*/
+.main-wip-label:hover {
+  background-color: #fefbbd;
+}

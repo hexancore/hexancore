@@ -1,30 +1,51 @@
-import { DefaultTheme } from 'vitepress'
+import { docFooterTextGenerator, processWipTag, type HcSidebarItem } from './functions';
 
-export default [
+export default docFooterTextGenerator(processWipTag([
   {
-    text: 'Introduction',
-    collapsed: false,
+    text: '☄️ Introduction',
     items: [
-      { text: 'What is hexancore', link: '/guide/what-is-hexancore' },
-      { text: 'Getting Started', link: '/guide/getting-started' },
+      { text: 'What is Hexancore', link: '/guide/what-is-hexancore' },
+      { text: 'Getting Started', link: '/guide/getting-started', wip: true },
     ]
   },
   {
-    text: 'Architecture Concepts',
-    collapsed: false,
+    text: '🏛️ Fundamentals',
     items: [
-      { text: 'Introduction', link: '/guide/architecture/index' },
-      { text: 'Module', link: '/guide/architecture/module' },
-      { text: 'Domain', link: '/guide/architecture/domain' },
-      { text: 'Application', link: '/guide/architecture/application' },
-      { text: 'Infrastructure', link: '/guide/architecture/infrastructure' },
-    ]
-  },
-  {
-    text: 'Basics',
-    collapsed: false,
-    items: [
+      {
+        text: 'Architecture Concepts', link: "/guide/architecture/intro",
+      },
+      {
+        base: "/guide/architecture/module",
+        text: "Module",
+        collapsed: false,
+        items: [
+          { text: 'Overview', link: '/module' },
+          { text: 'Domain', link: '/domain', wip: true },
+          { text: 'Application', link: '/application', wip: true  },
+          { text: 'Infrastructure', link: '/infrastructure', wip: true },
+          { text: 'Asset', link: '/asset', wip: true },
+          { text: 'Component', link: '/component', wip: true },
+          { text: 'Service', link: '/service', wip: true },
+        ]
+      },
       { text: 'Result', link: '/guide/result' },
     ]
-  }
-] as DefaultTheme.SidebarItem[];
+  },
+
+  {
+    text: '📦 Packages>',
+    items: [
+      {
+        text: 'Auth ',
+        collapsed: false,
+        base: '/guide/packages/auth',
+        items: [
+          { text: 'Introduction', link: '/intro', wip: true },
+          { text: 'OpenID Connect', link: '/oidc', wip: true },
+          { text: 'Session', link: '/session', wip: true }
+        ]
+      }
+    ]
+  },
+  { text: '📘 API Reference', link: '/reference/', wip: true }
+] as HcSidebarItem[]));

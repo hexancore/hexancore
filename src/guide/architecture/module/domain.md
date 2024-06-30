@@ -1,9 +1,9 @@
 ---
 layout: doc
-title: Module Domain layer
+title: Module Domain
 ---
 
-# Module Domain Layer
+# Module Domain  <HcWipTag/>
 Domain-Driven Design focuses on complexity management in software development by deeply connecting the implementation to an evolving model of the core business concepts. Haxancore might leverage DDD principles to guide the design and development of its systems, ensuring that the software accurately reflects and evolves with the business domain it represents.
 
 Hexancore provides abstractions to separate any persistence technology(like `@typeorm` ) from Module Domain layer
@@ -76,22 +76,24 @@ It provides a clean separation between the domain logic and data persistence mec
 
 Only AggregateRoot can have public interface in Module Domain Layer, entities can be managed only by AggregateRoot.
 
-```ts
+::: code-group
+```ts [AggregateRootRepository Interface]
 // src/Bookstore/Domain/Author/AuthorRepository.ts
 interface AuthorRepository extends IAggregateRootRepository<Author> {}
 ```
 
-```ts
+```ts [EntityRepository Implementation]
 // src/Bookstore/Infrastructure/Persistance/Domain/Author/MemoryBookReposiotry.ts
 @EntityRepository(Book, 'memory')
 export class MemoryBookRepository extends MemoryEntityRepository<Book> {}
 ```
 
-```ts
+```ts [AggregateRootRepository Implementation]
 // src/Bookstore/Infrastructure/Persistance/Domain/Author/MemoryAuthorReposiotry.ts
 @AggregateRootRepository(Author, 'memory')
 export class MemoryAuthorRepository extends MemoryAggregateRootRepository<Author> implements AuthorRepository {}
 ```
+:::
 
 ## Domain Service
 A Domain Service in the Module Domain Layer encapsulates business logic that doesn't naturally fit within a single entity or value object, often coordinating tasks across multiple domain models.

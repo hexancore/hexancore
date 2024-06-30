@@ -1,22 +1,26 @@
 {
   "devDependencies": {
+    "@textlint/textlint-plugin-markdown": "^14.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "dictionary-en": "^4.0.0",
     "markdown-it-container": "^4.0.0",
     "textlint": "^14.0.4",
-    "textlint-plugin-markdown": "^4.0.6",
     "textlint-rule-no-dead-link": "^5.1.2",
     "textlint-rule-spellcheck-tech-word": "^5.0.0",
     "textlint-rule-spelling": "^0.3.0",
     "textlint-rule-terminology": "^4.0.1",
     "textlint-rule-write-good": "^2.0.0",
-    "vitepress": "^1.0.0-rc.45",
-    "vitepress-plugin-sandpack": "^1.1.4"
+    "vitepress": "^1.2.3",
+    "vitepress-plugin-sandpack": "^1.1.4",
+    "vue": "^3.4.31"
   },
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
     "lint": "npx textlint src/**/*.md"
+  },
+  "dependencies": {
+    "jsonpath": "^1.1.1"
   }
 }

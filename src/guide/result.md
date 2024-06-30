@@ -5,6 +5,8 @@ title: Result
 
 ---
 
+# Result
+
 ## Why return instead of throw ?
 
 A return some result object is technique that allows you to capture errors elegantly,

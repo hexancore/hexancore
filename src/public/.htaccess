@@ -1,0 +1,23 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_URI} !^/assets/
+RewriteCond %{REQUEST_URI} !^/favicon.ico
+RewriteCond %{REQUEST_URI} !^/robots.txt
+
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,4}$
+# Check exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Add .html to request
+RewriteRule ^(.*)$ /$1.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+
+# 404 error page
+ErrorDocument 404 /404
+
+# 500 error page
+ErrorDocument 500 /500.html
