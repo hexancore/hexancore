@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineProps } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 const props = defineProps({
   command: {
@@ -38,11 +38,11 @@ const props = defineProps({
   },
 });
 
-const isMobile = computed(() => {
-  return screen.width <= 760;
-});
+const isMobile = ref(false);
 
-const buttonText = ref('Copy');
+onMounted(() => {
+  isMobile.value = window.screen.width <= 760;
+});
 
 const splitCommand = computed(() => {
   if (props.command.length < 60) {
@@ -86,7 +86,6 @@ const isOption = (part) => {
 const copyButtonClass = ref('copy');
 const copyToClipboard = () => {
   navigator.clipboard.writeText(props.command).then(() => {
-    buttonText.value = 'Copied';
     copyButtonClass.value = 'copy copied';
     setTimeout(() => {
       copyButtonClass.value = 'copy';
